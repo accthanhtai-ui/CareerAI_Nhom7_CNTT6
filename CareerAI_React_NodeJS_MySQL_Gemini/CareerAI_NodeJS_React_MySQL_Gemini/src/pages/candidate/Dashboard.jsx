@@ -1,8 +1,22 @@
+import { useState, useEffect } from "react";
 import { BriefcaseBusiness, FileText, Sparkles } from "lucide-react";
 import InfoCard from "../../components/common/InfoCard";
 import PageHeader from "../../components/common/PageHeader";
+import api from "../../services/api";
 
 function Dashboard() {
+  const [stats, setStats] = useState({
+    myCvs: 0,
+    savedJobs: 0,
+    analyses: 0
+  });
+
+  useEffect(() => {
+    api.get("/profile/dashboard-stats")
+      .then((res) => setStats(res.data))
+      .catch((err) => console.error("Lỗi tải thống kê dashboard:", err));
+  }, []);
+
   return (
     <>
       <PageHeader
@@ -24,17 +38,17 @@ function Dashboard() {
       <section className="card-grid">
         <InfoCard
           title="CV của tôi"
-          value="--"
+          value={stats.myCvs}
           description="Số CV đã tải lên"
         />
         <InfoCard
           title="Việc làm đã lưu"
-          value="--"
+          value={stats.savedJobs}
           description="Cơ hội đang quan tâm"
         />
         <InfoCard
           title="Lần phân tích CV"
-          value="--"
+          value={stats.analyses}
           description="Lịch sử phân tích"
         />
       </section>

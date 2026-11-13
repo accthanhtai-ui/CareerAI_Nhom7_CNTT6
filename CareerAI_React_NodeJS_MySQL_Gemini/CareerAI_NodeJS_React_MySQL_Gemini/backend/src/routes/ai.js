@@ -39,7 +39,7 @@ router.post("/analyze-cv",requireAuth,upload.single("cv"),async(req,res,next)=>{
 
 router.get("/history",requireAuth,async(req,res,next)=>{
   try{
-    const [rows]=await pool.query("SELECT id,file_name,score,created_at FROM cv_analyses WHERE user_id=? ORDER BY id DESC",[req.user.id]);
+    const [rows]=await pool.query("SELECT analysis_id AS id,file_name,score,created_at FROM cv_analyses WHERE user_id=? ORDER BY analysis_id DESC",[req.user.id]);
     res.json(rows);
   }catch(e){next(e);}
 });

@@ -16,7 +16,7 @@ function Login() {
   finally{setLoading(false);}
  }
  return <main className="auth-page"><section className="auth-card">
-  <div className="auth-brand"><span className="brand-logo">C</span><b>CareerAI</b></div>
+  <div className="auth-brand"><img src="/logo.png" alt="CareerAI Logo" className="auth-logo-img" /></div>
   <h1>Đăng nhập</h1><p>Đăng nhập để quản lý CV và khám phá cơ hội nghề nghiệp.</p>
   {error&&<div className="alert-error">{error}</div>}
   <form onSubmit={handleSubmit}>

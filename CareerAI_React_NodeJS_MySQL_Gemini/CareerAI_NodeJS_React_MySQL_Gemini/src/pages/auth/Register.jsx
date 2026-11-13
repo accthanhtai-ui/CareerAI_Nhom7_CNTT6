@@ -7,7 +7,7 @@ function Register(){
  async function submit(e){e.preventDefault();setError("");setLoading(true);try{
   await api.post("/auth/register",{name,email,password});navigate("/login");
  }catch(err){setError(err.response?.data?.message||"Đăng ký thất bại.");}finally{setLoading(false);}}
- return <main className="auth-page"><section className="auth-card"><div className="auth-brand"><span className="brand-logo">C</span><b>CareerAI</b></div>
+ return <main className="auth-page"><section className="auth-card"><div className="auth-brand"><img src="/logo.png" alt="CareerAI Logo" className="auth-logo-img" /></div>
  <h1>Tạo tài khoản</h1><p>Đăng ký để bắt đầu hành trình nghề nghiệp.</p>{error&&<div className="alert-error">{error}</div>}
  <form onSubmit={submit}><label>Họ và tên<input required value={name} onChange={e=>setName(e.target.value)} placeholder="Nguyễn Văn A"/></label>
  <label>Email<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="email@example.com"/></label>
