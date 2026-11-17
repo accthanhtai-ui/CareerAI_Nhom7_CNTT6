@@ -21,19 +21,29 @@ root.insertAdjacentHTML("beforeend", `
 
     <div id="cvList" class="stack"></div>
 
-    <div id="previewModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.65);z-index:9999;align-items:center;justify-content:center;padding:20px">
-        <div style="background:#fff;border-radius:14px;max-width:900px;width:100%;height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)">
-            <div class="row between" style="padding:16px 20px;border-bottom:1px solid var(--line);background:#f8fafc">
-                <div>
+    <div id="previewModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.65);z-index:9999;align-items:center;justify-content:center;padding:16px">
+        <div style="background:#fff;border-radius:14px;max-width:960px;width:100%;height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)">
+            <div class="row between" style="padding:14px 20px;border-bottom:1px solid var(--line);background:#f8fafc">
+                <div class="row" style="gap:10px">
                     <strong id="previewTitle" style="font-size:16px">Xem trước CV</strong>
-                    <span class="tag" style="background:#e6f9f0;color:#0e7041;margin-left:8px">Đã xử lý</span>
+                    <span class="tag" style="background:#e6f9f0;color:#0e7041">Đã xử lý</span>
                 </div>
-                <div class="actions">
-                    <button id="closePreviewBtn" class="button button-light" style="padding:6px 14px">Đóng</button>
+                <div class="actions" style="gap:8px">
+                    <button id="openNewTabBtn" class="button button-primary" style="padding:6px 14px;font-size:13px" title="Mở trong tab mới để xem toàn màn hình">
+                        ↗ Mở tab mới
+                    </button>
+                    <button id="modalDownloadBtn" class="button button-light" style="padding:6px 14px;font-size:13px">
+                        ⬇ Tải file
+                    </button>
+                    <button id="closePreviewBtn" class="button button-light" style="padding:6px 14px;font-size:13px">
+                        ✕ Đóng
+                    </button>
                 </div>
             </div>
-            <div style="flex:1;position:relative;background:#525659">
-                <iframe id="previewFrame" style="width:100%;height:100%;border:0" title="PDF Preview"></iframe>
+            <div id="previewFrameContainer" style="flex:1;position:relative;background:#525659;display:flex;flex-direction:column">
+            </div>
+            <div style="padding:8px 16px;background:#f8fafc;border-top:1px solid var(--line);font-size:12px;color:#64748b">
+                💡 <em>Mẹo:</em> Nếu trình duyệt hiển thị biểu tượng tài liệu bị chặn (do WPS Office hoặc tiện ích chặn xem PDF nội tuyến), hãy bấm nút <strong>↗ Mở tab mới</strong> ở góc trên để xem toàn màn hình.
             </div>
         </div>
     </div>
@@ -50,30 +60,42 @@ function setDefaultCvId(id) {
 }
 
 let activeBlobUrl = null;
+let activeFileName = "cv.pdf";
 
 async function fetchPdfBlob(cvId) {
-    const response = await fetch(`/api/cvs/${cvId}/download`, {
+    const response = await fetch(`/api/cvs/${cvId}/download?preview=true`, {
         headers: { Authorization: `Bearer ${getToken()}` }
     });
     if (!response.ok) throw new Error("Không thể tải nội dung file CV.");
-    return await response.blob();
+    const buffer = await response.arrayBuffer();
+    return new Blob([buffer], { type: "application/pdf" });
 }
 
 async function previewCv(cvId, fileName) {
     try {
-        toast("Đang tải bản xem trước...");
+        toast("Đang mở bản xem trước...");
         const blob = await fetchPdfBlob(cvId);
         if (activeBlobUrl) {
             URL.revokeObjectURL(activeBlobUrl);
         }
         activeBlobUrl = URL.createObjectURL(blob);
+        activeFileName = fileName;
 
         const modal = document.querySelector("#previewModal");
-        const frame = document.querySelector("#previewFrame");
+        const frameContainer = document.querySelector("#previewFrameContainer");
         const title = document.querySelector("#previewTitle");
 
         title.textContent = `Xem trước: ${fileName}`;
-        frame.src = activeBlobUrl;
+        frameContainer.innerHTML = `
+            <object data="${activeBlobUrl}" type="application/pdf" style="width:100%;height:100%;border:0">
+                <iframe src="${activeBlobUrl}#toolbar=1" style="width:100%;height:100%;border:0" title="PDF Preview">
+                    <div style="padding:40px;text-align:center;color:#fff">
+                        <p style="font-size:15px;margin-bottom:12px">Trình duyệt không hỗ trợ xem trực tiếp PDF trong khung.</p>
+                        <button class="button button-primary" onclick="window.open('${activeBlobUrl}', '_blank')">↗ Bấm vào đây để mở xem ở tab mới</button>
+                    </div>
+                </iframe>
+            </object>
+        `;
         modal.style.display = "flex";
     } catch (err) {
         toast(err.message || "Lỗi xem trước CV.");
@@ -82,9 +104,9 @@ async function previewCv(cvId, fileName) {
 
 function closePreview() {
     const modal = document.querySelector("#previewModal");
-    const frame = document.querySelector("#previewFrame");
+    const frameContainer = document.querySelector("#previewFrameContainer");
     modal.style.display = "none";
-    frame.src = "about:blank";
+    frameContainer.innerHTML = "";
     if (activeBlobUrl) {
         URL.revokeObjectURL(activeBlobUrl);
         activeBlobUrl = null;
@@ -94,6 +116,24 @@ function closePreview() {
 document.querySelector("#closePreviewBtn").onclick = closePreview;
 document.querySelector("#previewModal").onclick = (e) => {
     if (e.target.id === "previewModal") closePreview();
+};
+
+document.querySelector("#openNewTabBtn").onclick = () => {
+    if (activeBlobUrl) {
+        window.open(activeBlobUrl, "_blank");
+    }
+};
+
+document.querySelector("#modalDownloadBtn").onclick = () => {
+    if (activeBlobUrl && activeFileName) {
+        const link = document.createElement("a");
+        link.href = activeBlobUrl;
+        link.download = activeFileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        toast("Đã tải CV về máy.");
+    }
 };
 
 async function load() {
