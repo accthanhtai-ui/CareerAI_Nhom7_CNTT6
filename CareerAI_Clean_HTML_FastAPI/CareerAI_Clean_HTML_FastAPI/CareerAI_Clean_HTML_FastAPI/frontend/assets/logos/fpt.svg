@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="48" viewBox="0 0 160 48" fill="none">
+  <g transform="translate(4, 8)">
+    <path d="M6 26C2.5 26 0 22.5 0 18C0 10 7 2 15 2C18.5 2 21 5.5 21 10C21 18 14 26 6 26Z" fill="#005FA8"/>
+    <path d="M19 26C15.5 26 13 22.5 13 18C13 10 20 2 28 2C31.5 2 34 5.5 34 10C34 18 27 26 19 26Z" fill="#F36F21"/>
+    <path d="M32 26C28.5 26 26 22.5 26 18C26 10 33 2 41 2C44.5 2 47 5.5 47 10C47 18 40 26 32 26Z" fill="#009944"/>
+  </g>
+  <text x="60" y="27" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="20" fill="#005FA8">FPT</text>
+  <text x="60" y="38" font-family="'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="10" fill="#64748B" letter-spacing="1">SOFTWARE</text>
+</svg>
