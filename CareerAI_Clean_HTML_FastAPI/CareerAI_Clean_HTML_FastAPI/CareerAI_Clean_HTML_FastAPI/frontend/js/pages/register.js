@@ -1,2 +1,0 @@
-import {api,json} from "../common/api.js";import {showMessage} from "../common/ui.js";
-document.querySelector("#authForm").addEventListener("submit",async event=>{event.preventDefault();const form=new FormData(event.currentTarget);try{await api("/auth/register",json("POST",{name:form.get("name"),email:form.get("email"),password:form.get("password")}));location.href="/pages/login.html";}catch(error){showMessage(error.message);}});
