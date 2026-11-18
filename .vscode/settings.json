@@ -1,3 +1,7 @@
 {
+    "python.defaultInterpreterPath": "${workspaceFolder}/CareerAI_Clean_HTML_FastAPI/backend/venv/Scripts/python.exe",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/CareerAI_Clean_HTML_FastAPI"
+    ],
     "python-envs.defaultEnvManager": "ms-python.python:system"
 }
