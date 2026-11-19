@@ -17,6 +17,18 @@ def list_jobs(search:str="",sort:str="newest",page:int=1,limit:int=12):
 @router.get("/jobs/saved/list")
 def saved_jobs(user=Depends(get_current_user)):
  return fetch_all("SELECT j.job_id,j.title,j.description,j.deadline,c.name AS company_name FROM saved_jobs s JOIN jobs j ON s.job_id=j.job_id JOIN companies c ON j.company_id=c.company_id WHERE s.user_id=%s ORDER BY s.created_at DESC",(user["id"],))
+@router.get("/companies/{company_id}")
+def company_detail(company_id:int):
+ row=fetch_one("SELECT * FROM companies WHERE company_id=%s",(company_id,))
+ if not row: raise HTTPException(404,"Không tìm thấy công ty.")
+ jobs=fetch_all("SELECT j.job_id,j.title,j.description,j.deadline,j.created_at FROM jobs j WHERE j.company_id=%s AND (j.deadline IS NULL OR j.deadline >= CURDATE()) ORDER BY j.created_at DESC",(company_id,))
+ row["jobs"]=jobs
+ return row
+
+@router.get("/companies/{company_id}/jobs")
+def company_other_jobs(company_id:int,exclude_id:int=0):
+ return fetch_all("SELECT j.job_id,j.title,j.description,j.deadline,j.created_at,c.name AS company_name FROM jobs j JOIN companies c ON j.company_id=c.company_id WHERE j.company_id=%s AND j.job_id!=%s AND (j.deadline IS NULL OR j.deadline >= CURDATE()) ORDER BY j.created_at DESC LIMIT 6",(company_id,exclude_id))
+
 @router.get("/jobs/{job_id}")
 def job_detail(job_id:int):
  row=fetch_one("SELECT j.*,c.name AS company_name,c.website,c.description AS company_description FROM jobs j JOIN companies c ON j.company_id=c.company_id WHERE j.job_id=%s",(job_id,))
