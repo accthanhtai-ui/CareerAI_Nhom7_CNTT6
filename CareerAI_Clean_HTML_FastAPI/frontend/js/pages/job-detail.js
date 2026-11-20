@@ -2,7 +2,7 @@ import { api, json } from "../common/api.js";
 import { setPage, escapeHtml, toast } from "../common/ui.js";
 
 const jobId = new URLSearchParams(location.search).get("id");
-const root = setPage("Chi tiết việc làm", "Thông tin mô tả, yêu cầu, quyền lợi và doanh nghiệp tuyển dụng.");
+const root = setPage("Chi tiết việc làm", "Thông tin mô tả, yêu cầu, quyền lợi và đối chiếu kỹ năng phù hợp.");
 
 function getCompanyLogo(name = "") {
     const n = name.toLowerCase();
@@ -35,18 +35,19 @@ if (!jobId) {
 
 async function init() {
     try {
-        const [job, otherJobs, savedList] = await Promise.all([
+        const [job, otherJobs, savedList, matchData] = await Promise.all([
             api(`/jobs/${jobId}`),
             api(`/companies/${jobId}/jobs?exclude_id=${jobId}`).catch(() => []),
-            api(`/jobs/saved/list`).catch(() => [])
+            api(`/jobs/saved/list`).catch(() => []),
+            api(`/jobs/${jobId}/match`).catch(() => null)
         ]);
 
         const logoUrl = getCompanyLogo(job.company_name);
         const salary = getSalaryEstimate(job.title);
+        const isExpired = job.deadline ? (new Date(job.deadline) < new Date(new Date().toDateString())) : false;
         const deadlineStr = job.deadline ? new Date(job.deadline).toLocaleDateString("vi-VN") : "Tuyển gấp / Đến khi đủ số lượng";
         const isSaved = Array.isArray(savedList) && savedList.some(s => String(s.job_id) === String(job.job_id));
 
-        // Tách hoặc sinh nội dung chi tiết nếu description gộp chung
         const descText = job.description || "";
         const descHtml = `
             <p style="line-height:1.7;color:#334155;margin-bottom:16px">${escapeHtml(descText)}</p>
@@ -75,28 +76,72 @@ async function init() {
             </ul>
         `;
 
+        const matchHtml = matchData ? `
+            <article class="card" style="border:1px solid #bfdbfe;background:#f8faff;margin-bottom:16px">
+                <div class="row between" style="margin-bottom:12px">
+                    <h3 style="font-size:18px;margin:0;color:#1e40af">
+                        🎯 Đối chiếu kỹ năng CV với việc làm
+                    </h3>
+                    <span class="tag" style="background:#dbeafe;color:#1e40af;font-weight:700">
+                        Độ tương thích: ${matchData.match_score}%
+                    </span>
+                </div>
+                <p class="muted" style="font-size:13px;margin-bottom:14px">
+                    Đối chiếu dựa trên CV: <strong>${escapeHtml(matchData.cv_file_name)}</strong>
+                </p>
+                <div style="margin-bottom:12px">
+                    <strong style="font-size:13px;color:#166534">✔ Kỹ năng phù hợp đã có:</strong>
+                    <div style="margin-top:6px">
+                        ${matchData.matched_skills.length
+                            ? matchData.matched_skills.map(s => `<span class="tag" style="background:#dcfce7;color:#15803d">✔ ${escapeHtml(s)}</span>`).join("")
+                            : `<span class="muted" style="font-size:12px">Chưa tìm thấy kỹ năng trùng khớp trực tiếp.</span>`}
+                    </div>
+                </div>
+                <div style="margin-bottom:14px">
+                    <strong style="font-size:13px;color:#9a3412">⚠ Kỹ năng còn thiếu / cần trau dồi thêm:</strong>
+                    <div style="margin-top:6px">
+                        ${matchData.missing_skills.length
+                            ? matchData.missing_skills.map(s => `<span class="tag" style="background:#fee2e2;color:#991b1b">+ ${escapeHtml(s)}</span>`).join("")
+                            : `<span class="muted" style="font-size:12px">Bạn đã đáp ứng toàn diện các kỹ năng cốt lõi.</span>`}
+                    </div>
+                </div>
+                <div style="padding:10px 14px;background:#f1f5f9;border-radius:8px;font-size:12px;color:#64748b;line-height:1.5">
+                    📌 <em>Lưu ý:</em> Điểm số và mức độ so khớp chỉ mang tính chất tham khảo, không quyết định tuyệt đối kết quả tuyển dụng của doanh nghiệp.
+                </div>
+            </article>
+        ` : "";
+
         root.insertAdjacentHTML("beforeend", `
+            ${isExpired ? `
+                <div class="message" style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;margin-bottom:20px;border-radius:10px;padding:14px 18px">
+                    <strong>✕ Tin tuyển dụng này đã hết hạn nộp hồ sơ hoặc đã đóng.</strong> Chức năng ứng tuyển tạm khóa để bảo vệ quyền lợi ứng viên.
+                </div>
+            ` : ""}
+
             <!-- Header chi tiết tin tuyển dụng -->
-            <div class="card" style="padding:28px;margin-bottom:24px;border-top:4px solid var(--primary)">
+            <div class="card" style="padding:28px;margin-bottom:24px;border-top:4px solid ${isExpired ? '#94a3b8' : 'var(--primary)'}">
                 <div class="row" style="align-items:flex-start;gap:20px">
                     <img src="${logoUrl}" alt="${escapeHtml(job.company_name)}" style="width:72px;height:72px;object-fit:contain;border:1px solid var(--line);border-radius:12px;padding:6px;background:#fff">
                     <div style="flex:1;min-width:280px">
                         <div class="row" style="gap:8px;margin-bottom:8px">
-                            <span class="tag" style="background:#eef3ff;color:#244ca9;font-weight:600">Tuyển dụng chính thức</span>
-                            <span class="tag" style="background:#ecfdf5;color:#047857;font-weight:700">💰 ${salary}</span>
+                            ${isExpired
+                                ? `<span class="tag" style="background:#fee2e2;color:#991b1b;font-weight:700">✕ Đã hết hạn / Đóng</span>`
+                                : `<span class="tag" style="background:#ecfdf5;color:#047857;font-weight:600">✔ Tuyển dụng chính thức</span>`
+                            }
+                            <span class="tag" style="background:#eef2ff;color:#3730a3;font-weight:700">💰 ${salary}</span>
                         </div>
                         <h1 style="font-size:24px;margin:0 0 8px 0;line-height:1.3">${escapeHtml(job.title)}</h1>
                         <div class="row" style="gap:16px;color:var(--muted);font-size:14px">
                             <span>🏢 Công ty: <a href="/pages/company.html?id=${job.company_id}" style="font-weight:600;color:var(--primary)">${escapeHtml(job.company_name)} ↗</a></span>
-                            <span>📅 Hạn nộp: <strong style="color:#b91c1c">${deadlineStr}</strong></span>
+                            <span>📅 Hạn nộp: <strong style="color:${isExpired ? '#991b1b' : '#b91c1c'}">${deadlineStr}</strong></span>
                             <span>📍 Địa điểm: TP. Hồ Chí Minh / Hà Nội</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="actions" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
-                    <button id="applyJobBtn" class="button button-primary" style="padding:11px 28px;font-size:15px">
-                        ✉ Ứng tuyển ngay
+                    <button id="applyJobBtn" class="button ${isExpired ? 'button-light' : 'button-primary'}" ${isExpired ? 'disabled' : ''} style="padding:11px 28px;font-size:15px">
+                        ${isExpired ? "✕ Đã hết hạn nộp hồ sơ" : "✉ Ứng tuyển ngay"}
                     </button>
                     <button id="saveJobBtn" class="button button-light" style="padding:11px 20px;font-size:14px">
                         ${isSaved ? "★ Đã lưu việc làm" : "☆ Lưu việc làm"}
@@ -112,8 +157,10 @@ async function init() {
 
             <!-- Bố cục 2 cột: Cột nội dung tin & Cột thông tin công ty / tin khác -->
             <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:start">
-                <!-- Cột chính: Mô tả, Yêu cầu, Quyền lợi -->
+                <!-- Cột chính: Đối chiếu kỹ năng, Mô tả, Yêu cầu, Quyền lợi -->
                 <div class="stack">
+                    ${matchHtml}
+
                     <article class="card">
                         <h3 style="font-size:18px;margin-bottom:14px;color:#1e293b;border-bottom:2px solid #e2e8f0;padding-bottom:8px">
                             📋 1. Mô tả công việc
@@ -138,7 +185,6 @@ async function init() {
 
                 <!-- Cột phụ: Thông tin công ty & Các tin khác của công ty -->
                 <div class="stack">
-                    <!-- Thẻ thông tin công ty tóm tắt -->
                     <div class="card" style="border:1px solid var(--line)">
                         <h4 style="margin-bottom:12px;font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Về công ty</h4>
                         <div class="row" style="gap:12px;margin-bottom:12px">
@@ -156,7 +202,6 @@ async function init() {
                         </a>
                     </div>
 
-                    <!-- Thẻ danh sách tin khác của công ty -->
                     <div class="card">
                         <h4 style="margin-bottom:14px;font-size:15px;color:#1e293b">
                             💼 Việc làm khác của ${escapeHtml(job.company_name)}
@@ -169,10 +214,8 @@ async function init() {
             </div>
         `);
 
-        // Tải danh sách các tin khác của công ty này
         loadOtherCompanyJobs(job.company_id, job.job_id, job.company_name);
 
-        // Sự kiện Lưu việc làm
         let savedState = isSaved;
         const saveBtn = document.querySelector("#saveJobBtn");
         saveBtn.onclick = async () => {
@@ -193,79 +236,80 @@ async function init() {
             }
         };
 
-        // Sự kiện Ứng tuyển
         const applyBtn = document.querySelector("#applyJobBtn");
         const applyArea = document.querySelector("#applyArea");
 
-        applyBtn.onclick = async () => {
-            applyArea.style.display = "block";
-            applyArea.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (applyBtn && !isExpired) {
+            applyBtn.onclick = async () => {
+                applyArea.style.display = "block";
+                applyArea.scrollIntoView({ behavior: "smooth", block: "center" });
 
-            try {
-                const cvs = await api("/cvs");
-                const defaultCvId = localStorage.getItem("career_ai_default_cv_id");
+                try {
+                    const cvs = await api("/cvs");
+                    const defaultCvId = localStorage.getItem("career_ai_default_cv_id");
 
-                if (!cvs || !cvs.length) {
-                    applyArea.innerHTML = `
-                        <div class="card" style="background:#fffbeb;border:1px solid #fde68a">
-                            <p style="color:#92400e;margin-bottom:10px"><strong>Bạn chưa có CV nào trên hệ thống.</strong></p>
-                            <a href="/pages/my-cvs.html" class="button button-primary" style="display:inline-block">Tải CV lên ngay</a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                applyArea.innerHTML = `
-                    <form id="applyForm" class="card" style="border:2px solid var(--primary);background:#f8fafc">
-                        <div class="row between" style="margin-bottom:12px">
-                            <h3 style="margin:0;font-size:17px">Ứng tuyển vị trí: ${escapeHtml(job.title)}</h3>
-                            <button type="button" id="closeApplyBtn" style="background:none;border:0;cursor:pointer;font-weight:bold">✕</button>
-                        </div>
-                        <div class="field">
-                            <label><strong>Chọn CV ứng tuyển:</strong></label>
-                            <select name="cv_id" required style="padding:10px;border-radius:8px">
-                                ${cvs.map(c => `
-                                    <option value="${c.cv_id}" ${String(c.cv_id) === String(defaultCvId) ? "selected" : ""}>
-                                        ${escapeHtml(c.file_name)} ${String(c.cv_id) === String(defaultCvId) ? "(★ CV Mặc định)" : ""}
-                                    </option>
-                                `).join("")}
-                            </select>
-                        </div>
-                        <div class="row" style="margin-top:16px;gap:12px">
-                            <button type="submit" class="button button-primary">Xác nhận nộp hồ sơ</button>
-                            <button type="button" id="cancelApplyBtn" class="button button-light">Hủy</button>
-                        </div>
-                    </form>
-                `;
-
-                document.querySelector("#closeApplyBtn").onclick = () => { applyArea.style.display = "none"; };
-                document.querySelector("#cancelApplyBtn").onclick = () => { applyArea.style.display = "none"; };
-
-                document.querySelector("#applyForm").onsubmit = async e => {
-                    e.preventDefault();
-                    const submitBtn = e.currentTarget.querySelector("button[type=submit]");
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = "Đang gửi hồ sơ...";
-
-                    try {
-                        const selectedCvId = Number(new FormData(e.currentTarget).get("cv_id"));
-                        await api(`/jobs/${job.job_id}/apply`, json("POST", { cv_id: selectedCvId }));
-                        toast("Ứng tuyển thành công! Nhà tuyển dụng sẽ sớm phản hồi.");
+                    if (!cvs || !cvs.length) {
                         applyArea.innerHTML = `
-                            <div class="card" style="background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46">
-                                <strong>✔ Bạn đã nộp hồ sơ ứng tuyển thành công cho vị trí này!</strong>
+                            <div class="card" style="background:#fffbeb;border:1px solid #fde68a">
+                                <p style="color:#92400e;margin-bottom:10px"><strong>Bạn chưa có CV nào trên hệ thống.</strong></p>
+                                <a href="/pages/my-cvs.html" class="button button-primary" style="display:inline-block">Tải CV lên ngay</a>
                             </div>
                         `;
-                    } catch (err) {
-                        toast(err.message || "Lỗi khi ứng tuyển.");
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = "Xác nhận nộp hồ sơ";
+                        return;
                     }
-                };
-            } catch (err) {
-                toast(err.message);
-            }
-        };
+
+                    applyArea.innerHTML = `
+                        <form id="applyForm" class="card" style="border:2px solid var(--primary);background:#f8fafc">
+                            <div class="row between" style="margin-bottom:12px">
+                                <h3 style="margin:0;font-size:17px">Ứng tuyển vị trí: ${escapeHtml(job.title)}</h3>
+                                <button type="button" id="closeApplyBtn" style="background:none;border:0;cursor:pointer;font-weight:bold">✕</button>
+                            </div>
+                            <div class="field">
+                                <label><strong>Chọn CV ứng tuyển:</strong></label>
+                                <select name="cv_id" required style="padding:10px;border-radius:8px">
+                                    ${cvs.map(c => `
+                                        <option value="${c.cv_id}" ${String(c.cv_id) === String(defaultCvId) ? "selected" : ""}>
+                                            ${escapeHtml(c.file_name)} ${String(c.cv_id) === String(defaultCvId) ? "(★ CV Mặc định)" : ""}
+                                        </option>
+                                    `).join("")}
+                                </select>
+                            </div>
+                            <div class="row" style="margin-top:16px;gap:12px">
+                                <button type="submit" class="button button-primary">Xác nhận nộp hồ sơ</button>
+                                <button type="button" id="cancelApplyBtn" class="button button-light">Hủy</button>
+                            </div>
+                        </form>
+                    `;
+
+                    document.querySelector("#closeApplyBtn").onclick = () => { applyArea.style.display = "none"; };
+                    document.querySelector("#cancelApplyBtn").onclick = () => { applyArea.style.display = "none"; };
+
+                    document.querySelector("#applyForm").onsubmit = async e => {
+                        e.preventDefault();
+                        const submitBtn = e.currentTarget.querySelector("button[type=submit]");
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = "Đang gửi hồ sơ...";
+
+                        try {
+                            const selectedCvId = Number(new FormData(e.currentTarget).get("cv_id"));
+                            await api(`/jobs/${job.job_id}/apply`, json("POST", { cv_id: selectedCvId }));
+                            toast("Ứng tuyển thành công! Nhà tuyển dụng sẽ sớm phản hồi.");
+                            applyArea.innerHTML = `
+                                <div class="card" style="background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46">
+                                    <strong>✔ Bạn đã nộp hồ sơ ứng tuyển thành công cho vị trí này!</strong>
+                                </div>
+                            `;
+                        } catch (err) {
+                            toast(err.message || "Lỗi khi ứng tuyển.");
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = "Xác nhận nộp hồ sơ";
+                        }
+                    };
+                } catch (err) {
+                    toast(err.message);
+                }
+            };
+        }
 
     } catch (e) {
         root.innerHTML = `<div class="card empty"><p>Lỗi tải việc làm: ${escapeHtml(e.message)}</p></div>`;
