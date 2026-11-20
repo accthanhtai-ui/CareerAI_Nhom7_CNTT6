@@ -35,11 +35,12 @@ if (!jobId) {
 
 async function init() {
     try {
-        const [job, otherJobs, savedList, matchData] = await Promise.all([
+        const [job, otherJobs, savedList, matchData, applicationsList] = await Promise.all([
             api(`/jobs/${jobId}`),
             api(`/companies/${jobId}/jobs?exclude_id=${jobId}`).catch(() => []),
             api(`/jobs/saved/list`).catch(() => []),
-            api(`/jobs/${jobId}/match`).catch(() => null)
+            api(`/jobs/${jobId}/match`).catch(() => null),
+            api(`/applications`).catch(() => [])
         ]);
 
         const logoUrl = getCompanyLogo(job.company_name);
@@ -47,6 +48,8 @@ async function init() {
         const isExpired = job.deadline ? (new Date(job.deadline) < new Date(new Date().toDateString())) : false;
         const deadlineStr = job.deadline ? new Date(job.deadline).toLocaleDateString("vi-VN") : "Tuyển gấp / Đến khi đủ số lượng";
         const isSaved = Array.isArray(savedList) && savedList.some(s => String(s.job_id) === String(job.job_id));
+        const existingApp = Array.isArray(applicationsList) && applicationsList.find(a => String(a.job_id) === String(job.job_id) && a.status !== "WITHDRAWN");
+        const hasApplied = Boolean(existingApp);
 
         const descText = job.description || "";
         const descHtml = `
@@ -140,9 +143,19 @@ async function init() {
                 </div>
 
                 <div class="actions" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
-                    <button id="applyJobBtn" class="button ${isExpired ? 'button-light' : 'button-primary'}" ${isExpired ? 'disabled' : ''} style="padding:11px 28px;font-size:15px">
-                        ${isExpired ? "✕ Đã hết hạn nộp hồ sơ" : "✉ Ứng tuyển ngay"}
-                    </button>
+                    ${hasApplied ? `
+                        <a href="/pages/applications.html" class="button button-light" style="padding:11px 24px;font-size:15px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;font-weight:600">
+                            ✔ Đã nộp hồ sơ (${existingApp.status === "SUBMITTED" ? "Chờ duyệt" : "Đang xử lý"})
+                        </a>
+                    ` : isExpired ? `
+                        <button class="button button-light" disabled style="padding:11px 28px;font-size:15px;color:#991b1b">
+                            ✕ Đã hết hạn nộp hồ sơ
+                        </button>
+                    ` : `
+                        <button id="applyJobBtn" class="button button-primary" style="padding:11px 28px;font-size:15px">
+                            ✉ Ứng tuyển ngay
+                        </button>
+                    `}
                     <button id="saveJobBtn" class="button button-light" style="padding:11px 20px;font-size:14px">
                         ${isSaved ? "★ Đã lưu việc làm" : "☆ Lưu việc làm"}
                     </button>

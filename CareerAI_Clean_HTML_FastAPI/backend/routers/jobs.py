@@ -84,18 +84,35 @@ def job_detail(job_id:int):
 @router.post("/jobs/{job_id}/save")
 def save_job(job_id:int,user=Depends(get_current_user)):
  if not fetch_one("SELECT job_id FROM jobs WHERE job_id=%s",(job_id,)): raise HTTPException(404,"Tin tuyển dụng không tồn tại.")
- execute("INSERT IGNORE INTO saved_jobs(user_id,job_id) VALUES(%s,%s)",(user["id"],job_id));return {"message":"Đã lưu việc làm."}
+ already=fetch_one("SELECT saved_job_id FROM saved_jobs WHERE user_id=%s AND job_id=%s",(user["id"],job_id))
+ if already:
+  return {"message":"Việc làm đã có trong danh sách lưu.","already_saved":True}
+ execute("INSERT INTO saved_jobs(user_id,job_id) VALUES(%s,%s)",(user["id"],job_id))
+ return {"message":"Đã lưu việc làm thành công."}
+
 @router.delete("/jobs/{job_id}/save")
 def unsave_job(job_id:int,user=Depends(get_current_user)):
- execute("DELETE FROM saved_jobs WHERE user_id=%s AND job_id=%s",(user["id"],job_id));return {"message":"Đã bỏ lưu việc làm."}
+ execute("DELETE FROM saved_jobs WHERE user_id=%s AND job_id=%s",(user["id"],job_id))
+ return {"message":"Đã bỏ lưu việc làm."}
+
 @router.post("/jobs/{job_id}/apply")
 def apply_job(job_id:int,data:ApplyData,user=Depends(get_current_user)):
  job=fetch_one("SELECT job_id,deadline FROM jobs WHERE job_id=%s",(job_id,))
  if not job: raise HTTPException(404,"Tin tuyển dụng không tồn tại.")
- if job["deadline"] and job["deadline"]<date.today(): raise HTTPException(400,"Tin tuyển dụng đã hết hạn.")
- if not fetch_one("SELECT cv_id FROM resumes_cv WHERE cv_id=%s AND user_id=%s",(data.cv_id,user["id"])): raise HTTPException(403,"CV không thuộc tài khoản của bạn.")
- try: execute("INSERT INTO applications(user_id,job_id,cv_id,status) VALUES(%s,%s,%s,'SUBMITTED')",(user["id"],job_id,data.cv_id))
- except Exception: raise HTTPException(409,"Bạn đã ứng tuyển công việc này.")
+ # 1. Kiểm tra không ứng tuyển tin đã đóng / hết hạn
+ if job["deadline"] and job["deadline"]<date.today():
+  raise HTTPException(400,"Tin tuyển dụng đã hết hạn nộp hồ sơ, không thể ứng tuyển.")
+ # 2. Dữ liệu ứng tuyển gắn đúng ứng viên: CV phải thuộc sở hữu của chính user_id
+ if not fetch_one("SELECT cv_id FROM resumes_cv WHERE cv_id=%s AND user_id=%s",(data.cv_id,user["id"])):
+  raise HTTPException(403,"CV không hợp lệ hoặc không thuộc tài khoản của bạn.")
+ # 3. Kiểm tra không nộp trùng hồ sơ (đã ứng tuyển và đơn chưa rút)
+ existing=fetch_one("SELECT application_id,status FROM applications WHERE user_id=%s AND job_id=%s AND status!='WITHDRAWN'",(user["id"],job_id))
+ if existing:
+  raise HTTPException(409,"Bạn đã nộp hồ sơ cho vị trí này rồi. Vui lòng theo dõi trạng thái tại trang Theo dõi ứng tuyển.")
+ try:
+  execute("INSERT INTO applications(user_id,job_id,cv_id,status) VALUES(%s,%s,%s,'SUBMITTED')",(user["id"],job_id,data.cv_id))
+ except Exception:
+  raise HTTPException(409,"Bạn đã nộp hồ sơ cho công việc này rồi.")
  return {"message":"Ứng tuyển thành công."}
 @router.get("/applications")
 def applications(user=Depends(get_current_user)):
