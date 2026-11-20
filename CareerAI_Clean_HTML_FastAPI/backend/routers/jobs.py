@@ -63,7 +63,7 @@ def match_job_cv(job_id:int,cv_id:int=Query(default=0),user=Depends(get_current_
  }
 @router.get("/jobs/saved/list")
 def saved_jobs(user=Depends(get_current_user)):
- return fetch_all("SELECT j.job_id,j.title,j.description,j.deadline,c.name AS company_name FROM saved_jobs s JOIN jobs j ON s.job_id=j.job_id JOIN companies c ON j.company_id=c.company_id WHERE s.user_id=%s ORDER BY s.created_at DESC",(user["id"],))
+ return fetch_all("SELECT j.job_id,j.title,j.description,j.deadline,c.company_id,c.name AS company_name, (j.deadline IS NOT NULL AND j.deadline < CURDATE()) AS is_expired FROM saved_jobs s JOIN jobs j ON s.job_id=j.job_id JOIN companies c ON j.company_id=c.company_id WHERE s.user_id=%s ORDER BY s.created_at DESC",(user["id"],))
 @router.get("/companies/{company_id}")
 def company_detail(company_id:int):
  row=fetch_one("SELECT * FROM companies WHERE company_id=%s",(company_id,))
@@ -99,7 +99,7 @@ def apply_job(job_id:int,data:ApplyData,user=Depends(get_current_user)):
  return {"message":"Ứng tuyển thành công."}
 @router.get("/applications")
 def applications(user=Depends(get_current_user)):
- return fetch_all("SELECT a.application_id,a.status,a.applied_at,j.job_id,j.title,c.name AS company_name,r.file_name FROM applications a JOIN jobs j ON a.job_id=j.job_id JOIN companies c ON j.company_id=c.company_id JOIN resumes_cv r ON a.cv_id=r.cv_id WHERE a.user_id=%s ORDER BY a.applied_at DESC",(user["id"],))
+ return fetch_all("SELECT a.application_id,a.status,a.applied_at,j.job_id,j.title,c.company_id,c.name AS company_name,r.file_name FROM applications a JOIN jobs j ON a.job_id=j.job_id JOIN companies c ON j.company_id=c.company_id JOIN resumes_cv r ON a.cv_id=r.cv_id WHERE a.user_id=%s ORDER BY a.applied_at DESC",(user["id"],))
 @router.patch("/applications/{application_id}/withdraw")
 def withdraw(application_id:int,user=Depends(get_current_user)):
  result=execute("UPDATE applications SET status='WITHDRAWN' WHERE application_id=%s AND user_id=%s AND status='SUBMITTED'",(application_id,user["id"]))
