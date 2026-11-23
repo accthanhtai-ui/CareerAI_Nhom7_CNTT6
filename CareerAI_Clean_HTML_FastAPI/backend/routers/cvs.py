@@ -21,11 +21,13 @@ async def upload_cv(cv:UploadFile=File(...),user=Depends(get_current_user)):
  result=execute("INSERT INTO resumes_cv(user_id,file_name,storage_path,extracted_text) VALUES(%s,%s,%s,%s)",(user["id"],cv.filename,stored,extracted))
  return {"message":"Tải CV thành công.","cv_id":result["id"],"file_name":cv.filename,"text_length":len(extracted)}
 @router.get("/{cv_id}/download")
-def download_cv(cv_id:int,user=Depends(get_current_user)):
+def download_cv(cv_id:int,preview:bool=False,user=Depends(get_current_user)):
  row=fetch_one("SELECT file_name,storage_path FROM resumes_cv WHERE cv_id=%s AND user_id=%s",(cv_id,user["id"]))
  if not row: raise HTTPException(404,"Không tìm thấy CV.")
  path=UPLOAD_DIR/Path(row["storage_path"]).name
  if not path.exists(): raise HTTPException(404,"File CV không còn tồn tại.")
+ if preview:
+  return FileResponse(path,media_type="application/pdf",content_disposition_type="inline")
  return FileResponse(path,filename=row["file_name"],media_type="application/pdf")
 @router.delete("/{cv_id}")
 def delete_cv(cv_id:int,user=Depends(get_current_user)):
