@@ -1,39 +1,70 @@
-import { api } from "../common/api.js";
+import { api, json } from "../common/api.js";
 import { setPage, escapeHtml, toast } from "../common/ui.js";
 
+const DEFAULT_CV_KEY = "careerai_default_cv_id";
 const root = setPage("Phân tích CV bằng AI", "Đánh giá chất lượng CV, phát hiện điểm mạnh, điểm cần cải thiện và gợi ý nghề nghiệp từ AI.");
 
 root.insertAdjacentHTML("beforeend", `
-    <!-- Form Phân tích CV -->
+    <!-- Cách 1: Chọn từ CV đã có trong tài khoản (Không cần tải lại) -->
+    <div class="card" style="margin-bottom:20px;border-top:4px solid var(--primary);background:#f8faff">
+        <h3 style="margin-bottom:6px;font-size:17px;color:#1e3a8a">
+            ⚡ Cách 1: Phân tích CV đã lưu trong tài khoản (Khuyên dùng)
+        </h3>
+        <p class="muted" style="font-size:13px;margin-bottom:14px">
+            Bạn đã tải CV lên trong mục <strong>Quản lý CV</strong>? Chọn ngay CV bên dưới để AI phân tích mà <strong>không cần tải lại file</strong>:
+        </p>
+        <div class="row" style="gap:12px;align-items:center">
+            <select id="savedCvSelect" style="flex:1;min-width:240px;padding:11px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;font-weight:500">
+                <option value="">-- Đang nạp danh sách CV... --</option>
+            </select>
+            <button type="button" id="analyzeSavedCvBtn" class="button button-primary" style="padding:11px 24px;font-size:14px;white-space:nowrap;font-weight:600">
+                ⚡ Phân tích CV này ngay
+            </button>
+        </div>
+    </div>
+
+    <!-- Phân cách hoặc -->
+    <div class="row" style="align-items:center;margin:18px 0;gap:12px">
+        <div style="flex:1;height:1px;background:var(--line)"></div>
+        <span class="muted" style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Hoặc tải file PDF mới từ máy tính</span>
+        <div style="flex:1;height:1px;background:var(--line)"></div>
+    </div>
+
+    <!-- Cách 2: Tải lên file PDF mới từ máy tính -->
     <div class="card">
+        <h3 style="margin-bottom:6px;font-size:17px;color:#1e293b">
+            📄 Cách 2: Tải lên file CV mới từ máy tính
+        </h3>
+        <p class="muted" style="font-size:13px;margin-bottom:14px">
+            Thích hợp khi bạn muốn kiểm tra nhanh một bản CV mới khác trước khi lưu vào tài khoản.
+        </p>
         <form id="analysisForm">
             <div class="upload-area" id="dropArea" style="cursor:pointer;position:relative">
-                <input type="file" id="cvFileInput" name="cv" accept="application/pdf" required style="display:none">
+                <input type="file" id="cvFileInput" name="cv" accept="application/pdf" style="display:none">
                 <div style="font-size:36px;margin-bottom:8px">📄</div>
                 <p><strong>Kéo thả hoặc bấm vào đây để chọn file CV (PDF)</strong></p>
                 <p class="muted" style="font-size:13px;margin-bottom:12px">Hỗ trợ file PDF có lớp văn bản, tối đa 5 MB</p>
                 <div id="selectedFileName" class="tag" style="background:#e0e7ff;color:#3730a3;display:none;font-size:14px;padding:6px 14px"></div>
             </div>
 
-            <!-- Khu vực thông báo lỗi -->
-            <div id="errorAlert" class="message" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;margin-top:16px;border-radius:10px;padding:12px 16px">
-                <div class="row between">
-                    <div class="row" style="gap:8px">
-                        <strong style="font-size:16px">⚠ Lỗi:</strong>
-                        <span id="errorMessageText"></span>
-                    </div>
-                    <button type="button" id="closeErrorBtn" style="background:transparent;border:0;color:#991b1b;font-weight:bold;cursor:pointer">✕</button>
-                </div>
-            </div>
-
-            <!-- Nút Phân tích CV -->
             <div class="row between" style="margin-top:16px">
                 <span class="muted" style="font-size:13px">Hệ thống CareerAI sử dụng mô hình Gemini để phân tích nội dung.</span>
-                <button type="submit" id="analyzeBtn" class="button button-primary" style="padding:11px 24px;font-size:15px">
-                    ⚡ Phân tích CV
+                <button type="submit" id="analyzeBtn" class="button button-primary" style="padding:11px 24px;font-size:14px">
+                    ⚡ Phân tích file tải lên
                 </button>
             </div>
         </form>
+    </div>
+
+    <!-- Khu vực thông báo lỗi -->
+    <div id="errorAlert" class="message" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;margin-top:20px;border-radius:10px;padding:14px 18px">
+        <div class="row between" style="align-items:flex-start">
+            <div class="row" style="gap:8px">
+                <strong style="font-size:16px">⚠ Lỗi:</strong>
+                <span id="errorMessageText"></span>
+            </div>
+            <button type="button" id="closeErrorBtn" style="background:transparent;border:0;color:#991b1b;font-weight:bold;cursor:pointer;font-size:16px">✕</button>
+        </div>
     </div>
 
     <!-- Trạng thái đang xử lý (Loading State) -->
@@ -70,7 +101,6 @@ root.insertAdjacentHTML("beforeend", `
 
         <!-- 3 Cột: Điểm mạnh, Điểm cần cải thiện, Gợi ý -->
         <div class="grid grid-3">
-            <!-- Điểm mạnh -->
             <div class="card" style="background:#f0fdf4;border:1px solid #bbf7d0">
                 <h3 style="color:#166534;font-size:16px;display:flex;align-items:center;gap:6px;margin-bottom:12px">
                     <span style="font-size:18px">✔</span> Điểm mạnh nổi bật
@@ -78,7 +108,6 @@ root.insertAdjacentHTML("beforeend", `
                 <ul id="strengthsList" style="padding-left:18px;margin:0;color:#14532d;line-height:1.6"></ul>
             </div>
 
-            <!-- Điểm cần cải thiện -->
             <div class="card" style="background:#fff7ed;border:1px solid #fed7aa">
                 <h3 style="color:#9a3412;font-size:16px;display:flex;align-items:center;gap:6px;margin-bottom:12px">
                     <span style="font-size:18px">⚠</span> Điểm cần cải thiện
@@ -86,50 +115,50 @@ root.insertAdjacentHTML("beforeend", `
                 <ul id="weaknessesList" style="padding-left:18px;margin:0;color:#7c2d12;line-height:1.6"></ul>
             </div>
 
-            <!-- Đề xuất & Gợi ý -->
             <div class="card" style="background:#eff6ff;border:1px solid #bfdbfe">
                 <h3 style="color:#1e40af;font-size:16px;display:flex;align-items:center;gap:6px;margin-bottom:12px">
-                    <span style="font-size:18px">💡</span> Gợi ý phát triển
+                    <span style="font-size:18px">💡</span> Gợi ý phát triển & tối ưu
                 </h3>
                 <ul id="suggestionsList" style="padding-left:18px;margin:0;color:#1e3a8a;line-height:1.6"></ul>
             </div>
         </div>
 
-        <!-- Từ khóa kỹ năng còn thiếu (nếu có) -->
-        <div id="missingKeywordsCard" class="card" style="display:none;background:#fefce8;border:1px solid #fef08a">
-            <h4 style="margin-bottom:8px;color:#854d0e;font-size:14px">Từ khóa chuyên môn nên bổ sung vào CV:</h4>
+        <!-- Từ khóa kỹ năng còn thiếu -->
+        <div id="missingKeywordsCard" class="card" style="display:none;background:#fdf2f8;border:1px solid #fbcfe8">
+            <h3 style="color:#9d174d;font-size:16px;margin-bottom:8px">Từ khóa chuyên môn nên bổ sung vào CV:</h3>
             <div id="missingKeywordsList"></div>
         </div>
 
-        <p class="muted" style="font-size:12px;text-align:right">
-            * Điểm số và đánh giá do AI phân tích tự động dựa trên văn bản trích xuất từ CV, mang tính chất định hướng và tham khảo.
-        </p>
+        <!-- Ghi chú kết quả mang tính tham khảo -->
+        <div class="card" style="background:#f8fafc;border:1px solid var(--line);padding:14px 18px">
+            <p style="margin:0;font-size:13px;color:#64748b;line-height:1.6">
+                📌 <strong>Lưu ý quan trọng:</strong> Điểm số và nhận xét từ AI chỉ mang tính chất tham khảo, không đảm bảo 100% cơ hội trúng tuyển. Bạn nên cân nhắc điều chỉnh phù hợp với định hướng nghề nghiệp thực tế.
+            </p>
+        </div>
     </div>
 
-    <!-- Lịch sử phân tích gần đây -->
-    <div id="historySection" style="margin-top:32px">
-        <h3 style="font-size:16px;margin-bottom:12px">Lịch sử phân tích gần đây</h3>
-        <div id="historyList" class="stack"></div>
-    </div>
+    <!-- Lịch sử phân tích CV -->
+    <section class="card" style="margin-top:28px">
+        <div class="row between" style="margin-bottom:14px">
+            <h3 style="margin:0;font-size:18px">Lịch sử phân tích CV gần đây</h3>
+            <span class="muted" style="font-size:13px">Lưu trữ các lần phân tích trước đó của bạn</span>
+        </div>
+        <div id="historyList" class="stack">
+            <div class="loading-state" style="padding:16px;text-align:center;color:var(--muted)">Đang tải lịch sử...</div>
+        </div>
+    </section>
 `);
 
-// Thêm animation quay loading
-if (!document.getElementById("spinnerStyle")) {
-    const style = document.createElement("style");
-    style.id = "spinnerStyle";
-    style.textContent = `
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// Xử lý kéo thả và chọn file
+// Các phần tử giao diện
+const form = document.querySelector("#analysisForm");
 const dropArea = document.querySelector("#dropArea");
 const fileInput = document.querySelector("#cvFileInput");
 const selectedFileName = document.querySelector("#selectedFileName");
+const analyzeBtn = document.querySelector("#analyzeBtn");
+const savedCvSelect = document.querySelector("#savedCvSelect");
+const analyzeSavedCvBtn = document.querySelector("#analyzeSavedCvBtn");
+const processingState = document.querySelector("#processingState");
+const processingStep = document.querySelector("#processingStep");
 const errorAlert = document.querySelector("#errorAlert");
 const errorMessageText = document.querySelector("#errorMessageText");
 const closeErrorBtn = document.querySelector("#closeErrorBtn");
@@ -137,16 +166,91 @@ const closeErrorBtn = document.querySelector("#closeErrorBtn");
 function showError(msg) {
     errorMessageText.textContent = msg;
     errorAlert.style.display = "block";
-    errorAlert.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    errorAlert.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function hideError() {
     errorAlert.style.display = "none";
-    errorMessageText.textContent = "";
 }
 
 closeErrorBtn.onclick = hideError;
 
+// 1. Tải danh sách CV đã có trong tài khoản
+async function initSavedCvs() {
+    try {
+        const cvs = await api("/cvs").catch(() => []);
+        const defaultCvId = localStorage.getItem(DEFAULT_CV_KEY);
+        const urlCvId = new URLSearchParams(location.search).get("cv_id");
+
+        if (!cvs || !cvs.length) {
+            savedCvSelect.innerHTML = `<option value="">(Chưa có CV nào trong tài khoản - hãy tải file ở Cách 2 hoặc vào Quản lý CV)</option>`;
+            analyzeSavedCvBtn.disabled = true;
+            return;
+        }
+
+        analyzeSavedCvBtn.disabled = false;
+        savedCvSelect.innerHTML = cvs.map(c => {
+            const isDefault = String(c.cv_id) === String(defaultCvId);
+            const isUrlTarget = String(c.cv_id) === String(urlCvId);
+            const isSelected = isUrlTarget || (!urlCvId && isDefault);
+            return `
+                <option value="${c.cv_id}" ${isSelected ? "selected" : ""}>
+                    ${escapeHtml(c.file_name)} ${isDefault ? "(★ Mặc định)" : ""} (${c.text_length || 0} ký tự)
+                </option>
+            `;
+        }).join("");
+
+        // Nếu người dùng bấm từ trang Quản lý CV qua (có param ?cv_id=...), tự động kích hoạt phân tích luôn!
+        if (urlCvId) {
+            toast("Đã tự động chọn CV từ Quản lý CV. Đang phân tích...");
+            setTimeout(() => {
+                analyzeSavedCvBtn.click();
+            }, 300);
+        }
+    } catch {
+        savedCvSelect.innerHTML = `<option value="">Không thể tải danh sách CV.</option>`;
+    }
+}
+
+initSavedCvs();
+
+// 2. Xử lý nút Phân tích CV đã có (Cách 1)
+analyzeSavedCvBtn.onclick = async () => {
+    hideError();
+    const cvId = Number(savedCvSelect.value);
+    if (!cvId) {
+        showError("Vui lòng chọn một CV từ danh sách.");
+        return;
+    }
+
+    const selectedOption = savedCvSelect.options[savedCvSelect.selectedIndex];
+    const fileName = selectedOption ? selectedOption.text.split("(")[0].trim() : "CV";
+
+    analyzeSavedCvBtn.disabled = true;
+    analyzeSavedCvBtn.textContent = "⏳ Đang phân tích...";
+    processingState.style.display = "block";
+    document.querySelector("#analysisResult").style.display = "none";
+
+    let stepTimer = setTimeout(() => {
+        processingStep.textContent = "Đang gửi nội dung tới Gemini AI để đánh giá điểm số và gợi ý...";
+    }, 2500);
+
+    try {
+        const response = await api("/ai/analyze-existing-cv", json("POST", { cv_id: cvId }));
+        toast("Phân tích CV thành công!");
+        displayResult(response.fileName || fileName, response.result || {});
+        loadHistory();
+    } catch (err) {
+        showError(err.message || "Đã xảy ra lỗi trong quá trình phân tích CV. Vui lòng kiểm tra lại file PDF.");
+    } finally {
+        clearTimeout(stepTimer);
+        analyzeSavedCvBtn.disabled = false;
+        analyzeSavedCvBtn.textContent = "⚡ Phân tích CV này ngay";
+        processingState.style.display = "none";
+    }
+};
+
+// 3. Xử lý tải file mới từ máy tính (Cách 2)
 dropArea.onclick = () => fileInput.click();
 
 fileInput.onchange = () => {
@@ -170,7 +274,6 @@ fileInput.onchange = () => {
     }
 };
 
-// Xử lý kéo thả (drag & drop)
 ["dragenter", "dragover"].forEach(eventName => {
     dropArea.addEventListener(eventName, e => {
         e.preventDefault();
@@ -193,6 +296,45 @@ dropArea.addEventListener("drop", e => {
         fileInput.dispatchEvent(new Event("change"));
     }
 });
+
+form.onsubmit = async (e) => {
+    e.preventDefault();
+    hideError();
+
+    const file = fileInput.files[0];
+    if (!file) {
+        showError("Vui lòng chọn file CV (PDF) từ máy tính để phân tích.");
+        return;
+    }
+
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = "⏳ Đang xử lý...";
+    processingState.style.display = "block";
+    document.querySelector("#analysisResult").style.display = "none";
+
+    let stepTimer = setTimeout(() => {
+        processingStep.textContent = "Đang gửi dữ liệu tới Gemini AI để đánh giá điểm số và gợi ý...";
+    }, 3000);
+
+    try {
+        const formData = new FormData(form);
+        const response = await api("/ai/analyze-cv", {
+            method: "POST",
+            body: formData
+        });
+
+        toast("Phân tích CV thành công!");
+        displayResult(response.fileName || file.name, response.result || {});
+        loadHistory();
+    } catch (err) {
+        showError(err.message || "Đã xảy ra lỗi trong quá trình phân tích CV. Vui lòng kiểm tra lại file PDF có lớp văn bản.");
+    } finally {
+        clearTimeout(stepTimer);
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = "⚡ Phân tích file tải lên";
+        processingState.style.display = "none";
+    }
+};
 
 // Render kết quả phân tích
 function displayResult(fileName, r) {
@@ -222,113 +364,57 @@ function displayResult(fileName, r) {
             scoreLabel.style.color = "#15803d";
         } else if (score >= 65) {
             scoreLabel.textContent = "Khá tốt";
-            scoreLabel.style.background = "#dbeafe";
-            scoreLabel.style.color = "#1d4ed8";
-        } else if (score >= 50) {
-            scoreLabel.textContent = "Trung bình";
-            scoreLabel.style.background = "#fef3c7";
-            scoreLabel.style.color = "#b45309";
+            scoreLabel.style.background = "#fef9c3";
+            scoreLabel.style.color = "#a16207";
         } else {
             scoreLabel.textContent = "Cần cải thiện";
             scoreLabel.style.background = "#fee2e2";
             scoreLabel.style.color = "#b91c1c";
         }
     } else {
-        scoreLabel.textContent = "Chưa chấm điểm";
+        scoreLabel.textContent = "Tham khảo";
+        scoreLabel.style.background = "#f1f5f9";
+        scoreLabel.style.color = "#64748b";
     }
 
     // Điểm mạnh
     strengthsList.innerHTML = (r.strengths && r.strengths.length)
-        ? r.strengths.map(s => `<li style="margin-bottom:6px">${escapeHtml(s)}</li>`).join("")
-        : `<li class="muted">Chưa ghi nhận điểm mạnh cụ thể.</li>`;
+        ? r.strengths.map(s => `<li>${escapeHtml(s)}</li>`).join("")
+        : `<li>Chưa xác định được điểm mạnh nổi bật.</li>`;
 
     // Điểm cần cải thiện
     weaknessesList.innerHTML = (r.weaknesses && r.weaknesses.length)
-        ? r.weaknesses.map(w => `<li style="margin-bottom:6px">${escapeHtml(w)}</li>`).join("")
-        : `<li class="muted">Không có thiếu sót lớn nào.</li>`;
+        ? r.weaknesses.map(w => `<li>${escapeHtml(w)}</li>`).join("")
+        : `<li>Hồ sơ của bạn khá cân bằng, không có điểm yếu lớn.</li>`;
 
-    // Đề xuất & gợi ý
+    // Gợi ý
     suggestionsList.innerHTML = (r.suggestions && r.suggestions.length)
-        ? r.suggestions.map(g => `<li style="margin-bottom:6px">${escapeHtml(g)}</li>`).join("")
-        : `<li class="muted">Chưa có đề xuất cụ thể.</li>`;
+        ? r.suggestions.map(sg => `<li>${escapeHtml(sg)}</li>`).join("")
+        : `<li>Tiếp tục tích lũy thêm các dự án thực tế liên quan đến chuyên ngành.</li>`;
 
-    // Vị trí phù hợp
+    // Vị trí gợi ý
     if (r.recommendedRoles && r.recommendedRoles.length) {
         rolesList.innerHTML = r.recommendedRoles.map(role => `
-            <span class="tag" style="background:#eef2f6;color:#1e293b;font-size:12px;margin:2px 4px">
-                💼 ${escapeHtml(role)}
-            </span>
+            <span class="tag" style="background:#e0e7ff;color:#3730a3;font-weight:600">${escapeHtml(role)}</span>
         `).join("");
         rolesWrap.style.display = "block";
     } else {
         rolesWrap.style.display = "none";
     }
 
-    // Từ khóa còn thiếu
+    // Từ khóa kỹ năng còn thiếu
     if (r.missingKeywords && r.missingKeywords.length) {
         keywordsList.innerHTML = r.missingKeywords.map(kw => `
-            <span class="tag" style="background:#fef08a;color:#713f12;font-size:12px;margin:3px">
-                + ${escapeHtml(kw)}
-            </span>
+            <span class="tag" style="background:#fce7f3;color:#9d174d">${escapeHtml(kw)}</span>
         `).join("");
         keywordsCard.style.display = "block";
     } else {
         keywordsCard.style.display = "none";
     }
 
-    resultBox.style.display = "grid";
-    resultBox.scrollIntoView({ behavior: "smooth" });
+    resultBox.style.display = "block";
+    resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
 }
-
-// Xử lý submit phân tích
-const form = document.querySelector("#analysisForm");
-const analyzeBtn = document.querySelector("#analyzeBtn");
-const processingState = document.querySelector("#processingState");
-const processingStep = document.querySelector("#processingStep");
-
-form.onsubmit = async e => {
-    e.preventDefault();
-    hideError();
-
-    if (!fileInput.files || !fileInput.files.length) {
-        showError("Vui lòng chọn hoặc kéo thả file CV dạng PDF.");
-        return;
-    }
-
-    const file = fileInput.files[0];
-    if (file.size > 5 * 1024 * 1024) {
-        showError("File vượt quá kích thước 5 MB cho phép.");
-        return;
-    }
-
-    analyzeBtn.disabled = true;
-    analyzeBtn.textContent = "⏳ Đang xử lý...";
-    processingState.style.display = "block";
-    document.querySelector("#analysisResult").style.display = "none";
-
-    let stepTimer = setTimeout(() => {
-        processingStep.textContent = "Đang gửi dữ liệu tới Gemini AI để đánh giá điểm số và gợi ý...";
-    }, 3000);
-
-    try {
-        const formData = new FormData(form);
-        const response = await api("/ai/analyze-cv", {
-            method: "POST",
-            body: formData
-        });
-
-        toast("Phân tích CV thành công!");
-        displayResult(response.fileName || file.name, response.result || {});
-        loadHistory();
-    } catch (err) {
-        showError(err.message || "Đã xảy ra lỗi trong quá trình phân tích CV. Vui lòng kiểm tra lại file PDF có lớp văn bản.");
-    } finally {
-        clearTimeout(stepTimer);
-        analyzeBtn.disabled = false;
-        analyzeBtn.textContent = "⚡ Phân tích CV";
-        processingState.style.display = "none";
-    }
-};
 
 // Tải lịch sử phân tích
 async function loadHistory() {

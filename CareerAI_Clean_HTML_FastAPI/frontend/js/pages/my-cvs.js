@@ -181,6 +181,9 @@ async function load() {
                     </p>
                 </div>
                 <div class="actions">
+                    <a href="/pages/cv-analysis.html?cv_id=${c.cv_id}" class="button button-primary" style="padding:10px 16px;font-size:13px;text-decoration:none">
+                        ⚡ Phân tích AI
+                    </a>
                     <button class="button button-light"
                         data-preview="${c.cv_id}"
                         data-name="${escapeHtml(c.file_name)}">
