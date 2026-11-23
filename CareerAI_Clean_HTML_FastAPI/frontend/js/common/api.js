@@ -26,7 +26,7 @@ export async function api(path, options = {}) {
     try {
         response = await fetch(API_BASE + path, { ...options, headers });
     } catch (networkError) {
-        throw new Error("Không thể kết nối đến máy chủ backend. Vui lòng kiểm tra dịch vụ FastAPI hoặc mạng Internet.");
+        throw new Error("Không thể kết nối đến máy chủ backend (FastAPI). Vui lòng kiểm tra lại dịch vụ đang chạy hoặc kết nối mạng.");
     }
 
     // Tự động xử lý khi hết hạn phiên đăng nhập (401)
@@ -53,7 +53,11 @@ export async function api(path, options = {}) {
         if (Array.isArray(errMsg)) {
             errMsg = errMsg.map(e => e.msg || JSON.stringify(e)).join("; ");
         }
-        throw new Error(typeof errMsg === "string" ? errMsg : JSON.stringify(errMsg));
+        const text = typeof errMsg === "string" ? errMsg : JSON.stringify(errMsg);
+        if (text.includes("Failed to fetch") || text.includes("NetworkError")) {
+            throw new Error("Không thể kết nối đến máy chủ backend. Vui lòng kiểm tra lại dịch vụ đang chạy.");
+        }
+        throw new Error(text);
     }
 
     return data;

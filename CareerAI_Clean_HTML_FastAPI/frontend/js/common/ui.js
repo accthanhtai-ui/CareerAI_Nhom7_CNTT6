@@ -1,7 +1,21 @@
+export function formatErrorMessage(msg) {
+    if (!msg) return "Có lỗi xảy ra, vui lòng thử lại.";
+    const str = String(msg);
+    if (
+        str.includes("Failed to fetch") ||
+        str.includes("NetworkError") ||
+        str.includes("fetch failed") ||
+        str.includes("Load failed")
+    ) {
+        return "Không thể kết nối đến máy chủ backend (FastAPI). Vui lòng kiểm tra lại dịch vụ đang chạy hoặc kết nối mạng.";
+    }
+    return str;
+}
+
 export function showMessage(message, type = "info") {
     const box = document.querySelector("#pageMessage");
     if (!box) return;
-    box.textContent = message;
+    box.textContent = formatErrorMessage(message);
     box.hidden = false;
     box.className = "message";
     if (type === "error") {
@@ -22,7 +36,7 @@ export function showMessage(message, type = "info") {
 export function toast(message, type = "info") {
     const box = document.querySelector("#toast");
     if (!box) return;
-    box.textContent = message;
+    box.textContent = formatErrorMessage(message);
     box.className = "toast show";
     if (type === "success") box.classList.add("toast-success");
     else if (type === "error") box.classList.add("toast-error");
@@ -53,7 +67,8 @@ export function setPage(title, description = "") {
 }
 
 export function escapeHtml(value = "") {
-    return String(value).replace(/[&<>"']/g, char => ({
+    const formatted = formatErrorMessage(value);
+    return String(formatted).replace(/[&<>"']/g, char => ({
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",

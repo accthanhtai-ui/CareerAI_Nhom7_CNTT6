@@ -63,12 +63,19 @@ let activeBlobUrl = null;
 let activeFileName = "cv.pdf";
 
 async function fetchPdfBlob(cvId) {
-    const response = await fetch(`/api/cvs/${cvId}/download?preview=true`, {
-        headers: { Authorization: `Bearer ${getToken()}` }
-    });
-    if (!response.ok) throw new Error("Không thể tải nội dung file CV.");
-    const buffer = await response.arrayBuffer();
-    return new Blob([buffer], { type: "application/pdf" });
+    try {
+        const response = await fetch(`/api/cvs/${cvId}/download?preview=true`, {
+            headers: { Authorization: `Bearer ${getToken()}` }
+        });
+        if (!response.ok) throw new Error("Không thể tải nội dung file CV.");
+        const buffer = await response.arrayBuffer();
+        return new Blob([buffer], { type: "application/pdf" });
+    } catch (err) {
+        if (err.message.includes("Failed to fetch") || err.message.includes("NetworkError")) {
+            throw new Error("Không thể kết nối đến máy chủ để tải file CV. Vui lòng kiểm tra lại dịch vụ đang chạy.");
+        }
+        throw err;
+    }
 }
 
 async function previewCv(cvId, fileName) {
