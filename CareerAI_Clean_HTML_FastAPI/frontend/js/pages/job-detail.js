@@ -162,11 +162,17 @@ async function init() {
                     <a href="/pages/company.html?id=${job.company_id}" class="button button-light" style="padding:11px 18px;font-size:14px">
                         🏢 Xem hồ sơ công ty
                     </a>
+                    <button id="reportJobBtn" class="button button-light" style="padding:11px 18px;font-size:14px;color:#dc2626;border-color:#fecaca">
+                        ⚑ Báo cáo tin
+                    </button>
                 </div>
             </div>
 
             <!-- Khu vực ứng tuyển nhanh (mặc định ẩn) -->
             <div id="applyArea" style="display:none;margin-bottom:24px"></div>
+
+            <!-- Khu vực báo cáo tin tuyển dụng vi phạm (mặc định ẩn) -->
+            <div id="reportArea" style="display:none;margin-bottom:24px"></div>
 
             <!-- Bố cục 2 cột: Cột nội dung tin & Cột thông tin công ty / tin khác -->
             <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:start">
@@ -321,6 +327,91 @@ async function init() {
                 } catch (err) {
                     toast(err.message);
                 }
+            };
+        }
+
+        const reportJobBtn = document.querySelector("#reportJobBtn");
+        const reportArea = document.querySelector("#reportArea");
+
+        if (reportJobBtn && reportArea) {
+            reportJobBtn.onclick = () => {
+                if (reportArea.style.display === "block") {
+                    reportArea.style.display = "none";
+                    return;
+                }
+                reportArea.style.display = "block";
+                reportArea.scrollIntoView({ behavior: "smooth", block: "center" });
+                reportArea.innerHTML = `
+                    <form id="reportForm" class="card" style="border:2px solid #ef4444;background:#fef2f2;padding:20px;border-radius:10px">
+                        <div class="row between" style="margin-bottom:12px;align-items:center">
+                            <h3 style="margin:0;font-size:17px;color:#991b1b">⚑ Báo cáo tin tuyển dụng vi phạm</h3>
+                            <button type="button" id="closeReportBtn" style="background:none;border:0;cursor:pointer;font-weight:bold;font-size:16px;color:#991b1b">✕</button>
+                        </div>
+                        <p style="font-size:13px;color:#7f1d1d;margin-bottom:14px;line-height:1.5">
+                            Bạn đang báo cáo tin <strong>${escapeHtml(job.title)}</strong> của <strong>${escapeHtml(job.company_name)}</strong>. Vui lòng cho biết lý do để Admin xác minh:
+                        </p>
+                        <div class="field" style="margin-bottom:12px">
+                            <label style="font-weight:600;font-size:13px;display:block;margin-bottom:6px">Lý do báo cáo: *</label>
+                            <select id="reportCategory" style="width:100%;padding:10px;border-radius:8px;border:1px solid #fca5a5;background:#fff">
+                                <option value="Nội dung sai lệch, lừa đảo">Nội dung tin sai lệch, có dấu hiệu lừa đảo</option>
+                                <option value="Yêu cầu nộp phí trái quy định">Yêu cầu ứng viên nộp tiền/phí trái quy định</option>
+                                <option value="Thông tin công ty giả mạo">Thông tin công ty hoặc địa chỉ giả mạo</option>
+                                <option value="Tin đã hết hạn hoặc không liên hệ được">Tin đã đóng/hết hạn nhưng vẫn để hoạt động</option>
+                                <option value="Vi phạm tiêu chuẩn cộng đồng">Vi phạm thuần phong mỹ tục hoặc tiêu chuẩn cộng đồng</option>
+                                <option value="Lý do khác">Lý do khác</option>
+                            </select>
+                        </div>
+                        <div class="field" style="margin-bottom:14px">
+                            <label style="font-weight:600;font-size:13px;display:block;margin-bottom:6px">Mô tả chi tiết bổ sung (tùy chọn):</label>
+                            <textarea id="reportDetails" rows="3" placeholder="Ghi chú thêm thông tin cụ thể giúp Quản trị viên xử lý nhanh hơn..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #fca5a5;background:#fff;resize:vertical"></textarea>
+                        </div>
+                        <div id="reportFeedback" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:8px;font-size:13px"></div>
+                        <div class="row" style="gap:12px">
+                            <button type="submit" id="submitReportBtn" class="button" style="background:#dc2626;color:#fff;border:none;padding:10px 22px;font-weight:600;border-radius:8px">
+                                Xác nhận gửi báo cáo
+                            </button>
+                            <button type="button" id="cancelReportBtn" class="button button-light" style="padding:10px 18px">
+                                Hủy
+                            </button>
+                        </div>
+                    </form>
+                `;
+
+                document.querySelector("#closeReportBtn").onclick = () => { reportArea.style.display = "none"; };
+                document.querySelector("#cancelReportBtn").onclick = () => { reportArea.style.display = "none"; };
+
+                document.querySelector("#reportForm").onsubmit = async (e) => {
+                    e.preventDefault();
+                    const submitBtn = document.querySelector("#submitReportBtn");
+                    const feedback = document.querySelector("#reportFeedback");
+                    const category = document.querySelector("#reportCategory").value.trim();
+                    const details = document.querySelector("#reportDetails").value.trim();
+                    const fullReason = details ? `${category}: ${details}` : category;
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Đang gửi báo cáo...";
+                    feedback.style.display = "none";
+
+                    try {
+                        const res = await api(`/jobs/${job.job_id}/report`, json("POST", { reason: fullReason }));
+                        toast(res.message || "Đã gửi báo cáo tin tuyển dụng.");
+                        reportArea.innerHTML = `
+                            <div class="card" style="background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;padding:18px;border-radius:10px">
+                                <strong>✔ Đã gửi báo cáo vi phạm thành công!</strong>
+                                <p style="margin:6px 0 0 0;font-size:13px">Cảm ơn bạn đã phản ánh. Quản trị viên sẽ nhanh chóng xác minh và xử lý tin tuyển dụng này.</p>
+                            </div>
+                        `;
+                    } catch (err) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "Xác nhận gửi báo cáo";
+                        feedback.style.display = "block";
+                        feedback.style.background = "#fff1f2";
+                        feedback.style.border = "1px solid #fecdd3";
+                        feedback.style.color = "#be123c";
+                        feedback.innerHTML = `<strong>✕ Gửi thất bại:</strong> ${escapeHtml(err.message || "Vui lòng thử lại sau.")}`;
+                        toast(err.message || "Lỗi khi gửi báo cáo.");
+                    }
+                };
             };
         }
 
