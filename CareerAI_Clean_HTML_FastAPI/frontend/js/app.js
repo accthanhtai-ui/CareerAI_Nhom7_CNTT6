@@ -68,9 +68,10 @@ const pages = {
     admin: "./pages/admin.js"
 };
 
-// Tải trang với cơ chế bắt lỗi an toàn (Frontend Error Boundary)
+// Tải trang với cơ chế chống lưu cache cũ (Cache-Busting Timestamp)
 if (pages[page]) {
-    import(pages[page]).catch(error => {
+    const scriptUrl = `${pages[page]}?t=${Date.now()}`;
+    import(scriptUrl).catch(error => {
         console.error(`Lỗi tải trang [${page}]:`, error);
         showMessage(`Không thể khởi chạy trang: ${error.message || "Lỗi giao diện"}`, "error");
     });
