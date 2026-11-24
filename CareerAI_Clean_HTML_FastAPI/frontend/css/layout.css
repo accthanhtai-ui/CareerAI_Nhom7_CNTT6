@@ -10,13 +10,516 @@
 .topbar { height: 70px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
 .user-chip { background: #eef3ff; color: #244ca9; border-radius: 30px; padding: 8px 14px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
 .page-content { padding: 30px; max-width: 1250px; width: 100%; margin: 0 auto; flex: 1; }
-.auth-layout { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: linear-gradient(135deg, #eaf0ff, #f8faff); }
-.auth-card { width: min(440px, 100%); background: #fff; padding: 34px; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 20px 60px #1b376b15; }
-.auth-logo { width: 170px; margin-bottom: 24px; }
-.auth-card h1 { margin-bottom: 8px; }
-.auth-card form { margin: 22px 0; }
-.auth-card label { display: grid; gap: 7px; margin: 15px 0; }
-.auth-card button { width: 100%; }
+/* ========================================================
+   GIAO DIỆN ĐĂNG NHẬP / ĐĂNG KÝ NEUMORPHIC 3D FLIP CARD
+   ======================================================== */
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px clamp(20px, 6vw, 100px);
+  background: #e7ebf0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Các quả cầu Neumorphic trôi nổi mềm mại */
+.bg-circle {
+  position: fixed;
+  border-radius: 50%;
+  background: #e7ebf0;
+  box-shadow: 15px 15px 30px rgba(163, 177, 198, 0.55), -15px -15px 30px rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  animation: floating 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.bg1 {
+  width: 190px;
+  height: 190px;
+  top: 7%;
+  left: 6%;
+}
+
+.bg2 {
+  width: 130px;
+  height: 130px;
+  left: 32%;
+  bottom: 8%;
+  animation-delay: 1.5s;
+}
+
+.bg3 {
+  width: 60px;
+  height: 60px;
+  left: 20%;
+  top: 25%;
+  animation-delay: 3s;
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+}
+
+/* Khu vực giới thiệu thương hiệu bên trái */
+.auth-left-brand {
+  flex: 1;
+  max-width: 520px;
+  z-index: 2;
+  padding-right: 40px;
+}
+
+.brand-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #e7ebf0;
+  box-shadow: 4px 4px 10px rgba(163, 177, 198, 0.6), -4px -4px 10px rgba(255, 255, 255, 0.9);
+  color: #087cff;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+
+.auth-left-brand h1 {
+  font-size: clamp(34px, 4vw, 48px);
+  font-weight: 850;
+  color: #24303f;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.auth-left-brand .brand-blue {
+  color: #087cff;
+  text-shadow: 0 4px 12px rgba(8, 124, 255, 0.25);
+}
+
+.brand-tagline {
+  font-size: 16px;
+  color: #64748b;
+  line-height: 1.65;
+  margin-bottom: 30px;
+}
+
+.brand-stats-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand-stat-item {
+  padding: 16px 20px;
+  border-radius: 20px;
+  background: #e7ebf0;
+  box-shadow: 6px 6px 14px rgba(163, 177, 198, 0.5), -6px -6px 14px rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: #087cff;
+}
+
+.stat-label {
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Khối bao bọc 3D Card đặt ở GÓC PHẢI màn hình */
+.auth-wrapper {
+  width: 430px;
+  max-width: 100%;
+  perspective: 1600px;
+  z-index: 10;
+  margin-left: auto; /* Cố định vị trí nằm ở góc phải */
+}
+
+.auth-card-3d {
+  position: relative;
+  width: 100%;
+  min-height: 640px;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.auth-card-3d.flipped {
+  transform: rotateY(180deg);
+}
+
+/* 2 Mặt thẻ: Đăng nhập & Đăng ký */
+.form-panel {
+  position: absolute;
+  inset: 0;
+  padding: 38px 34px;
+  border-radius: 35px;
+  background: #e7ebf0;
+  box-shadow: 20px 20px 40px rgba(163, 177, 198, 0.65), -20px -20px 40px rgba(255, 255, 255, 0.95);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.signup-panel {
+  transform: rotateY(180deg);
+}
+
+/* Logo hình tròn Neumorphic ở đầu mỗi panel */
+.auth-panel-logo {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: #e7ebf0;
+  box-shadow: 9px 9px 18px rgba(163, 177, 198, 0.65), -9px -9px 18px rgba(255, 255, 255, 0.95);
+  transition: transform 0.4s ease;
+  flex-shrink: 0;
+}
+
+.auth-panel-logo:hover {
+  transform: translateY(-4px) rotate(6deg);
+}
+
+.auth-panel-logo img {
+  width: 52px;
+  height: auto;
+  max-height: 50px;
+  object-fit: contain;
+  display: block;
+}
+
+.form-panel h1 {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 750;
+  color: #303943;
+  margin-bottom: 6px;
+}
+
+.form-panel .subtitle {
+  text-align: center;
+  color: #7c858e;
+  font-size: 13.5px;
+  margin-bottom: 22px;
+}
+
+/* Nhóm nhập liệu & Hiệu ứng Electric Border */
+.input-group {
+  position: relative;
+  width: 100%;
+  height: 54px;
+  margin-bottom: 18px;
+}
+
+.electric-border {
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.electric-border::before {
+  content: "";
+  position: absolute;
+  width: 170%;
+  height: 170%;
+  left: -35%;
+  top: -35%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 30deg,
+    #00eaff 45deg,
+    #00aaff 65deg,
+    #006cff 80deg,
+    transparent 105deg,
+    transparent 360deg
+  );
+  animation: electricRotate 1.1s linear infinite;
+}
+
+.electric-border::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 16px;
+  background: #e7ebf0;
+}
+
+.electric-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 20px;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(7px);
+}
+
+.input-group:focus-within .electric-border {
+  opacity: 1;
+}
+
+.input-group:focus-within .electric-glow {
+  opacity: 0.55;
+  animation: electricRotate 1.1s linear infinite;
+}
+
+@keyframes electricRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.input-group input {
+  position: absolute;
+  inset: 2px;
+  width: calc(100% - 4px);
+  height: 50px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  background: #e7ebf0;
+  color: #303943;
+  font-size: 14.5px;
+  padding: 0 44px 0 16px;
+  z-index: 20;
+  box-shadow: inset 5px 5px 10px rgba(163, 177, 198, 0.55), inset -5px -5px 10px rgba(255, 255, 255, 0.95);
+  transition: box-shadow 0.25s ease;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.55), inset -3px -3px 6px rgba(255, 255, 255, 0.95);
+}
+
+.input-group label {
+  position: absolute;
+  left: 16px;
+  top: 17px;
+  z-index: 30;
+  color: #89929c;
+  font-size: 14px;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 14px;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: #e7ebf0;
+  color: #087cff;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Nút ẩn/hiện mật khẩu */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 13px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #7d8790;
+  cursor: pointer;
+  z-index: 40;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #006cff;
+  transform: scale(1.12);
+}
+
+/* Tùy chọn nhớ mật khẩu & Quên mật khẩu */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2px 2px 20px;
+  color: #7d8790;
+  font-size: 13px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  accent-color: #0072ff;
+  cursor: pointer;
+}
+
+.options a {
+  color: #006cff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+/* Nút Submit Chính với hiệu ứng chuyển màu sáng rực */
+.main-btn {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 16px;
+  background: #e7ebf0;
+  color: #006cff;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.65), -8px -8px 16px rgba(255, 255, 255, 0.95);
+  transition: all 0.3s ease;
+  margin-top: 4px;
+}
+
+.main-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, #006cff, #00cfff, #006cff);
+  background-size: 200% 100%;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+  z-index: -1;
+}
+
+.main-btn:hover::before {
+  transform: translateY(0);
+  animation: buttonMove 1.5s linear infinite;
+}
+
+@keyframes buttonMove {
+  from { background-position: 0 50%; }
+  to { background-position: 200% 50%; }
+}
+
+.main-btn:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 114, 255, 0.35);
+}
+
+.main-btn:active {
+  transform: scale(0.97);
+}
+
+/* Khu vực chuyển đổi lật thẻ (Switch Area) */
+.switch-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  font-size: 13px;
+  color: #7d8790;
+}
+
+.switch-circle {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #e7ebf0;
+  color: #0072ff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.65), -6px -6px 12px rgba(255, 255, 255, 0.95);
+  transition: all 0.35s ease;
+}
+
+.switch-circle:hover {
+  color: #fff;
+  background: #0072ff;
+  transform: rotate(180deg) scale(1.08);
+  box-shadow: 0 8px 20px rgba(0, 114, 255, 0.35);
+}
+
+.switch-circle:active {
+  transform: scale(0.92);
+}
+
+/* Thông báo lỗi trong card */
+.auth-msg-box {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: none;
+}
+.auth-msg-box.error {
+  display: block;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+.auth-msg-box.success {
+  display: block;
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* Responsive khi màn hình thu nhỏ */
+@media (max-width: 920px) {
+  .auth-layout {
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px 16px;
+    gap: 32px;
+  }
+  .auth-left-brand {
+    max-width: 100%;
+    padding-right: 0;
+    text-align: center;
+  }
+  .brand-stats-row {
+    justify-content: center;
+  }
+  .auth-wrapper {
+    margin-left: 0;
+    width: 100%;
+    max-width: 420px;
+  }
+}
 
 /* Spinner và Loading Animation */
 @keyframes spin { to { transform: rotate(360deg); } }
