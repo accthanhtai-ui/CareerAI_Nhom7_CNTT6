@@ -110,22 +110,27 @@ if (userLabel && user) {
     userLabel.innerHTML = `👤 <strong>${user.name || user.email}</strong> ${user.role === 'ADMIN' ? '<span class="tag" style="background:#fee2e2;color:#991b1b;font-size:10px">Admin</span>' : ''}`;
 }
 
-// Ẩn menu Quản trị đối với tài khoản không phải Admin
-if (user?.role !== "ADMIN") {
+// Phân quyền bảo mật: Chỉ hiển thị menu Quản trị khi người dùng có role ADMIN
+if (user?.role === "ADMIN") {
+    document.body.classList.add("is-admin");
+    document.querySelectorAll(".admin-link").forEach(el => {
+        el.style.display = "flex";
+    });
+} else {
+    document.body.classList.remove("is-admin");
     document.querySelectorAll(".admin-link").forEach(el => {
         el.style.display = "none";
     });
 }
 
 // ========================================================
-// 2.1. Quản lý Sidebar Dark Mode SaaS (Thu gọn, Phím tắt, Tìm kiếm & Drawer)
+// 2.1. Quản lý Sidebar Dark Mode SaaS (Thu gọn & Mobile Drawer)
 // ========================================================
 function initSidebar() {
     const sidebar = document.querySelector(".sidebar");
     if (!sidebar) return;
 
     const toggleBtn = document.querySelector("#sidebarToggle");
-    const searchInput = document.querySelector("#sidebarSearchInput");
     const mobileToggleBtn = document.querySelector("#sidebarMobileToggle");
     const backdrop = document.querySelector("#sidebarBackdrop");
 
@@ -145,9 +150,8 @@ function initSidebar() {
         toggleBtn.addEventListener("click", toggleSidebar);
     }
 
-    // Phím tắt bàn phím: Ctrl + B (Thu gọn) & Ctrl + K (Tìm kiếm)
+    // Phím tắt bàn phím: Ctrl + B (Thu gọn / Mở rộng menu)
     document.addEventListener("keydown", (e) => {
-        // Ctrl + B hoặc Cmd + B: Đóng/mở sidebar
         if ((e.ctrlKey || e.metaKey) && (e.key === "b" || e.key === "B")) {
             const activeTag = document.activeElement?.tagName?.toLowerCase();
             if (activeTag !== "input" && activeTag !== "textarea") {
@@ -155,56 +159,6 @@ function initSidebar() {
                 toggleSidebar();
             }
         }
-
-        // Ctrl + K hoặc Cmd + K: Mở ô tìm kiếm
-        if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
-            e.preventDefault();
-            if (sidebar.classList.contains("collapsed")) {
-                sidebar.classList.remove("collapsed");
-                localStorage.setItem("careerai_sidebar_collapsed", "0");
-            }
-            if (searchInput) {
-                searchInput.focus();
-                searchInput.select();
-            }
-        }
-    });
-
-    // Xử lý Quick Search lọc real-time danh sách menu
-    if (searchInput) {
-        searchInput.addEventListener("input", () => {
-            const query = searchInput.value.trim().toLowerCase();
-            const links = sidebar.querySelectorAll(".sidebar-link");
-            links.forEach(link => {
-                const text = link.querySelector(".sidebar-link-text")?.textContent.toLowerCase() || "";
-                if (!query || text.includes(query)) {
-                    link.style.display = "";
-                } else {
-                    link.style.display = "none";
-                }
-            });
-        });
-
-        // Nhấn Esc để xoá tìm kiếm và hủy focus
-        searchInput.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                searchInput.value = "";
-                searchInput.dispatchEvent(new Event("input"));
-                searchInput.blur();
-            }
-        });
-    }
-
-    // Xử lý đóng mở Submenu Dropdown (ví dụ Quản lý CV)
-    sidebar.querySelectorAll(".sidebar-submenu-toggle").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const parentItem = btn.closest(".has-submenu");
-            if (parentItem) {
-                parentItem.classList.toggle("submenu-open");
-            }
-        });
     });
 
     // Xử lý Mobile Drawer (Trượt ngang trên điện thoại)

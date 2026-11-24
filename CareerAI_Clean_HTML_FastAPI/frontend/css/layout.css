@@ -280,6 +280,15 @@
   flex-shrink: 0;
 }
 
+
+/* Phân quyền menu Quản trị: Ẩn tuyệt đối nếu tài khoản không phải ADMIN */
+.sidebar-link.admin-link {
+  display: none !important;
+}
+body.is-admin .sidebar-link.admin-link {
+  display: flex !important;
+}
+
 .sidebar-role-badge {
   font-size: 10px;
   font-weight: 700;

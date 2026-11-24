@@ -1,10 +1,9 @@
 <!doctype html><html lang="vi"><head><script>if(localStorage.getItem('careerai_theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="CareerAI - Phân tích CV bằng AI và kết nối việc làm"><title>Tìm việc làm | CareerAI</title><link rel="icon" href="/assets/favicon.ico"><link rel="stylesheet" href="/css/base.css"><link rel="stylesheet" href="/css/layout.css"><link rel="stylesheet" href="/css/components.css"></head><body data-page="jobs"><div class="app-shell"><aside class="sidebar">
-      <!-- 1. Header (Logo + Brand + Badge PRO + Sidebar Toggle) -->
+      <!-- 1. Header (Logo + Brand + Sidebar Toggle) -->
       <div class="sidebar-header">
         <a class="sidebar-brand" href="/">
           <img class="sidebar-brand-logo" src="/assets/logo.png" alt="CareerAI">
           <span class="sidebar-brand-text">Career<span class="sidebar-brand-ai">AI</span></span>
-          <span class="sidebar-badge-pro">PRO</span>
         </a>
         <button type="button" class="sidebar-toggle-btn" id="sidebarToggle" title="Thu gọn / Mở rộng menu (Ctrl+B)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -14,23 +13,7 @@
         </button>
       </div>
 
-      <!-- 2. Ô tìm kiếm nhanh (Quick Search) -->
-      <div class="sidebar-search-wrap">
-        <div class="sidebar-search-inner">
-          <span class="sidebar-search-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </span>
-          <input type="text" class="sidebar-search-input" id="sidebarSearchInput" placeholder="Tìm kiếm tính năng..." autocomplete="off">
-          <kbd class="sidebar-search-kbd">Ctrl K</kbd>
-        </div>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <!-- 3. Khu vực điều hướng chính -->
+      <!-- 2. Khu vực điều hướng chính -->
       <div class="sidebar-nav-container">
         <div class="sidebar-group-title">ĐIỀU HƯỚNG CHÍNH</div>
         <nav class="sidebar-nav">
@@ -126,7 +109,7 @@
             <span class="sidebar-link-text">Ứng tuyển</span>
           </a>
 
-          <!-- Thông báo (Badge số) -->
+          <!-- Thông báo -->
           <a class="sidebar-link" href="/pages/notifications.html" data-tooltip="Thông báo">
             <span class="sidebar-link-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -135,11 +118,10 @@
               </svg>
             </span>
             <span class="sidebar-link-text">Thông báo</span>
-            <span class="sidebar-count-badge" id="sidebarNotifBadge">3</span>
           </a>
 
-          <!-- Quản trị (Admin) -->
-          <a class="sidebar-link admin-link" href="/pages/admin.html" data-tooltip="Quản trị">
+          <!-- Quản trị (Admin) - Mặc định ẩn 100%, chỉ hiển thị khi tài khoản có role ADMIN -->
+          <a class="sidebar-link admin-link" href="/pages/admin.html" data-tooltip="Quản trị" style="display: none;">
             <span class="sidebar-link-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <circle cx="12" cy="12" r="3"/>
@@ -152,7 +134,7 @@
         </nav>
       </div>
 
-      <!-- 4. Footer (Đăng xuất) -->
+      <!-- 3. Footer (Đăng xuất) -->
       <div class="sidebar-footer">
         <button id="logoutButton" class="sidebar-logout-btn" type="button" data-tooltip="Đăng xuất">
           <span class="sidebar-link-icon">
