@@ -80,47 +80,15 @@ function initThemeToggle() {
     }
 }
 
-// ========================================================
-// 2. Chức năng Đồng hồ Luxury Analog (Luxury Clock)
-// ========================================================
-function initClock() {
-    const hour = document.querySelector(".hour");
-    const minute = document.querySelector(".minute");
-    const second = document.querySelector(".second");
-    if (!hour || !minute || !second) return;
-
-    function setClockTime() {
-        const now = new Date();
-        const getSecond = now.getSeconds();
-        const getMinute = now.getMinutes();
-        const getHour = now.getHours();
-
-        const secondDegree = (getSecond / 60) * 360;
-        const minuteDegree = ((getMinute + getSecond / 60) / 60) * 360;
-        const hourDegree = (((getHour % 12) + getMinute / 60) / 12) * 360;
-
-        second.style.transform = `rotate(${secondDegree}deg)`;
-        minute.style.transform = `rotate(${minuteDegree}deg)`;
-        hour.style.transform = `rotate(${hourDegree}deg)`;
-    }
-
-    setClockTime();
-    setInterval(setClockTime, 1000);
-}
-
-// Khởi chạy khi DOM đã sẵn sàng
+// Khởi chạy toggle theme khi DOM đã sẵn sàng
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-        initThemeToggle();
-        initClock();
-    });
+    document.addEventListener("DOMContentLoaded", initThemeToggle);
 } else {
     initThemeToggle();
-    initClock();
 }
 
 // ========================================================
-// 3. Kiểm tra quyền & Phiên làm việc
+// 2. Kiểm tra quyền & Phiên làm việc
 // ========================================================
 const page = document.body.dataset.page;
 const publicPages = ["login", "register", "index"];
@@ -172,7 +140,7 @@ if (page === "login" && new URLSearchParams(location.search).get("expired") === 
 }
 
 // ========================================================
-// 4. Định tuyến tải trang (Routing) & Cache-Busting
+// 3. Định tuyến tải trang (Routing) & Cache-Busting
 // ========================================================
 const pages = {
     login: "./pages/login.js",
