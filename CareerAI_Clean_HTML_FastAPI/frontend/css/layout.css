@@ -42,3 +42,505 @@
   .row.between { flex-direction: column; align-items: flex-start !important; gap: 10px; }
   table th, table td { padding: 10px 8px; font-size: 13px; }
 }
+
+
+/* ========================================================
+   BỘ NÚT CHUYỂN ĐỔI GIAO DIỆN SÁNG / TỐI (DAY / NIGHT TOGGLE)
+   ======================================================== */
+.topbar-theme-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.auth-theme-wrap {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 999;
+}
+
+.toggleWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 44px;
+  transform: scale(0.62);
+  transform-origin: center center;
+  user-select: none;
+  cursor: pointer;
+  margin: 0 -6px;
+  color: white;
+}
+
+.toggleWrapper .input {
+  position: absolute;
+  left: -99em;
+}
+
+.toggle {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  width: 90px;
+  height: 50px;
+  background-color: #83d8ff;
+  border-radius: 84px;
+  transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.toggle:before {
+  content: "AM";
+  position: absolute;
+  left: -42px;
+  top: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2457d6;
+  transition: color 250ms ease;
+}
+
+.toggle:after {
+  content: "PM";
+  position: absolute;
+  right: -42px;
+  top: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: color 250ms ease;
+}
+
+.toggle__handler {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  top: 3px;
+  left: 3px;
+  width: 44px;
+  height: 44px;
+  background-color: #ffcf96;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: rotate(-45deg);
+}
+
+.toggle__handler .crater {
+  position: absolute;
+  background-color: #e8cda5;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+  border-radius: 100%;
+}
+
+.toggle__handler .crater--1 {
+  top: 18px;
+  left: 10px;
+  width: 4px;
+  height: 4px;
+}
+
+.toggle__handler .crater--2 {
+  top: 28px;
+  left: 22px;
+  width: 6px;
+  height: 6px;
+}
+
+.toggle__handler .crater--3 {
+  top: 10px;
+  left: 25px;
+  width: 8px;
+  height: 8px;
+}
+
+.star {
+  position: absolute;
+  background-color: #fff;
+  transition: all 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  border-radius: 50%;
+}
+
+.star--1 {
+  top: 10px;
+  left: 35px;
+  z-index: 0;
+  width: 30px;
+  height: 3px;
+}
+
+.star--2 {
+  top: 18px;
+  left: 28px;
+  z-index: 1;
+  width: 30px;
+  height: 3px;
+}
+
+.star--3 {
+  top: 27px;
+  left: 40px;
+  z-index: 0;
+  width: 30px;
+  height: 3px;
+}
+
+.star--4,
+.star--5,
+.star--6 {
+  opacity: 0;
+  transition: all 300ms 0 cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.star--4 {
+  top: 16px;
+  left: 11px;
+  z-index: 0;
+  width: 2px;
+  height: 2px;
+  transform: translate3d(3px, 0, 0);
+}
+
+.star--5 {
+  top: 32px;
+  left: 17px;
+  z-index: 0;
+  width: 3px;
+  height: 3px;
+  transform: translate3d(3px, 0, 0);
+}
+
+.star--6 {
+  top: 36px;
+  left: 28px;
+  z-index: 0;
+  width: 2px;
+  height: 2px;
+  transform: translate3d(3px, 0, 0);
+}
+
+.input:checked + .toggle {
+  background-color: #475569;
+}
+
+.input:checked + .toggle:before {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.input:checked + .toggle:after {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.input:checked + .toggle .toggle__handler {
+  background-color: #ffe5b5;
+  transform: translate3d(40px, 0, 0) rotate(0);
+}
+
+.input:checked + .toggle .toggle__handler .crater {
+  opacity: 1;
+}
+
+.input:checked + .toggle .star--1 {
+  width: 2px;
+  height: 2px;
+}
+
+.input:checked + .toggle .star--2 {
+  width: 4px;
+  height: 4px;
+  transform: translate3d(-5px, 0, 0);
+}
+
+.input:checked + .toggle .star--3 {
+  width: 2px;
+  height: 2px;
+  transform: translate3d(-7px, 0, 0);
+}
+
+.input:checked + .toggle .star--4,
+.input:checked + .toggle .star--5,
+.input:checked + .toggle .star--6 {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.input:checked + .toggle .star--4 {
+  transition: all 300ms 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.input:checked + .toggle .star--5 {
+  transition: all 300ms 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.input:checked + .toggle .star--6 {
+  transition: all 300ms 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+/* ========================================================
+   CHẾ ĐỘ TỐI TOÀN HỆ THỐNG (DARK MODE THEME)
+   ======================================================== */
+[data-theme="dark"], body.dark-theme {
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --muted: #94a3b8;
+  --line: #233354;
+  --card: #131c31;
+  --bg: #0b1329;
+  --text: #f1f5f9;
+  background-color: #0b1329 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] body {
+  background-color: #0b1329 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .app-shell {
+  background-color: #0b1329;
+}
+
+[data-theme="dark"] .sidebar {
+  background: #090e1a !important;
+  border-right: 1px solid #1e293b;
+}
+
+[data-theme="dark"] .sidebar nav a {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sidebar nav a:hover {
+  background: #1a2642;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .sidebar nav a.active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+}
+
+[data-theme="dark"] .sidebar .button-light {
+  background: #1a2642 !important;
+  color: #cbd5e1 !important;
+  border: 1px solid #2d3f66 !important;
+}
+
+[data-theme="dark"] .sidebar .button-light:hover {
+  background: #233354 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .topbar {
+  background: #131c31 !important;
+  border-bottom: 1px solid #233354 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .topbar strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .topbar .muted {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .user-chip {
+  background: #1a2c52 !important;
+  color: #93c5fd !important;
+  border: 1px solid #2b4c8f;
+}
+
+[data-theme="dark"] .card {
+  background: #131c31 !important;
+  border-color: #233354 !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4 {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] p {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .muted {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] a:not(.button):not(.sidebar nav a) {
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field textarea,
+[data-theme="dark"] .field select,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: #090e1a !important;
+  border: 1px solid #2d3f66 !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #64748b;
+}
+
+[data-theme="dark"] select option {
+  background: #131c31;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] table {
+  background: #131c31 !important;
+}
+
+[data-theme="dark"] table th {
+  background: #1a2642 !important;
+  color: #94a3b8 !important;
+  border-bottom: 1px solid #233354 !important;
+}
+
+[data-theme="dark"] table td {
+  border-bottom: 1px solid #233354 !important;
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] table tr:hover td {
+  background: #1a2642 !important;
+}
+
+[data-theme="dark"] .list-item {
+  background: #131c31 !important;
+  border-color: #233354 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .list-item:hover {
+  background: #18233c !important;
+}
+
+[data-theme="dark"] .chat-box {
+  background: #090e1a !important;
+  border-color: #233354 !important;
+}
+
+[data-theme="dark"] .chat-message {
+  background: #1a2642 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #2d3f66;
+}
+
+[data-theme="dark"] .chat-message.user {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+  border: none;
+}
+
+[data-theme="dark"] .upload-area {
+  border-color: #3b507d !important;
+  background: #0e172a !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .tag {
+  background: #1a2c52 !important;
+  color: #93c5fd !important;
+}
+
+[data-theme="dark"] .button-light {
+  background: #1a2642 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #2d3f66 !important;
+}
+
+[data-theme="dark"] .button-light:hover {
+  background: #233354 !important;
+}
+
+[data-theme="dark"] .auth-layout {
+  background: linear-gradient(135deg, #070b14, #0f172a) !important;
+}
+
+[data-theme="dark"] .auth-card {
+  background: #131c31 !important;
+  border-color: #233354 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+}
+
+/* Các khối phân tích CV */
+[data-theme="dark"] .card[style*="background:#f8faff"],
+[data-theme="dark"] .card[style*="background: #f8faff"] {
+  background: #101c38 !important;
+  border-color: #1e3a8a !important;
+}
+
+[data-theme="dark"] .card[style*="background:#f0fdf4"],
+[data-theme="dark"] .card[style*="background: #f0fdf4"] {
+  background: #062b1a !important;
+  border-color: #0f5132 !important;
+}
+
+[data-theme="dark"] .card[style*="background:#fff7ed"],
+[data-theme="dark"] .card[style*="background: #fff7ed"] {
+  background: #2e1808 !important;
+  border-color: #7c2d12 !important;
+}
+
+[data-theme="dark"] .card[style*="background:#eff6ff"],
+[data-theme="dark"] .card[style*="background: #eff6ff"] {
+  background: #0c214d !important;
+  border-color: #1d4ed8 !important;
+}
+
+[data-theme="dark"] .card[style*="background:#fdf2f8"],
+[data-theme="dark"] .card[style*="background: #fdf2f8"],
+[data-theme="dark"] #missingKeywordsCard {
+  background: #2b0d23 !important;
+  border-color: #831843 !important;
+}
+
+[data-theme="dark"] div[style*="background:#f8fafc"],
+[data-theme="dark"] div[style*="background: #f8fafc"] {
+  background: #090e1a !important;
+  border-color: #233354 !important;
+}
+
+/* Modals & Dialogs */
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] div[style*="position:fixed"][style*="background:#fff"],
+[data-theme="dark"] div[style*="position: fixed"][style*="background: #fff"],
+[data-theme="dark"] div[style*="position:fixed"][style*="background: white"],
+[data-theme="dark"] div[style*="position: fixed"][style*="background: white"] {
+  background: #131c31 !important;
+  color: #f8fafc !important;
+  border-color: #233354 !important;
+}
+
+/* Chuyển đổi mượt mà */
+body, .main-area, .topbar, .card, .sidebar, input, select, textarea, table {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease;
+}
+
+/* Responsive Mobile cho Theme Toggle */
+@media (max-width: 850px) {
+  .toggleWrapper {
+    transform: scale(0.5);
+    padding: 0 40px;
+    margin: 0 -14px;
+  }
+}

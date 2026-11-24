@@ -1,6 +1,100 @@
 import { getToken, getUser } from "./common/api.js";
 import { showMessage } from "./common/ui.js";
 
+// ========================================================
+// 1. Quản lý Chế độ Giao diện Sáng / Tối (Day / Night Theme)
+// ========================================================
+const THEME_KEY = "careerai_theme";
+
+export function getStoredTheme() {
+    return localStorage.getItem(THEME_KEY) || "light";
+}
+
+export function applyTheme(theme) {
+    if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.body?.classList.add("dark-theme");
+    } else {
+        document.documentElement.removeAttribute("data-theme");
+        document.body?.classList.remove("dark-theme");
+    }
+    const toggleInput = document.querySelector("#dn");
+    if (toggleInput) {
+        toggleInput.checked = (theme === "dark");
+    }
+}
+
+// Khởi tạo theme ngay lập tức
+applyTheme(getStoredTheme());
+
+// Tự động chèn nút Day / Night Toggle Switch vào giao diện
+function initThemeToggle() {
+    let toggleInput = document.querySelector("#dn");
+    if (!toggleInput) {
+        const topbar = document.querySelector(".topbar");
+        const authCard = document.querySelector(".auth-card");
+        
+        const toggleHtml = `
+            <div class="toggleWrapper" title="Chuyển đổi giao diện Sáng (AM) / Tối (PM)">
+                <input class="input" id="dn" type="checkbox" />
+                <label class="toggle" for="dn">
+                    <span class="toggle__handler">
+                        <span class="crater crater--1"></span>
+                        <span class="crater crater--2"></span>
+                        <span class="crater crater--3"></span>
+                    </span>
+                    <span class="star star--1"></span>
+                    <span class="star star--2"></span>
+                    <span class="star star--3"></span>
+                    <span class="star star--4"></span>
+                    <span class="star star--5"></span>
+                    <span class="star star--6"></span>
+                </label>
+            </div>
+        `;
+
+        if (topbar) {
+            const userChip = topbar.querySelector("#currentUser");
+            const rightWrap = document.createElement("div");
+            rightWrap.className = "topbar-theme-wrap";
+            
+            if (userChip) {
+                topbar.insertBefore(rightWrap, userChip);
+                rightWrap.innerHTML = toggleHtml;
+                rightWrap.appendChild(userChip);
+            } else {
+                rightWrap.innerHTML = toggleHtml;
+                topbar.appendChild(rightWrap);
+            }
+        } else if (authCard) {
+            const authWrap = document.createElement("div");
+            authWrap.className = "auth-theme-wrap";
+            authWrap.innerHTML = toggleHtml;
+            document.body.appendChild(authWrap);
+        }
+        
+        toggleInput = document.querySelector("#dn");
+    }
+
+    if (toggleInput) {
+        toggleInput.checked = (getStoredTheme() === "dark");
+        toggleInput.addEventListener("change", (e) => {
+            const newTheme = e.target.checked ? "dark" : "light";
+            localStorage.setItem(THEME_KEY, newTheme);
+            applyTheme(newTheme);
+        });
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initThemeToggle);
+} else {
+    initThemeToggle();
+}
+
+// ========================================================
+// 2. Kiểm tra quyền & Phiên làm việc
+// ========================================================
 const page = document.body.dataset.page;
 const publicPages = ["login", "register", "index"];
 
@@ -50,7 +144,9 @@ if (page === "login" && new URLSearchParams(location.search).get("expired") === 
     showMessage("Phiên đăng nhập đã hết hạn hoặc bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.", "info");
 }
 
-// Bản đồ tải động các trang giao diện (Routing)
+// ========================================================
+// 3. Định tuyến tải trang (Routing) & Cache-Busting
+// ========================================================
 const pages = {
     login: "./pages/login.js",
     register: "./pages/register.js",
@@ -68,7 +164,6 @@ const pages = {
     admin: "./pages/admin.js"
 };
 
-// Tải trang với cơ chế chống lưu cache cũ (Cache-Busting Timestamp)
 if (pages[page]) {
     const scriptUrl = `${pages[page]}?t=${Date.now()}`;
     import(scriptUrl).catch(error => {
