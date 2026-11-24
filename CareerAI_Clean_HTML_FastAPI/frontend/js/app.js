@@ -209,13 +209,13 @@ function initSidebar() {
                 const content = document.querySelector(".page-content") || document.querySelector(".main-area > div:not(.topbar)");
                 if (content) {
                     e.preventDefault();
-                    content.style.transition = "opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), filter 0.22s ease";
+                    content.style.transition = "opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s ease";
                     content.style.opacity = "0";
-                    content.style.transform = "translateY(14px)";
+                    content.style.transform = "translateY(10px)";
                     content.style.filter = "blur(2px)";
                     setTimeout(() => {
                         window.location.href = href;
-                    }, 200);
+                    }, 260);
                 }
             }
         });

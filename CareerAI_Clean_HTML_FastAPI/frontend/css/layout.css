@@ -1340,17 +1340,18 @@ body.dark-theme .sidebar.collapsed .sidebar-logout-btn:hover::after {
 
 /* ==========================================================================
    HỆ THỐNG HIỆU ỨNG CHUYỂN TRANG KIỂU TRÌNH CHIẾU (CHOREOGRAPHED REVEAL)
-   Chuỗi hoạt ảnh 3 nhịp phân tầng (0.9s - 1.2s), cubic-bezier(0.22, 1, 0.36, 1)
+   Điều chỉnh nhịp độ êm ái, thanh thoát (0.7s - 0.8s), cubic-bezier(0.16, 1, 0.3, 1)
+   Khoảng cách giữa các mục giãn đều 140ms - 160ms, triệt tiêu cảm giác giật/nhanh
    Tuyệt đối không can thiệp vào trang Đăng ký / Đăng nhập
    ========================================================================== */
 
-/* 1. Nhịp 1 — Tiêu đề & Thanh công cụ trang (0ms):
-   Trượt nhẹ lên trên (translateY 16px -> 0), mờ sang rõ (0 -> 1), nét dần (blur 4px -> 0) */
+/* 1. Nhịp 1 — Tiêu đề & Thanh công cụ trang:
+   Trượt nhẹ lên trên (translateY 14px -> 0), mờ sang rõ (0 -> 1), nét dần (blur 3px -> 0) */
 @keyframes cvRevealBeat1 {
   0% {
     opacity: 0;
-    transform: translateY(16px);
-    filter: blur(4px);
+    transform: translateY(14px);
+    filter: blur(3px);
   }
   100% {
     opacity: 1;
@@ -1359,12 +1360,12 @@ body.dark-theme .sidebar.collapsed .sidebar-logout-btn:hover::after {
   }
 }
 
-/* 2. Nhịp 2 — Các khối nội dung / Bento Card (cách nhau 70ms - 90ms):
-   Trượt từ dưới lên kết hợp phóng nhẹ (translateY 24px scale 0.97 -> translateY 0 scale 1) */
+/* 2. Nhịp 2 — Các khối nội dung / Bento Card (cách nhau 140ms - 160ms êm dịu):
+   Trượt từ dưới lên kết hợp phóng nhẹ (translateY 20px scale 0.98 -> translateY 0 scale 1) */
 @keyframes cvRevealBeat2 {
   0% {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(20px) scale(0.98);
   }
   100% {
     opacity: 1;
@@ -1372,12 +1373,12 @@ body.dark-theme .sidebar.collapsed .sidebar-logout-btn:hover::after {
   }
 }
 
-/* 3. Nhịp 3 — Các chi tiết nhỏ bên trong từng thẻ (nảy ra lần lượt, cách nhau 40ms - 60ms):
-   Pop-in mượt với scale(0.92) -> 1 và opacity 0 -> 1 */
+/* 3. Nhịp 3 — Các chi tiết nhỏ bên trong từng thẻ (nảy ra nhịp nhàng, cách nhau 100ms - 120ms):
+   Pop-in mượt với scale(0.94) -> 1 và opacity 0 -> 1 */
 @keyframes cvRevealBeat3 {
   0% {
     opacity: 0;
-    transform: scale(0.92);
+    transform: scale(0.94);
   }
   100% {
     opacity: 1;
@@ -1394,11 +1395,11 @@ body:not([data-page="login"]):not([data-page="register"]) .main-area {
 body:not([data-page="login"]):not([data-page="register"]) .topbar > div,
 body:not([data-page="login"]):not([data-page="register"]) .page-title,
 body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-header {
-  animation: cvRevealBeat1 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cvRevealBeat1 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   will-change: opacity, transform, filter;
 }
 
-/* ÁP DỤNG NHỊP 2: Khối Bento Cards & Sections (Staggered 70ms - 90ms) */
+/* ÁP DỤNG NHỊP 2: Khối Bento Cards & Sections (Staggered 140ms - 160ms khoan thai) */
 body:not([data-page="login"]):not([data-page="register"]) .page-content > .hero,
 body:not([data-page="login"]):not([data-page="register"]) .page-content > .card,
 body:not([data-page="login"]):not([data-page="register"]) .page-content > article,
@@ -1408,41 +1409,41 @@ body:not([data-page="login"]):not([data-page="register"]) #pageContent > article
 body:not([data-page="login"]):not([data-page="register"]) .grid > .card,
 body:not([data-page="login"]):not([data-page="register"]) .grid > article,
 body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-card {
-  animation: cvRevealBeat2 0.58s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cvRevealBeat2 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
   will-change: opacity, transform;
 }
 
-/* Phân bổ độ trễ (delay) cho các thẻ cha trong Nhịp 2 */
+/* Phân bổ độ trễ (delay) cho các thẻ cha trong Nhịp 2: Giãn cách êm ái */
 body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(1),
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(1) {
-  animation-delay: 0.08s;
+  animation-delay: 0.10s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(2),
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(2) {
-  animation-delay: 0.16s;
+  animation-delay: 0.26s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(3),
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(3) {
-  animation-delay: 0.24s;
+  animation-delay: 0.42s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(4),
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(4) {
-  animation-delay: 0.32s;
+  animation-delay: 0.58s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(n+5),
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(n+5) {
-  animation-delay: 0.40s;
+  animation-delay: 0.74s;
 }
 
 /* Delay cho các item trong Bento Grid */
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(1) { animation-delay: 0.15s; }
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(2) { animation-delay: 0.23s; }
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(3) { animation-delay: 0.31s; }
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(n+4) { animation-delay: 0.39s; }
+body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(1) { animation-delay: 0.20s; }
+body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(2) { animation-delay: 0.36s; }
+body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(3) { animation-delay: 0.52s; }
+body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(n+4) { animation-delay: 0.68s; }
 
 /* ÁP DỤNG NHỊP 3: Chi tiết nhỏ bên trong thẻ (Pills, Badges, Tags, Buttons, Lists) */
 body:not([data-page="login"]):not([data-page="register"]) .card .tag,
@@ -1454,39 +1455,39 @@ body:not([data-page="login"]):not([data-page="register"]) .card .score,
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li,
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *,
 body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-item {
-  animation: cvRevealBeat3 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cvRevealBeat3 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   will-change: opacity, transform;
 }
 
-/* Phân tầng độ trễ cho các chi tiết con (cách nhau 40ms - 60ms sau thẻ cha) */
+/* Phân tầng độ trễ cho các chi tiết con: Khoảng cách 100ms - 120ms nhẹ nhàng */
 body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(1),
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(1),
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(1) {
-  animation-delay: 0.38s;
+  animation-delay: 0.50s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(2),
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(2),
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(2) {
-  animation-delay: 0.44s;
+  animation-delay: 0.62s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(3),
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(3),
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(3) {
-  animation-delay: 0.50s;
+  animation-delay: 0.74s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(4),
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(4),
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(4) {
-  animation-delay: 0.56s;
+  animation-delay: 0.86s;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(n+5),
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(n+5),
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(n+5) {
-  animation-delay: 0.62s;
+  animation-delay: 0.98s;
 }
 
 /* Hoạt ảnh thanh tiến trình điểm số (Progress Bar Reveal):
@@ -1494,7 +1495,7 @@ body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth
 .cv-progress-fill,
 .progress-bar-fill,
 div[role="progressbar"] > div {
-  transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.45s !important;
+  transition: width 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.55s !important;
 }
 
 /* Hỗ trợ chế độ giảm tải hoạt ảnh (Prefers-Reduced-Motion) */
