@@ -207,12 +207,28 @@ function initSidebar() {
                 !e.shiftKey
             ) {
                 const content = document.querySelector(".page-content") || document.querySelector(".main-area > div:not(.topbar)");
+                const topbarTitle = document.querySelector(".topbar strong");
+                const pageHeading = document.querySelector(".page-title h1") || document.querySelector(".hero h1, .hero h2");
                 if (content) {
                     e.preventDefault();
                     content.style.transition = "opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s ease";
                     content.style.opacity = "0";
                     content.style.transform = "translateY(10px)";
                     content.style.filter = "blur(2px)";
+
+                    if (topbarTitle) {
+                        topbarTitle.style.transition = "opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease";
+                        topbarTitle.style.opacity = "0";
+                        topbarTitle.style.transform = "translateX(-8px)";
+                        topbarTitle.style.filter = "blur(2px)";
+                    }
+                    if (pageHeading) {
+                        pageHeading.style.transition = "opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease";
+                        pageHeading.style.opacity = "0";
+                        pageHeading.style.transform = "translateY(-8px)";
+                        pageHeading.style.filter = "blur(2px)";
+                    }
+
                     setTimeout(() => {
                         window.location.href = href;
                     }, 260);

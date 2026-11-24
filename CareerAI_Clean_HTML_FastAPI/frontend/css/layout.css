@@ -1415,14 +1415,91 @@ body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-header {
   will-change: opacity, transform, filter;
 }
 
-/* HOẠT ẢNH CHỮ THEO NHỊP: Tiêu đề lớn & mô tả trang */
-body:not([data-page="login"]):not([data-page="register"]) .page-title h1 {
-  animation: cvRevealText 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+/* ==========================================================================
+   HOẠT ẢNH CHUYỂN CẢNH ĐIỆN ẢNH CHO TIÊU ĐỀ LỚN (CINEMATIC SCENE TRANSITION)
+   Trượt từ dưới lên, nét dần, mở rộng letter-spacing và vạch ánh sáng accent
+   ========================================================================== */
+@keyframes cvHeadingSceneTransition {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.95);
+    filter: blur(5px);
+    letter-spacing: -0.03em;
+  }
+  50% {
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    letter-spacing: normal;
+  }
+}
+
+/* Vạch gạch chân ánh sáng công nghệ (Cyan Accent Line) chạy ra mượt mà */
+@keyframes cvHeadingAccentLine {
+  0% {
+    width: 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  100% {
+    width: 46px;
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Chuyển cảnh trượt mượt mà cho tiêu đề Topbar breadcrumb */
+@keyframes cvTopbarTitleReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-14px);
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+body:not([data-page="login"]):not([data-page="register"]) .topbar strong {
+  display: inline-block;
+  animation: cvTopbarTitleReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
   will-change: opacity, transform, filter;
 }
 
+/* Áp dụng chuyển cảnh cho các tiêu đề lớn */
+body:not([data-page="login"]):not([data-page="register"]) .page-title h1,
+body:not([data-page="login"]):not([data-page="register"]) .hero h1 {
+  position: relative;
+  display: inline-block;
+  animation: cvHeadingSceneTransition 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+  will-change: opacity, transform, filter, letter-spacing;
+  padding-bottom: 6px;
+}
+
+/* Vạch sáng accent dưới tiêu đề lớn */
+body:not([data-page="login"]):not([data-page="register"]) .page-title h1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 46px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2457d6, #38bdf8);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  animation: cvHeadingAccentLine 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+  will-change: width, opacity, transform;
+}
+
 body:not([data-page="login"]):not([data-page="register"]) .page-title p {
-  animation: cvRevealText 0.68s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+  animation: cvRevealText 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
   will-change: opacity, transform, filter;
 }
 
