@@ -1,1 +1,58 @@
-<!doctype html><html lang="vi"><head><script>if(localStorage.getItem('careerai_theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="CareerAI - Phân tích CV bằng AI và kết nối việc làm"><title>Đăng nhập | CareerAI</title><link rel="icon" href="/assets/favicon.ico"><link rel="stylesheet" href="/css/base.css"><link rel="stylesheet" href="/css/layout.css"><link rel="stylesheet" href="/css/components.css"></head><body data-page="login"><main class="auth-layout"><section class="auth-card"><a href="/"><img class="auth-logo" src="/assets/logo.png" alt="CareerAI"></a><h1>Đăng nhập</h1><p class="muted">Đăng nhập để tiếp tục hành trình nghề nghiệp.</p><div id="pageMessage" class="message" hidden></div><form id="authForm"><label>Email<input name="email" type="email" required></label><label>Mật khẩu<input name="password" type="password" minlength="6" required></label><button class="button button-primary" type="submit">Đăng nhập</button></form><p class="muted">Chưa có tài khoản? <a href="/pages/register.html">Đăng ký ngay</a></p></section></main><div id="toast" class="toast" role="status"></div><script type="module" src="/js/app.js?v=2.5.1"></script></body></html>
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="CareerAI - Phân tích CV bằng AI và kết nối việc làm">
+  <title>Đăng nhập | CareerAI</title>
+  <link rel="icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body data-page="login">
+  <main class="auth-layout">
+    <!-- Khu vực Đồng hồ Luxury Analog & Giới thiệu thương hiệu -->
+    <section class="auth-clock-section">
+      <div class="clock">
+        <div class="numbers">
+          <span class="twelve">12</span>
+          <span class="three">3</span>
+          <span class="six">6</span>
+          <span class="nine">9</span>
+        </div>
+        <div class="arrows">
+          <div class="hour"></div>
+          <div class="minute"></div>
+          <div class="second"></div>
+        </div>
+        <img class="clock-logo" src="/assets/logo.png" alt="CareerAI">
+      </div>
+      <div class="clock-caption">
+        <h2>CareerAI</h2>
+        <p>Quản lý nghề nghiệp & Phân tích CV thông minh bằng AI</p>
+      </div>
+    </section>
+
+    <!-- Khối Form Đăng nhập đặt ở góc phải màn hình -->
+    <section class="auth-card">
+      <a href="/"><img class="auth-logo" src="/assets/logo.png" alt="CareerAI"></a>
+      <h1>Đăng nhập</h1>
+      <p class="muted">Đăng nhập để tiếp tục hành trình nghề nghiệp.</p>
+      <div id="pageMessage" class="message" hidden></div>
+      <form id="authForm">
+        <label>Email
+          <input name="email" type="email" required placeholder="name@example.com">
+        </label>
+        <label>Mật khẩu
+          <input name="password" type="password" minlength="6" required placeholder="••••••••">
+        </label>
+        <button class="button button-primary" type="submit">Đăng nhập</button>
+      </form>
+      <p class="muted">Chưa có tài khoản? <a href="/pages/register.html">Đăng ký ngay</a></p>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script type="module" src="/js/app.js?v=2.5.2"></script>
+</body>
+</html>
