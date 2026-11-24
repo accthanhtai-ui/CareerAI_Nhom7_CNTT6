@@ -57,6 +57,7 @@ if (loginForm) {
             
             localStorage.setItem("careerai_token", data.token);
             localStorage.setItem("careerai_user", JSON.stringify(data.user));
+            sessionStorage.setItem("cv_just_logged_in", "true");
             toast("Đăng nhập thành công!", "success");
             
             setTimeout(() => {

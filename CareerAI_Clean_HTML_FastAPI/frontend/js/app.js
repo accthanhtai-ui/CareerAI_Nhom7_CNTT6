@@ -193,7 +193,20 @@ function initSidebar() {
         }
     });
 
-    // Hiệu ứng chuyển trang kiểu trình chiếu (Choreographed Exit trước khi chuyển trang)
+    // Hiệu ứng chuyển trang kiểu PowerPoint (Sidebar & Header đứng yên, chỉ Main Content chuyển mượt)
+    const resetExitStyles = () => {
+        const content = document.querySelector(".page-content") || document.querySelector(".main-area > div:not(.topbar)");
+        if (!content) return;
+        content.style.transition = "";
+        content.style.opacity = "";
+        content.style.transform = "";
+        content.style.filter = "";
+    };
+
+    window.addEventListener("pageshow", (e) => {
+        if (e.persisted) resetExitStyles();
+    });
+
     sidebar.querySelectorAll(".sidebar-link, .sidebar-sublink").forEach(link => {
         link.addEventListener("click", (e) => {
             const href = link.getAttribute("href");
@@ -207,31 +220,15 @@ function initSidebar() {
                 !e.shiftKey
             ) {
                 const content = document.querySelector(".page-content") || document.querySelector(".main-area > div:not(.topbar)");
-                const topbarTitle = document.querySelector(".topbar strong");
-                const pageHeading = document.querySelector(".page-title h1") || document.querySelector(".hero h1, .hero h2");
                 if (content) {
                     e.preventDefault();
-                    content.style.transition = "opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s ease";
+                    content.style.transition = "opacity 0.16s cubic-bezier(0.22, 1, 0.36, 1), transform 0.16s cubic-bezier(0.22, 1, 0.36, 1)";
                     content.style.opacity = "0";
-                    content.style.transform = "translateY(10px)";
-                    content.style.filter = "blur(2px)";
-
-                    if (topbarTitle) {
-                        topbarTitle.style.transition = "opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease";
-                        topbarTitle.style.opacity = "0";
-                        topbarTitle.style.transform = "translateX(-8px)";
-                        topbarTitle.style.filter = "blur(2px)";
-                    }
-                    if (pageHeading) {
-                        pageHeading.style.transition = "opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease";
-                        pageHeading.style.opacity = "0";
-                        pageHeading.style.transform = "translateY(-8px)";
-                        pageHeading.style.filter = "blur(2px)";
-                    }
+                    content.style.transform = "translateY(8px)";
 
                     setTimeout(() => {
                         window.location.href = href;
-                    }, 260);
+                    }, 150);
                 }
             }
         });
@@ -268,11 +265,129 @@ function initSidebar() {
     }, 380);
 }
 
-// Khởi chạy Sidebar tương tác
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initSidebar);
-} else {
+// ========================================================
+// 2.2. Hiệu ứng Logo sau khi đăng nhập thành công (1 lần duy nhất)
+// ========================================================
+function runPostLoginSplash() {
+    const isLandingPage = page === "dashboard" || page === "admin";
+    const hasFlag = sessionStorage.getItem("cv_just_logged_in") === "true";
+
+    // Luôn xóa cờ ngay khi kiểm tra để tuyệt đối không chạy lại khi F5 hay chuyển mục
+    if (hasFlag) {
+        sessionStorage.removeItem("cv_just_logged_in");
+    }
+
+    if (!hasFlag || !isLandingPage || publicPages.includes(page) || !getToken()) {
+        document.documentElement.classList.remove("cv-splash-pending");
+        return;
+    }
+
+    const sidebar = document.querySelector(".sidebar");
+    const realLogo = document.querySelector(".sidebar-brand-logo");
+    const mobileToggle = document.querySelector("#sidebarMobileToggle");
+    if (!sidebar || !realLogo) {
+        document.documentElement.classList.remove("cv-splash-pending");
+        return;
+    }
+
+    const isMobile = window.innerWidth <= 850;
+    const sidebarRect = sidebar.getBoundingClientRect();
+    const logoRect = realLogo.getBoundingClientRect();
+    const mobileBtnRect = mobileToggle ? mobileToggle.getBoundingClientRect() : null;
+
+    // Tọa độ đích tại góc trên bên trái (khớp vị trí Logo Sidebar trên Desktop, hoặc đầu Topbar trên Mobile)
+    const targetRect = (!isMobile && logoRect.width > 0)
+        ? { left: logoRect.left, top: logoRect.top, width: logoRect.width, height: logoRect.height }
+        : {
+            left: mobileBtnRect ? mobileBtnRect.right + 12 : 60,
+            top: 16,
+            width: 28,
+            height: 28
+        };
+
+    const logoSize = 92;
+    const startLeft = Math.round((window.innerWidth - logoSize) / 2);
+    const startTop = Math.round((window.innerHeight - logoSize) / 2 - 16);
+
+    // Gắn thứ tự hiển thị nhẹ cho từng mục menu bên dưới Logo ở Giai đoạn 3
+    const navItems = Array.from(sidebar.querySelectorAll(".sidebar-nav .sidebar-link, .sidebar-footer"));
+    navItems.forEach((el, idx) => {
+        el.style.setProperty("--cv-nav-i", String(Math.min(idx, 10)));
+    });
+
+    // Tạo lớp phủ Splash (Cô lập class .cv-splash-*)
+    const splashRoot = document.createElement("div");
+    splashRoot.className = "cv-splash-root";
+    splashRoot.setAttribute("aria-hidden", "true");
+    splashRoot.innerHTML = `
+        <div class="cv-splash-backdrop ${isMobile ? "cv-splash-backdrop-mobile" : ""}"></div>
+        <div class="cv-splash-logo-float" style="left:${startLeft}px;top:${startTop}px;">
+            <div class="cv-splash-logo-inner">
+                <img src="/assets/logo.png" alt="CareerAI" />
+            </div>
+        </div>
+        <div class="cv-splash-subtitle" style="top:${startTop + logoSize + 18}px;">
+            Đang mở không gian làm việc...
+        </div>
+    `;
+
+    document.body.classList.add("cv-splash-hold");
+    document.body.appendChild(splashRoot);
+
+    const splashBackdrop = splashRoot.querySelector(".cv-splash-backdrop");
+    const splashLogoFloat = splashRoot.querySelector(".cv-splash-logo-float");
+
+    // Gỡ trạng thái ẩn ban đầu ngay sau khi lớp phủ Splash đã gắn lên DOM (chống nháy khung)
+    requestAnimationFrame(() => {
+        document.documentElement.classList.remove("cv-splash-pending");
+    });
+
+    // Giai đoạn 2 (0.48s – 1.12s): Chữ phụ mờ dần, Logo lướt về đúng Logo Sidebar, nền biến hình thành Sidebar
+    setTimeout(() => {
+        const dx = targetRect.left - startLeft;
+        const dy = targetRect.top - startTop;
+        const targetScale = (targetRect.width || 28) / logoSize;
+
+        splashRoot.classList.add("cv-splash-stage2");
+        if (!isMobile && splashBackdrop) {
+            splashBackdrop.style.width = `${sidebarRect.width || 260}px`;
+        }
+        if (splashLogoFloat) {
+            splashLogoFloat.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(${targetScale})`;
+        }
+    }, 480);
+
+    // Giai đoạn 3 (0.86s – 1.54s): Bung mở nội dung chính từ góc trên trái, hiện menu & chạy nhịp Dashboard
+    setTimeout(() => {
+        document.body.classList.remove("cv-splash-hold");
+        document.body.classList.add("cv-splash-reveal");
+    }, 860);
+
+    // Hòa liền mạch vào Logo & Sidebar thật rồi gỡ Splash khỏi DOM (~1.54s tổng thời gian)
+    setTimeout(() => {
+        splashRoot.classList.add("cv-splash-fadeout");
+    }, 1180);
+
+    const cleanupSplash = () => {
+        if (splashRoot.parentNode) splashRoot.remove();
+        document.documentElement.classList.remove("cv-splash-pending");
+        document.body.classList.remove("cv-splash-hold", "cv-splash-reveal");
+        navItems.forEach(el => el.style.removeProperty("--cv-nav-i"));
+    };
+
+    setTimeout(cleanupSplash, 1560);
+}
+
+// Khởi chạy Sidebar tương tác & hiệu ứng Splash (nếu vừa đăng nhập xong)
+const bootLayoutUI = () => {
     initSidebar();
+    runPostLoginSplash();
+};
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootLayoutUI);
+} else {
+    bootLayoutUI();
 }
 
 // Làm nổi bật menu đang hoạt động (Active Navigation State)
@@ -294,6 +409,7 @@ if (page) {
 document.querySelector("#logoutButton")?.addEventListener("click", () => {
     localStorage.removeItem("careerai_token");
     localStorage.removeItem("careerai_user");
+    sessionStorage.removeItem("cv_just_logged_in");
     location.href = "/pages/login.html";
 });
 
