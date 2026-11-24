@@ -1,6 +1,95 @@
 import { getToken, getUser } from "./common/api.js";
 import { showMessage } from "./common/ui.js";
 
+// ========================================================
+// 1. Quản lý Chế độ Giao diện Sáng / Tối (Day / Night Theme)
+// ========================================================
+const THEME_KEY = "careerai_theme";
+
+export function getStoredTheme() {
+    return localStorage.getItem(THEME_KEY) || "light";
+}
+
+export function applyTheme(theme) {
+    if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.body?.classList.add("dark-theme");
+    } else {
+        document.documentElement.removeAttribute("data-theme");
+        document.body?.classList.remove("dark-theme");
+    }
+    const toggleInput = document.querySelector("#dn");
+    if (toggleInput) {
+        toggleInput.checked = (theme === "dark");
+    }
+}
+
+// Khởi tạo theme ngay lập tức
+applyTheme(getStoredTheme());
+
+// CHỈ chèn nút Day / Night Toggle Switch khi người dùng đã vào hệ thống (ở thanh Topbar)
+function initThemeToggle() {
+    let toggleInput = document.querySelector("#dn");
+    if (!toggleInput) {
+        const topbar = document.querySelector(".topbar");
+        
+        // CHỈ hiển thị trong Topbar sau khi đăng nhập (không hiển thị ở màn hình Login/Register)
+        if (topbar) {
+            const toggleHtml = `
+                <div class="toggleWrapper" title="Chuyển đổi giao diện Sáng (AM) / Tối (PM)">
+                    <input class="input" id="dn" type="checkbox" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" />
+                    <label class="toggle" for="dn">
+                        <span class="toggle__handler">
+                            <span class="crater crater--1"></span>
+                            <span class="crater crater--2"></span>
+                            <span class="crater crater--3"></span>
+                        </span>
+                        <span class="star star--1"></span>
+                        <span class="star star--2"></span>
+                        <span class="star star--3"></span>
+                        <span class="star star--4"></span>
+                        <span class="star star--5"></span>
+                        <span class="star star--6"></span>
+                    </label>
+                </div>
+            `;
+
+            const userChip = topbar.querySelector("#currentUser");
+            const rightWrap = document.createElement("div");
+            rightWrap.className = "topbar-theme-wrap";
+            
+            if (userChip) {
+                topbar.insertBefore(rightWrap, userChip);
+                rightWrap.innerHTML = toggleHtml;
+                rightWrap.appendChild(userChip);
+            } else {
+                rightWrap.innerHTML = toggleHtml;
+                topbar.appendChild(rightWrap);
+            }
+            toggleInput = document.querySelector("#dn");
+        }
+    }
+
+    if (toggleInput) {
+        toggleInput.checked = (getStoredTheme() === "dark");
+        toggleInput.addEventListener("change", (e) => {
+            const newTheme = e.target.checked ? "dark" : "light";
+            localStorage.setItem(THEME_KEY, newTheme);
+            applyTheme(newTheme);
+        });
+    }
+}
+
+// Khởi chạy toggle theme khi DOM đã sẵn sàng
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initThemeToggle);
+} else {
+    initThemeToggle();
+}
+
+// ========================================================
+// 2. Kiểm tra quyền & Phiên làm việc
+// ========================================================
 const page = document.body.dataset.page;
 const publicPages = ["login", "register", "index"];
 
@@ -21,19 +110,134 @@ if (userLabel && user) {
     userLabel.innerHTML = `👤 <strong>${user.name || user.email}</strong> ${user.role === 'ADMIN' ? '<span class="tag" style="background:#fee2e2;color:#991b1b;font-size:10px">Admin</span>' : ''}`;
 }
 
-// Ẩn menu Quản trị đối với tài khoản không phải Admin
-if (user?.role !== "ADMIN") {
+// Phân quyền bảo mật: Chỉ hiển thị menu Quản trị khi người dùng có role ADMIN
+if (user?.role === "ADMIN") {
+    document.body.classList.add("is-admin");
+    document.querySelectorAll(".admin-link").forEach(el => {
+        el.style.display = "flex";
+    });
+} else {
+    document.body.classList.remove("is-admin");
     document.querySelectorAll(".admin-link").forEach(el => {
         el.style.display = "none";
     });
 }
 
+// ========================================================
+// 2.1. Quản lý Sidebar Dark Mode SaaS (Thu gọn & Mobile Drawer)
+// ========================================================
+function initSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    if (!sidebar) return;
+
+    const toggleBtn = document.querySelector("#sidebarToggle");
+    const mobileToggleBtn = document.querySelector("#sidebarMobileToggle");
+    const backdrop = document.querySelector("#sidebarBackdrop");
+
+    // Khôi phục trạng thái thu gọn đã lưu từ localStorage
+    const isCollapsed = localStorage.getItem("careerai_sidebar_collapsed") === "1";
+    if (isCollapsed && window.innerWidth > 850) {
+        sidebar.classList.add("collapsed");
+    }
+
+    // Toggle thu gọn / mở rộng Sidebar
+    const toggleSidebar = () => {
+        const collapsed = sidebar.classList.toggle("collapsed");
+        localStorage.setItem("careerai_sidebar_collapsed", collapsed ? "1" : "0");
+    };
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", toggleSidebar);
+    }
+
+    // Phím tắt bàn phím: Ctrl + B (Thu gọn / Mở rộng menu)
+    document.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && (e.key === "b" || e.key === "B")) {
+            const activeTag = document.activeElement?.tagName?.toLowerCase();
+            if (activeTag !== "input" && activeTag !== "textarea") {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        }
+    });
+
+    // Xử lý Mobile Drawer (Trượt ngang trên điện thoại)
+    const openMobileSidebar = () => {
+        sidebar.classList.add("mobile-open");
+        if (backdrop) backdrop.classList.add("active");
+    };
+
+    const closeMobileSidebar = () => {
+        sidebar.classList.remove("mobile-open");
+        if (backdrop) backdrop.classList.remove("active");
+    };
+
+    if (mobileToggleBtn) {
+        mobileToggleBtn.addEventListener("click", () => {
+            if (sidebar.classList.contains("mobile-open")) {
+                closeMobileSidebar();
+            } else {
+                openMobileSidebar();
+            }
+        });
+    }
+
+    if (backdrop) {
+        backdrop.addEventListener("click", closeMobileSidebar);
+    }
+
+    // Đóng drawer khi nhấn phím Escape
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && sidebar.classList.contains("mobile-open")) {
+            closeMobileSidebar();
+        }
+    });
+
+    // Hiệu ứng chuyển trang từ từ mượt mà (không giật mạnh)
+    sidebar.querySelectorAll(".sidebar-link").forEach(link => {
+        link.addEventListener("click", (e) => {
+            const href = link.getAttribute("href");
+            if (
+                href &&
+                !href.startsWith("#") &&
+                !link.classList.contains("active") &&
+                !e.ctrlKey &&
+                !e.metaKey &&
+                !e.shiftKey
+            ) {
+                const content = document.querySelector(".page-content") || document.querySelector(".main-area");
+                if (content) {
+                    e.preventDefault();
+                    content.style.transition = "opacity 0.16s ease, transform 0.16s ease";
+                    content.style.opacity = "0";
+                    content.style.transform = "translateY(-4px)";
+                    setTimeout(() => {
+                        location.href = href;
+                    }, 140);
+                }
+            }
+        });
+    });
+}
+
+// Khởi chạy Sidebar tương tác
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSidebar);
+} else {
+    initSidebar();
+}
+
 // Làm nổi bật menu đang hoạt động (Active Navigation State)
 if (page) {
-    document.querySelectorAll(".sidebar nav a").forEach(link => {
+    document.querySelectorAll(".sidebar nav a, .sidebar-link, .sidebar-sublink").forEach(link => {
         const href = link.getAttribute("href") || "";
-        if (href.includes(`${page}.html`) || (page === "index" && href === "/")) {
+        if (href.includes(`${page}.html`) || (page === "index" && (href === "/" || href === "/index.html"))) {
             link.classList.add("active");
+            // Tự động mở submenu nếu mục con đang được chọn
+            const parentSubmenu = link.closest(".has-submenu");
+            if (parentSubmenu) {
+                parentSubmenu.classList.add("submenu-open");
+            }
         }
     });
 }
@@ -50,7 +254,9 @@ if (page === "login" && new URLSearchParams(location.search).get("expired") === 
     showMessage("Phiên đăng nhập đã hết hạn hoặc bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.", "info");
 }
 
-// Bản đồ tải động các trang giao diện (Routing)
+// ========================================================
+// 3. Định tuyến tải trang (Routing) & Cache-Busting
+// ========================================================
 const pages = {
     login: "./pages/login.js",
     register: "./pages/register.js",
@@ -68,9 +274,9 @@ const pages = {
     admin: "./pages/admin.js"
 };
 
-// Tải trang với cơ chế bắt lỗi an toàn (Frontend Error Boundary)
 if (pages[page]) {
-    import(pages[page]).catch(error => {
+    const scriptUrl = `${pages[page]}?t=${Date.now()}`;
+    import(scriptUrl).catch(error => {
         console.error(`Lỗi tải trang [${page}]:`, error);
         showMessage(`Không thể khởi chạy trang: ${error.message || "Lỗi giao diện"}`, "error");
     });
