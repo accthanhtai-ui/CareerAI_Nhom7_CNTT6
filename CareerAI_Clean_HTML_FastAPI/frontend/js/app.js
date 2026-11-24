@@ -192,6 +192,32 @@ function initSidebar() {
             closeMobileSidebar();
         }
     });
+
+    // Hiệu ứng chuyển trang từ từ mượt mà (không giật mạnh)
+    sidebar.querySelectorAll(".sidebar-link").forEach(link => {
+        link.addEventListener("click", (e) => {
+            const href = link.getAttribute("href");
+            if (
+                href &&
+                !href.startsWith("#") &&
+                !link.classList.contains("active") &&
+                !e.ctrlKey &&
+                !e.metaKey &&
+                !e.shiftKey
+            ) {
+                const content = document.querySelector(".page-content") || document.querySelector(".main-area");
+                if (content) {
+                    e.preventDefault();
+                    content.style.transition = "opacity 0.16s ease, transform 0.16s ease";
+                    content.style.opacity = "0";
+                    content.style.transform = "translateY(-4px)";
+                    setTimeout(() => {
+                        location.href = href;
+                    }, 140);
+                }
+            }
+        });
+    });
 }
 
 // Khởi chạy Sidebar tương tác

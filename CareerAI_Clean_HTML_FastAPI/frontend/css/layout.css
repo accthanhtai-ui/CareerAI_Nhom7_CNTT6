@@ -6,32 +6,33 @@
 }
 
 /* ========================================================
-   NAVIGATION SIDEBAR - DARK MODE SAAS CHUẨN CAO CẤP
+   NAVIGATION SIDEBAR - MÀU GỐC TRẮNG XANH (LIGHT MODE CHUẨN)
    ======================================================== */
 .sidebar {
   width: 260px;
-  background: #141416;
-  border-right: 1px solid #27272A;
-  color: #F4F4F5;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  color: #0f172a;
   padding: 16px 14px 14px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease;
   z-index: 100;
   box-sizing: border-box;
   user-select: none;
 }
 
-/* 1. Header (Logo, Tên, Badge PRO & Toggle) */
+/* 1. Header (Logo, Tên & Toggle) */
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 4px 14px;
   min-height: 44px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #f1f5f9;
   box-sizing: border-box;
+  transition: border-color 0.25s ease;
 }
 
 .sidebar-brand {
@@ -39,11 +40,11 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #F4F4F5;
+  color: #0f172a;
   font-weight: 700;
   font-size: 16px;
   overflow: hidden;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .sidebar-brand-logo {
@@ -62,20 +63,9 @@
 }
 
 .sidebar-brand-ai {
-  color: #38BDF8;
+  color: #2563eb;
   font-weight: 800;
-}
-
-.sidebar-badge-pro {
-  font-size: 10px;
-  font-weight: 800;
-  background: #27272A;
-  color: #38BDF8;
-  padding: 2px 6px;
-  border-radius: 6px;
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
+  transition: color 0.2s ease;
 }
 
 .sidebar-toggle-btn {
@@ -85,9 +75,9 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1px solid #27272A;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  color: #A1A1AA;
+  color: #64748b;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
@@ -95,77 +85,12 @@
 }
 
 .sidebar-toggle-btn:hover {
-  background: #27272A;
-  color: #F4F4F5;
-  border-color: #3F3F46;
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
 }
 
-/* 2. Ô tìm kiếm nhanh (Quick Search) */
-.sidebar-search-wrap {
-  margin: 14px 0 10px;
-}
-
-.sidebar-search-inner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #18181B;
-  border: 1px solid #27272A;
-  border-radius: 10px;
-  padding: 7px 10px;
-  gap: 8px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  box-sizing: border-box;
-}
-
-.sidebar-search-inner:focus-within {
-  border-color: #38BDF8;
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
-}
-
-.sidebar-search-icon {
-  color: #71717A;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-}
-
-.sidebar-search-input {
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  font-size: 12.5px;
-  color: #F4F4F5 !important;
-  width: 100%;
-  padding: 0 !important;
-  box-shadow: none !important;
-  height: auto !important;
-}
-
-.sidebar-search-input::placeholder {
-  color: #71717A !important;
-}
-
-.sidebar-search-kbd {
-  font-size: 10px;
-  font-weight: 600;
-  color: #71717A;
-  background: #27272A;
-  border: 1px solid #3F3F46;
-  border-radius: 4px;
-  padding: 1.5px 5px;
-  flex-shrink: 0;
-  user-select: none;
-}
-
-/* Đường phân cách mờ */
-.sidebar-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.06);
-  margin: 10px 0 12px;
-}
-
-/* 3. Khu vực điều hướng chính */
+/* 2. Khu vực điều hướng chính */
 .sidebar-nav-container {
   overflow-y: auto;
   overflow-x: hidden;
@@ -173,7 +98,7 @@
   margin: 12px -4px 0;
   padding: 0 4px;
   scrollbar-width: thin;
-  scrollbar-color: #27272A transparent;
+  scrollbar-color: #e2e8f0 transparent;
 }
 
 .sidebar-nav-container::-webkit-scrollbar {
@@ -181,7 +106,7 @@
 }
 
 .sidebar-nav-container::-webkit-scrollbar-thumb {
-  background: #27272A;
+  background: #e2e8f0;
   border-radius: 4px;
 }
 
@@ -201,7 +126,7 @@
   gap: 12px;
   padding: 11px 14px;
   border-radius: 10px;
-  color: #A1A1AA !important;
+  color: #475569 !important;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -212,21 +137,21 @@
 }
 
 .sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.04) !important;
-  color: #F4F4F5 !important;
-  border-color: rgba(255, 255, 255, 0.06) !important;
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
 }
 
 .sidebar-link.active {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #FFFFFF !important;
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
   font-weight: 600;
-  border-color: rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  border-color: #bfdbfe !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
 }
 
 .sidebar-link-icon {
-  color: #71717A;
+  color: #64748b;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -236,7 +161,7 @@
 
 .sidebar-link:hover .sidebar-link-icon,
 .sidebar-link.active .sidebar-link-icon {
-  color: #38BDF8;
+  color: #2563eb;
 }
 
 .sidebar-link-text {
@@ -246,35 +171,34 @@
   text-overflow: ellipsis;
 }
 
-/* Huy hiệu & Badge */
+/* Huy hiệu AI & Admin */
 .sidebar-pill-badge {
   font-size: 10.5px;
   font-weight: 700;
-  background: rgba(56, 189, 248, 0.12);
-  color: #38BDF8;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.25);
   padding: 2px 7px;
   border-radius: 12px;
   margin-left: auto;
   letter-spacing: 0.2px;
   flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.sidebar-count-badge {
+.sidebar-role-badge {
   font-size: 10px;
-  font-weight: 750;
-  background: #EF4444;
-  color: #FFFFFF;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
   padding: 1px 6px;
-  border-radius: 10px;
+  border-radius: 6px;
   margin-left: auto;
-  min-width: 18px;
-  text-align: center;
   flex-shrink: 0;
 }
 
-
-/* Phân quyền menu Quản trị: Ẩn tuyệt đối nếu tài khoản không phải ADMIN */
+/* Phân quyền menu Quản trị */
 .sidebar-link.admin-link {
   display: none !important;
 }
@@ -282,161 +206,25 @@ body.is-admin .sidebar-link.admin-link {
   display: flex !important;
 }
 
-.sidebar-role-badge {
-  font-size: 10px;
-  font-weight: 700;
-  background: #27272A;
-  color: #A1A1AA;
-  border: 1px solid #3F3F46;
-  padding: 1px 6px;
-  border-radius: 6px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-/* Submenu Dropdown */
-.sidebar-nav-item {
-  position: relative;
-}
-
-.sidebar-submenu-toggle {
-  background: transparent;
-  border: none;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #71717A;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-left: auto;
-  transition: transform 0.25s ease, color 0.2s ease;
-  flex-shrink: 0;
-}
-
-.sidebar-submenu-toggle:hover {
-  color: #F4F4F5;
-}
-
-.sidebar-submenu {
-  display: none;
-  flex-direction: column;
-  gap: 2px;
-  padding: 4px 0 6px 36px;
-}
-
-.has-submenu.submenu-open .sidebar-submenu {
-  display: flex;
-}
-
-.has-submenu.submenu-open .sidebar-submenu-toggle {
-  transform: rotate(180deg);
-  color: #F4F4F5;
-}
-
-.sidebar-sublink {
-  font-size: 12.5px;
-  color: #71717A !important;
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: all 0.18s ease;
-  white-space: nowrap;
-}
-
-.sidebar-sublink:hover {
-  color: #38BDF8 !important;
-  background: rgba(56, 189, 248, 0.06);
-}
-
-.sidebar-sublink.active {
-  color: #FFFFFF !important;
-  background: rgba(255, 255, 255, 0.08);
-  font-weight: 600;
-}
-
-/* 4. Khu vực phân loại phụ (Trạng thái CV) */
-.sidebar-status-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 2px 2px;
-}
-
-.sidebar-status-item {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12.5px;
-  color: #A1A1AA;
-  cursor: default;
-  transition: background 0.15s ease;
-}
-
-.sidebar-status-item:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: #F4F4F5;
-}
-
-.sidebar-status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dot-green {
-  background: #10B981;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
-
-.dot-yellow {
-  background: #F59E0B;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
-}
-
-.dot-blue {
-  background: #3B82F6;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
-}
-
-.sidebar-status-name {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.sidebar-status-val {
-  font-size: 11px;
-  font-weight: 600;
-  color: #71717A;
-  background: #1E1E22;
-  padding: 1px 6px;
-  border-radius: 5px;
-  flex-shrink: 0;
-}
-
-/* 5. Footer (Đăng xuất) */
+/* 3. Footer (Đăng xuất) */
 .sidebar-footer {
   margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+  transition: border-color 0.25s ease;
 }
 
 .sidebar-logout-btn {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: 9px;
-  background: rgba(239, 68, 68, 0.06);
-  border: 1px solid rgba(239, 68, 68, 0.18);
-  color: #F87171 !important;
-  font-size: 13.5px;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  color: #ef4444 !important;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -444,9 +232,9 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 .sidebar-logout-btn:hover {
-  background: rgba(239, 68, 68, 0.14) !important;
-  border-color: rgba(239, 68, 68, 0.35) !important;
-  color: #EF4444 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #dc2626 !important;
 }
 
 /* ========================================================
@@ -458,18 +246,9 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 .sidebar.collapsed .sidebar-brand-text,
-.sidebar.collapsed .sidebar-badge-pro,
-.sidebar.collapsed .sidebar-search-kbd,
-.sidebar.collapsed .sidebar-search-input,
-.sidebar.collapsed .sidebar-group-title,
 .sidebar.collapsed .sidebar-link-text,
 .sidebar.collapsed .sidebar-pill-badge,
-.sidebar.collapsed .sidebar-count-badge,
 .sidebar.collapsed .sidebar-role-badge,
-.sidebar.collapsed .sidebar-submenu-toggle,
-.sidebar.collapsed .sidebar-submenu,
-.sidebar.collapsed .sidebar-status-name,
-.sidebar.collapsed .sidebar-status-val,
 .sidebar.collapsed .sidebar-logout-text {
   display: none !important;
   opacity: 0;
@@ -492,22 +271,12 @@ body.is-admin .sidebar-link.admin-link {
   width: 100%;
 }
 
-.sidebar.collapsed .sidebar-search-wrap {
-  padding: 0;
-}
-
-.sidebar.collapsed .sidebar-search-inner {
-  justify-content: center;
-  padding: 8px;
-  cursor: pointer;
-}
-
 .sidebar.collapsed .sidebar-link {
   justify-content: center;
-  padding: 10px;
+  padding: 12px;
 }
 
-/* Floating Tooltip khi thu gọn Sidebar */
+/* Floating Tooltip khi thu gọn Sidebar (Màu sáng) */
 .sidebar.collapsed .sidebar-link:hover::after,
 .sidebar.collapsed .sidebar-logout-btn:hover::after {
   content: attr(data-tooltip);
@@ -515,27 +284,22 @@ body.is-admin .sidebar-link.admin-link {
   left: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
-  background: #18181B;
-  color: #F4F4F5;
+  background: #ffffff;
+  color: #0f172a;
   font-size: 12px;
   font-weight: 500;
-  padding: 5px 10px;
-  border-radius: 6px;
+  padding: 6px 11px;
+  border-radius: 7px;
   white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
-  border: 1px solid #27272A;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
   pointer-events: none;
   z-index: 9999;
 }
 
-.sidebar.collapsed .sidebar-status-item {
-  justify-content: center;
-  padding: 8px;
-}
-
 .sidebar.collapsed .sidebar-logout-btn {
   justify-content: center;
-  padding: 10px;
+  padding: 12px;
 }
 
 /* Lớp phủ Backdrop trên Mobile */
@@ -573,7 +337,7 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 .sidebar-mobile-toggle:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .main-area { min-width: 0; flex: 1; display: flex; flex-direction: column; }
@@ -1453,6 +1217,145 @@ body.is-admin .sidebar-link.admin-link {
 [data-theme="dark"] .sidebar .button-light:hover {
   background: #233354 !important;
   color: #ffffff !important;
+}
+
+
+/* ========================================================
+   NAVIGATION SIDEBAR - DARK MODE (KHI BẬT TỐI SANG MÀU ĐEN)
+   ======================================================== */
+[data-theme="dark"] .sidebar,
+body.dark-theme .sidebar {
+  background: #141416 !important;
+  border-right: 1px solid #27272A !important;
+  color: #F4F4F5 !important;
+}
+
+[data-theme="dark"] .sidebar-header,
+body.dark-theme .sidebar-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .sidebar-brand,
+body.dark-theme .sidebar-brand {
+  color: #F4F4F5 !important;
+}
+
+[data-theme="dark"] .sidebar-brand-ai,
+body.dark-theme .sidebar-brand-ai {
+  color: #38BDF8 !important;
+}
+
+[data-theme="dark"] .sidebar-toggle-btn,
+body.dark-theme .sidebar-toggle-btn {
+  border-color: #27272A !important;
+  color: #A1A1AA !important;
+}
+
+[data-theme="dark"] .sidebar-toggle-btn:hover,
+body.dark-theme .sidebar-toggle-btn:hover {
+  background: #27272A !important;
+  color: #F4F4F5 !important;
+  border-color: #3F3F46 !important;
+}
+
+[data-theme="dark"] .sidebar-nav-container,
+body.dark-theme .sidebar-nav-container {
+  scrollbar-color: #27272A transparent !important;
+}
+
+[data-theme="dark"] .sidebar-link,
+body.dark-theme .sidebar-link {
+  color: #A1A1AA !important;
+}
+
+[data-theme="dark"] .sidebar-link-icon,
+body.dark-theme .sidebar-link-icon {
+  color: #71717A !important;
+}
+
+[data-theme="dark"] .sidebar-link:hover,
+body.dark-theme .sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .sidebar-link:hover .sidebar-link-icon,
+[data-theme="dark"] .sidebar-link.active .sidebar-link-icon,
+body.dark-theme .sidebar-link:hover .sidebar-link-icon,
+body.dark-theme .sidebar-link.active .sidebar-link-icon {
+  color: #38BDF8 !important;
+}
+
+[data-theme="dark"] .sidebar-link.active,
+body.dark-theme .sidebar-link.active {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .sidebar-pill-badge,
+body.dark-theme .sidebar-pill-badge {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: #38BDF8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="dark"] .sidebar-role-badge,
+body.dark-theme .sidebar-role-badge {
+  background: #27272A !important;
+  color: #A1A1AA !important;
+  border-color: #3F3F46 !important;
+}
+
+[data-theme="dark"] .sidebar-footer,
+body.dark-theme .sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .sidebar-logout-btn,
+body.dark-theme .sidebar-logout-btn {
+  background: rgba(239, 68, 68, 0.06) !important;
+  border-color: rgba(239, 68, 68, 0.18) !important;
+  color: #F87171 !important;
+}
+
+[data-theme="dark"] .sidebar-logout-btn:hover,
+body.dark-theme .sidebar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #EF4444 !important;
+}
+
+[data-theme="dark"] .sidebar.collapsed .sidebar-link:hover::after,
+[data-theme="dark"] .sidebar.collapsed .sidebar-logout-btn:hover::after,
+body.dark-theme .sidebar.collapsed .sidebar-link:hover::after,
+body.dark-theme .sidebar.collapsed .sidebar-logout-btn:hover::after {
+  background: #18181B !important;
+  color: #F4F4F5 !important;
+  border-color: #27272A !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ========================================================
+   HIỆU ỨNG CHUYỂN TRANG TỪ TỪ MƯỢT MÀ (SMOOTH PAGE FADE-IN)
+   ======================================================== */
+@keyframes pageSmoothFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-content,
+.main-area > div:not(.topbar) {
+  animation: pageSmoothFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
 }
 
 [data-theme="dark"] .topbar {
