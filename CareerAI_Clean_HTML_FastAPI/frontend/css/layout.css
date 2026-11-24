@@ -170,7 +170,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   flex: 1;
-  margin: 0 -4px;
+  margin: 12px -4px 0;
   padding: 0 4px;
   scrollbar-width: thin;
   scrollbar-color: #27272A transparent;
@@ -186,31 +186,24 @@
 }
 
 .sidebar-group-title {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #71717A;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 10px 8px;
-  user-select: none;
-  white-space: nowrap;
+  display: none !important;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 8px;
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 9px 12px;
-  border-radius: 9px;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
   color: #A1A1AA !important;
   text-decoration: none;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 500;
   border: 1px solid transparent;
   transition: all 0.18s ease;
@@ -1189,9 +1182,20 @@ body.is-admin .sidebar-link.admin-link {
   color: white;
 }
 
-.toggleWrapper .input {
-  position: absolute;
-  left: -99em;
+.toggleWrapper .input,
+#dn {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
 }
 
 .toggle {

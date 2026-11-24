@@ -37,7 +37,7 @@ function initThemeToggle() {
         if (topbar) {
             const toggleHtml = `
                 <div class="toggleWrapper" title="Chuyển đổi giao diện Sáng (AM) / Tối (PM)">
-                    <input class="input" id="dn" type="checkbox" />
+                    <input class="input" id="dn" type="checkbox" style="position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;" />
                     <label class="toggle" for="dn">
                         <span class="toggle__handler">
                             <span class="crater crater--1"></span>
