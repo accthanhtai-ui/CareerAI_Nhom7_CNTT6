@@ -193,31 +193,63 @@ function initSidebar() {
         }
     });
 
-    // Hiệu ứng chuyển trang từ từ mượt mà (không giật mạnh)
-    sidebar.querySelectorAll(".sidebar-link").forEach(link => {
+    // Hiệu ứng chuyển trang kiểu trình chiếu (Choreographed Exit trước khi chuyển trang)
+    sidebar.querySelectorAll(".sidebar-link, .sidebar-sublink").forEach(link => {
         link.addEventListener("click", (e) => {
             const href = link.getAttribute("href");
             if (
                 href &&
                 !href.startsWith("#") &&
                 !link.classList.contains("active") &&
+                !link.classList.contains("sidebar-menu-toggle") &&
                 !e.ctrlKey &&
                 !e.metaKey &&
                 !e.shiftKey
             ) {
-                const content = document.querySelector(".page-content") || document.querySelector(".main-area");
+                const content = document.querySelector(".page-content") || document.querySelector(".main-area > div:not(.topbar)");
                 if (content) {
                     e.preventDefault();
-                    content.style.transition = "opacity 0.16s ease, transform 0.16s ease";
+                    content.style.transition = "opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), filter 0.22s ease";
                     content.style.opacity = "0";
-                    content.style.transform = "translateY(-4px)";
+                    content.style.transform = "translateY(14px)";
+                    content.style.filter = "blur(2px)";
                     setTimeout(() => {
-                        location.href = href;
-                    }, 140);
+                        window.location.href = href;
+                    }, 200);
                 }
             }
         });
     });
+
+    // Phím tắt bàn phím: Ctrl + K / ⌘K (Focus nhanh vào ô tìm kiếm)
+    document.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+            const searchInput = document.querySelector(".sidebar-search-input") || 
+                                document.querySelector("#searchInput") || 
+                                document.querySelector("input[type='search']") ||
+                                document.querySelector(".search-box input");
+            if (searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+                if (searchInput.select) searchInput.select();
+            }
+        }
+    });
+
+    // Tự động kích hoạt hiệu ứng thanh tiến trình (Progress Bar Animation)
+    setTimeout(() => {
+        document.querySelectorAll(".progress-bar-fill, .cv-progress-fill, div[role='progressbar'] > div").forEach(bar => {
+            const targetWidth = bar.getAttribute("data-width") || bar.style.width;
+            if (targetWidth && targetWidth !== "0%") {
+                bar.style.width = "0%";
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        bar.style.width = targetWidth;
+                    }, 60);
+                });
+            }
+        });
+    }, 380);
 }
 
 // Khởi chạy Sidebar tương tác
