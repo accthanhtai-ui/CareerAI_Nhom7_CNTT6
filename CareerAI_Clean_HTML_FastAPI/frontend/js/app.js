@@ -117,12 +117,147 @@ if (user?.role !== "ADMIN") {
     });
 }
 
+// ========================================================
+// 2.1. Quản lý Sidebar Dark Mode SaaS (Thu gọn, Phím tắt, Tìm kiếm & Drawer)
+// ========================================================
+function initSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    if (!sidebar) return;
+
+    const toggleBtn = document.querySelector("#sidebarToggle");
+    const searchInput = document.querySelector("#sidebarSearchInput");
+    const mobileToggleBtn = document.querySelector("#sidebarMobileToggle");
+    const backdrop = document.querySelector("#sidebarBackdrop");
+
+    // Khôi phục trạng thái thu gọn đã lưu từ localStorage
+    const isCollapsed = localStorage.getItem("careerai_sidebar_collapsed") === "1";
+    if (isCollapsed && window.innerWidth > 850) {
+        sidebar.classList.add("collapsed");
+    }
+
+    // Toggle thu gọn / mở rộng Sidebar
+    const toggleSidebar = () => {
+        const collapsed = sidebar.classList.toggle("collapsed");
+        localStorage.setItem("careerai_sidebar_collapsed", collapsed ? "1" : "0");
+    };
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", toggleSidebar);
+    }
+
+    // Phím tắt bàn phím: Ctrl + B (Thu gọn) & Ctrl + K (Tìm kiếm)
+    document.addEventListener("keydown", (e) => {
+        // Ctrl + B hoặc Cmd + B: Đóng/mở sidebar
+        if ((e.ctrlKey || e.metaKey) && (e.key === "b" || e.key === "B")) {
+            const activeTag = document.activeElement?.tagName?.toLowerCase();
+            if (activeTag !== "input" && activeTag !== "textarea") {
+                e.preventDefault();
+                toggleSidebar();
+            }
+        }
+
+        // Ctrl + K hoặc Cmd + K: Mở ô tìm kiếm
+        if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+            e.preventDefault();
+            if (sidebar.classList.contains("collapsed")) {
+                sidebar.classList.remove("collapsed");
+                localStorage.setItem("careerai_sidebar_collapsed", "0");
+            }
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            }
+        }
+    });
+
+    // Xử lý Quick Search lọc real-time danh sách menu
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.trim().toLowerCase();
+            const links = sidebar.querySelectorAll(".sidebar-link");
+            links.forEach(link => {
+                const text = link.querySelector(".sidebar-link-text")?.textContent.toLowerCase() || "";
+                if (!query || text.includes(query)) {
+                    link.style.display = "";
+                } else {
+                    link.style.display = "none";
+                }
+            });
+        });
+
+        // Nhấn Esc để xoá tìm kiếm và hủy focus
+        searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                searchInput.value = "";
+                searchInput.dispatchEvent(new Event("input"));
+                searchInput.blur();
+            }
+        });
+    }
+
+    // Xử lý đóng mở Submenu Dropdown (ví dụ Quản lý CV)
+    sidebar.querySelectorAll(".sidebar-submenu-toggle").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const parentItem = btn.closest(".has-submenu");
+            if (parentItem) {
+                parentItem.classList.toggle("submenu-open");
+            }
+        });
+    });
+
+    // Xử lý Mobile Drawer (Trượt ngang trên điện thoại)
+    const openMobileSidebar = () => {
+        sidebar.classList.add("mobile-open");
+        if (backdrop) backdrop.classList.add("active");
+    };
+
+    const closeMobileSidebar = () => {
+        sidebar.classList.remove("mobile-open");
+        if (backdrop) backdrop.classList.remove("active");
+    };
+
+    if (mobileToggleBtn) {
+        mobileToggleBtn.addEventListener("click", () => {
+            if (sidebar.classList.contains("mobile-open")) {
+                closeMobileSidebar();
+            } else {
+                openMobileSidebar();
+            }
+        });
+    }
+
+    if (backdrop) {
+        backdrop.addEventListener("click", closeMobileSidebar);
+    }
+
+    // Đóng drawer khi nhấn phím Escape
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && sidebar.classList.contains("mobile-open")) {
+            closeMobileSidebar();
+        }
+    });
+}
+
+// Khởi chạy Sidebar tương tác
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSidebar);
+} else {
+    initSidebar();
+}
+
 // Làm nổi bật menu đang hoạt động (Active Navigation State)
 if (page) {
-    document.querySelectorAll(".sidebar nav a").forEach(link => {
+    document.querySelectorAll(".sidebar nav a, .sidebar-link, .sidebar-sublink").forEach(link => {
         const href = link.getAttribute("href") || "";
-        if (href.includes(`${page}.html`) || (page === "index" && href === "/")) {
+        if (href.includes(`${page}.html`) || (page === "index" && (href === "/" || href === "/index.html"))) {
             link.classList.add("active");
+            // Tự động mở submenu nếu mục con đang được chọn
+            const parentSubmenu = link.closest(".has-submenu");
+            if (parentSubmenu) {
+                parentSubmenu.classList.add("submenu-open");
+            }
         }
     });
 }

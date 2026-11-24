@@ -1,2 +1,208 @@
-<!doctype html><html lang="vi"><head><script>if(localStorage.getItem('careerai_theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="CareerAI - Phân tích CV bằng AI và kết nối việc làm"><title>Trợ lý CareerAI | CareerAI</title><link rel="icon" href="/assets/favicon.ico"><link rel="stylesheet" href="/css/base.css"><link rel="stylesheet" href="/css/layout.css"><link rel="stylesheet" href="/css/components.css"></head><body data-page="ai-chat"><div class="app-shell"><aside class="sidebar"><a class="brand" href="/"> <img src="/assets/logo.png" alt="CareerAI"></a><nav>
-<a href="/pages/dashboard.html">Tổng quan</a><a href="/pages/profile.html">Hồ sơ cá nhân</a><a href="/pages/my-cvs.html">Quản lý CV</a><a href="/pages/cv-analysis.html">Phân tích CV</a><a href="/pages/ai-chat.html">Chatbot AI</a><a href="/pages/jobs.html">Tìm việc làm</a><a href="/pages/saved-jobs.html">Việc đã lưu</a><a href="/pages/applications.html">Ứng tuyển</a><a href="/pages/notifications.html">Thông báo</a><a class="admin-link" href="/pages/admin.html">Quản trị</a></nav><button id="logoutButton" class="button button-light">Đăng xuất</button></aside><main class="main-area"><header class="topbar"><div><span class="muted">CareerAI / </span><strong>Trợ lý CareerAI</strong></div><span id="currentUser" class="user-chip"></span></header><section class="page-content"><div id="pageMessage" class="message" hidden></div><div id="pageContent"></div></section></main></div><div id="toast" class="toast" role="status"></div><script type="module" src="/js/app.js?v=2.5.1"></script></body></html>
+<!doctype html><html lang="vi"><head><script>if(localStorage.getItem('careerai_theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="CareerAI - Phân tích CV bằng AI và kết nối việc làm"><title>Trợ lý CareerAI | CareerAI</title><link rel="icon" href="/assets/favicon.ico"><link rel="stylesheet" href="/css/base.css"><link rel="stylesheet" href="/css/layout.css"><link rel="stylesheet" href="/css/components.css"></head><body data-page="ai-chat"><div class="app-shell"><aside class="sidebar">
+      <!-- 1. Header (Logo + Brand + Badge PRO + Sidebar Toggle) -->
+      <div class="sidebar-header">
+        <a class="sidebar-brand" href="/">
+          <img class="sidebar-brand-logo" src="/assets/logo.png" alt="CareerAI">
+          <span class="sidebar-brand-text">Career<span class="sidebar-brand-ai">AI</span></span>
+          <span class="sidebar-badge-pro">PRO</span>
+        </a>
+        <button type="button" class="sidebar-toggle-btn" id="sidebarToggle" title="Thu gọn / Mở rộng menu (Ctrl+B)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="9" y1="3" x2="9" y2="21"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 2. Ô tìm kiếm nhanh (Quick Search) -->
+      <div class="sidebar-search-wrap">
+        <div class="sidebar-search-inner">
+          <span class="sidebar-search-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </span>
+          <input type="text" class="sidebar-search-input" id="sidebarSearchInput" placeholder="Tìm kiếm tính năng..." autocomplete="off">
+          <kbd class="sidebar-search-kbd">Ctrl K</kbd>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- 3. Khu vực điều hướng chính -->
+      <div class="sidebar-nav-container">
+        <div class="sidebar-group-title">ĐIỀU HƯỚNG CHÍNH</div>
+        <nav class="sidebar-nav">
+          <!-- Tổng quan -->
+          <a class="sidebar-link" href="/pages/dashboard.html" data-tooltip="Tổng quan">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Tổng quan</span>
+          </a>
+
+          <!-- Hồ sơ cá nhân -->
+          <a class="sidebar-link" href="/pages/profile.html" data-tooltip="Hồ sơ cá nhân">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Hồ sơ cá nhân</span>
+          </a>
+
+          <!-- Quản lý CV (có Submenu dropdown) -->
+          <div class="sidebar-nav-item has-submenu">
+            <a class="sidebar-link" href="/pages/my-cvs.html" data-tooltip="Quản lý CV">
+              <span class="sidebar-link-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </span>
+              <span class="sidebar-link-text">Quản lý CV</span>
+              <button type="button" class="sidebar-submenu-toggle" title="Mở danh sách con">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+            </a>
+            <div class="sidebar-submenu">
+              <a class="sidebar-sublink" href="/pages/my-cvs.html">• Danh sách CV</a>
+              <a class="sidebar-sublink" href="/pages/cv-analysis.html">• Tải CV mới</a>
+            </div>
+          </div>
+
+          <!-- Phân tích CV (Badge AI) -->
+          <a class="sidebar-link" href="/pages/cv-analysis.html" data-tooltip="Phân tích CV">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Phân tích CV</span>
+            <span class="sidebar-pill-badge">AI ✨</span>
+          </a>
+
+          <!-- Chatbot AI -->
+          <a class="sidebar-link" href="/pages/ai-chat.html" data-tooltip="Chatbot AI">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                <path d="M8 9h.01"/><path d="M12 9h.01"/><path d="M16 9h.01"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Chatbot AI</span>
+          </a>
+
+          <!-- Tìm việc làm -->
+          <a class="sidebar-link" href="/pages/jobs.html" data-tooltip="Tìm việc làm">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Tìm việc làm</span>
+          </a>
+
+          <!-- Việc đã lưu -->
+          <a class="sidebar-link" href="/pages/saved-jobs.html" data-tooltip="Việc đã lưu">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Việc đã lưu</span>
+          </a>
+
+          <!-- Ứng tuyển -->
+          <a class="sidebar-link" href="/pages/applications.html" data-tooltip="Ứng tuyển">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Ứng tuyển</span>
+          </a>
+
+          <!-- Thông báo (Badge số) -->
+          <a class="sidebar-link" href="/pages/notifications.html" data-tooltip="Thông báo">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Thông báo</span>
+            <span class="sidebar-count-badge" id="sidebarNotifBadge">3</span>
+          </a>
+
+          <!-- Quản trị (Admin) -->
+          <a class="sidebar-link admin-link" href="/pages/admin.html" data-tooltip="Quản trị">
+            <span class="sidebar-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </span>
+            <span class="sidebar-link-text">Quản trị</span>
+            <span class="sidebar-role-badge">Admin</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- 4. Khu vực phân loại phụ (Trạng thái CV & Tiến độ) -->
+        <div class="sidebar-group-title">TRẠNG THÁI CV &amp; TIẾN ĐỘ</div>
+        <div class="sidebar-status-list">
+          <div class="sidebar-status-item" data-tooltip="Chuẩn ATS 85%">
+            <span class="sidebar-status-dot dot-green"></span>
+            <span class="sidebar-status-name">Chuẩn ATS</span>
+            <span class="sidebar-status-val">85%</span>
+          </div>
+          <div class="sidebar-status-item" data-tooltip="Kỹ năng cần bổ sung">
+            <span class="sidebar-status-dot dot-yellow"></span>
+            <span class="sidebar-status-name">Kỹ năng</span>
+            <span class="sidebar-status-val">3 mục</span>
+          </div>
+          <div class="sidebar-status-item" data-tooltip="Ứng tuyển đang xử lý">
+            <span class="sidebar-status-dot dot-blue"></span>
+            <span class="sidebar-status-name">Ứng tuyển</span>
+            <span class="sidebar-status-val">2 việc</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Footer (Đăng xuất) -->
+      <div class="sidebar-footer">
+        <button id="logoutButton" class="sidebar-logout-btn" type="button" data-tooltip="Đăng xuất">
+          <span class="sidebar-link-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </span>
+          <span class="sidebar-logout-text">Đăng xuất</span>
+        </button>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div><main class="main-area"><header class="topbar"><button type="button" class="sidebar-mobile-toggle" id="sidebarMobileToggle" title="Mở menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button><div><span class="muted">CareerAI / </span><strong>Trợ lý CareerAI</strong></div><span id="currentUser" class="user-chip"></span></header><section class="page-content"><div id="pageMessage" class="message" hidden></div><div id="pageContent"></div></section></main></div><div id="toast" class="toast" role="status"></div><script type="module" src="/js/app.js?v=2.5.1"></script></body></html>

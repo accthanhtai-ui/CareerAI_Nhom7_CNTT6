@@ -1,11 +1,579 @@
-.app-shell { display: flex; min-height: 100vh; }
-.sidebar { width: 245px; background: #14213d; color: #fff; padding: 22px 16px; display: flex; flex-direction: column; gap: 20px; flex-shrink: 0; transition: all 0.25s ease; }
-.brand img { width: 155px; max-height: 52px; object-fit: contain; }
-.sidebar nav { display: grid; gap: 4px; }
-.sidebar nav a { color: #d5def0; padding: 10px 12px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: all 0.15s ease; }
-.sidebar nav a:hover { background: #26385c; color: #fff; }
-.sidebar nav a.active { background: #2563eb; color: #ffffff; font-weight: 600; box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
-.sidebar .button { margin-top: auto; }
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  background: var(--bg);
+}
+
+/* ========================================================
+   NAVIGATION SIDEBAR - DARK MODE SAAS CHUẨN CAO CẤP
+   ======================================================== */
+.sidebar {
+  width: 260px;
+  background: #141416;
+  border-right: 1px solid #27272A;
+  color: #F4F4F5;
+  padding: 16px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease;
+  z-index: 100;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* 1. Header (Logo, Tên, Badge PRO & Toggle) */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 14px;
+  min-height: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #F4F4F5;
+  font-weight: 700;
+  font-size: 16px;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-brand-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.sidebar-brand-text {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.sidebar-brand-ai {
+  color: #38BDF8;
+  font-weight: 800;
+}
+
+.sidebar-badge-pro {
+  font-size: 10px;
+  font-weight: 800;
+  background: #27272A;
+  color: #38BDF8;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #27272A;
+  border-radius: 8px;
+  color: #A1A1AA;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #27272A;
+  color: #F4F4F5;
+  border-color: #3F3F46;
+}
+
+/* 2. Ô tìm kiếm nhanh (Quick Search) */
+.sidebar-search-wrap {
+  margin: 14px 0 10px;
+}
+
+.sidebar-search-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #18181B;
+  border: 1px solid #27272A;
+  border-radius: 10px;
+  padding: 7px 10px;
+  gap: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.sidebar-search-inner:focus-within {
+  border-color: #38BDF8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+}
+
+.sidebar-search-icon {
+  color: #71717A;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-search-input {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  font-size: 12.5px;
+  color: #F4F4F5 !important;
+  width: 100%;
+  padding: 0 !important;
+  box-shadow: none !important;
+  height: auto !important;
+}
+
+.sidebar-search-input::placeholder {
+  color: #71717A !important;
+}
+
+.sidebar-search-kbd {
+  font-size: 10px;
+  font-weight: 600;
+  color: #71717A;
+  background: #27272A;
+  border: 1px solid #3F3F46;
+  border-radius: 4px;
+  padding: 1.5px 5px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Đường phân cách mờ */
+.sidebar-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 10px 0 12px;
+}
+
+/* 3. Khu vực điều hướng chính */
+.sidebar-nav-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  margin: 0 -4px;
+  padding: 0 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #27272A transparent;
+}
+
+.sidebar-nav-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav-container::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 4px;
+}
+
+.sidebar-group-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #71717A;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px 8px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  color: #A1A1AA !important;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.18s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar-link-icon {
+  color: #71717A;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.18s ease;
+}
+
+.sidebar-link:hover .sidebar-link-icon,
+.sidebar-link.active .sidebar-link-icon {
+  color: #38BDF8;
+}
+
+.sidebar-link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Huy hiệu & Badge */
+.sidebar-pill-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 7px;
+  border-radius: 12px;
+  margin-left: auto;
+  letter-spacing: 0.2px;
+  flex-shrink: 0;
+}
+
+.sidebar-count-badge {
+  font-size: 10px;
+  font-weight: 750;
+  background: #EF4444;
+  color: #FFFFFF;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: auto;
+  min-width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-role-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #27272A;
+  color: #A1A1AA;
+  border: 1px solid #3F3F46;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Submenu Dropdown */
+.sidebar-nav-item {
+  position: relative;
+}
+
+.sidebar-submenu-toggle {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #71717A;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: auto;
+  transition: transform 0.25s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-submenu-toggle:hover {
+  color: #F4F4F5;
+}
+
+.sidebar-submenu {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0 6px 36px;
+}
+
+.has-submenu.submenu-open .sidebar-submenu {
+  display: flex;
+}
+
+.has-submenu.submenu-open .sidebar-submenu-toggle {
+  transform: rotate(180deg);
+  color: #F4F4F5;
+}
+
+.sidebar-sublink {
+  font-size: 12.5px;
+  color: #71717A !important;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.sidebar-sublink:hover {
+  color: #38BDF8 !important;
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.sidebar-sublink.active {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+}
+
+/* 4. Khu vực phân loại phụ (Trạng thái CV) */
+.sidebar-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 2px;
+}
+
+.sidebar-status-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #A1A1AA;
+  cursor: default;
+  transition: background 0.15s ease;
+}
+
+.sidebar-status-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #F4F4F5;
+}
+
+.sidebar-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-green {
+  background: #10B981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.dot-yellow {
+  background: #F59E0B;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.dot-blue {
+  background: #3B82F6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+}
+
+.sidebar-status-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-status-val {
+  font-size: 11px;
+  font-weight: 600;
+  color: #71717A;
+  background: #1E1E22;
+  padding: 1px 6px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+/* 5. Footer (Đăng xuất) */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  color: #F87171 !important;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.sidebar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #EF4444 !important;
+}
+
+/* ========================================================
+   TRẠNG THÁI THU GỌN (MINI SIDEBAR COLLAPSED)
+   ======================================================== */
+.sidebar.collapsed {
+  width: 76px;
+  padding: 16px 10px 14px;
+}
+
+.sidebar.collapsed .sidebar-brand-text,
+.sidebar.collapsed .sidebar-badge-pro,
+.sidebar.collapsed .sidebar-search-kbd,
+.sidebar.collapsed .sidebar-search-input,
+.sidebar.collapsed .sidebar-group-title,
+.sidebar.collapsed .sidebar-link-text,
+.sidebar.collapsed .sidebar-pill-badge,
+.sidebar.collapsed .sidebar-count-badge,
+.sidebar.collapsed .sidebar-role-badge,
+.sidebar.collapsed .sidebar-submenu-toggle,
+.sidebar.collapsed .sidebar-submenu,
+.sidebar.collapsed .sidebar-status-name,
+.sidebar.collapsed .sidebar-status-val,
+.sidebar.collapsed .sidebar-logout-text {
+  display: none !important;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sidebar.collapsed .sidebar-brand {
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+  width: 100%;
+}
+
+.sidebar.collapsed .sidebar-search-wrap {
+  padding: 0;
+}
+
+.sidebar.collapsed .sidebar-search-inner {
+  justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.sidebar.collapsed .sidebar-link {
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Floating Tooltip khi thu gọn Sidebar */
+.sidebar.collapsed .sidebar-link:hover::after,
+.sidebar.collapsed .sidebar-logout-btn:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #18181B;
+  color: #F4F4F5;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  border: 1px solid #27272A;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.sidebar.collapsed .sidebar-status-item {
+  justify-content: center;
+  padding: 8px;
+}
+
+.sidebar.collapsed .sidebar-logout-btn {
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Lớp phủ Backdrop trên Mobile */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Nút Mobile Hamburger trên Topbar */
+.sidebar-mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  margin-right: 12px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.sidebar-mobile-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .main-area { min-width: 0; flex: 1; display: flex; flex-direction: column; }
 .topbar { height: 70px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
 .user-chip { background: #eef3ff; color: #244ca9; border-radius: 30px; padding: 8px 14px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
@@ -557,10 +1125,22 @@
 /* Responsive Mobile & Tablet (< 850px) */
 @media (max-width: 850px) {
   .app-shell { display: flex; flex-direction: column; }
-  .sidebar { width: 100%; padding: 14px 16px; gap: 12px; }
-  .sidebar nav { display: flex; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
-  .sidebar nav a { white-space: nowrap; font-size: 13px; padding: 8px 12px; }
-  .sidebar .button { margin-top: 0; align-self: flex-start; }
+  .sidebar-mobile-toggle { display: inline-flex !important; }
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 270px !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6) !important;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
   .topbar { padding: 0 16px; height: 60px; }
   .page-content { padding: 16px; }
   .grid-3 { grid-template-columns: 1fr !important; }
