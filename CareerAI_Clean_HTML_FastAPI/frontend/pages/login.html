@@ -50,13 +50,13 @@
             <img src="/assets/logo.png" alt="CareerAI">
           </div>
           <h1>Chào mừng</h1>
-          <p class="subtitle">Đăng nhập để tiếp tục hành trình nghề nghiệp</p>
+          <p class="subtitle">Đăng nhập để tiếp tục hành trình</p>
 
           <div id="loginMessage" class="auth-msg-box"></div>
 
           <form id="loginForm">
             <!-- Email -->
-            <div class="input-group">
+            <div class="input-group" onclick="this.querySelector('input').focus()">
               <div class="electric-glow"></div>
               <div class="electric-border"></div>
               <input type="email" id="loginEmail" name="email" placeholder=" " autocomplete="email" required>
@@ -64,12 +64,12 @@
             </div>
 
             <!-- Mật khẩu -->
-            <div class="input-group">
+            <div class="input-group" onclick="this.querySelector('input').focus()">
               <div class="electric-glow"></div>
               <div class="electric-border"></div>
               <input type="password" id="loginPassword" name="password" placeholder=" " autocomplete="current-password" required>
               <label for="loginPassword">Mật khẩu</label>
-              <button type="button" class="password-toggle" onclick="window.toggleAuthPassword('loginPassword', this)">
+              <button type="button" class="password-toggle" onclick="event.stopPropagation(); window.toggleAuthPassword('loginPassword', this)">
                 <i class="fa-solid fa-eye"></i>
               </button>
             </div>
@@ -79,7 +79,7 @@
                 <input type="checkbox" name="remember" checked>
                 Ghi nhớ đăng nhập
               </label>
-              <a href="javascript:void(0)" onclick="alert('Vui lòng liên hệ quản trị viên để hỗ trợ khôi phục mật khẩu.')">Quên mật khẩu?</a>
+              <a href="javascript:void(0)" onclick="alert('Vui lòng liên hệ quản trị viên để được hỗ trợ cấp lại mật khẩu.')">Quên mật khẩu?</a>
             </div>
 
             <button type="submit" class="main-btn" id="loginSubmitBtn">ĐĂNG NHẬP</button>
@@ -105,7 +105,7 @@
 
           <form id="signupForm">
             <!-- Họ và tên -->
-            <div class="input-group">
+            <div class="input-group" onclick="this.querySelector('input').focus()">
               <div class="electric-glow"></div>
               <div class="electric-border"></div>
               <input type="text" id="signupName" name="name" placeholder=" " autocomplete="name" required minlength="2">
@@ -113,7 +113,7 @@
             </div>
 
             <!-- Email -->
-            <div class="input-group">
+            <div class="input-group" onclick="this.querySelector('input').focus()">
               <div class="electric-glow"></div>
               <div class="electric-border"></div>
               <input type="email" id="signupEmail" name="email" placeholder=" " autocomplete="email" required>
@@ -121,23 +121,23 @@
             </div>
 
             <!-- Mật khẩu -->
-            <div class="input-group">
+            <div class="input-group" onclick="this.querySelector('input').focus()">
               <div class="electric-glow"></div>
               <div class="electric-border"></div>
               <input type="password" id="signupPassword" name="password" placeholder=" " autocomplete="new-password" required minlength="6">
               <label for="signupPassword">Mật khẩu (tối thiểu 6 ký tự)</label>
-              <button type="button" class="password-toggle" onclick="window.toggleAuthPassword('signupPassword', this)">
+              <button type="button" class="password-toggle" onclick="event.stopPropagation(); window.toggleAuthPassword('signupPassword', this)">
                 <i class="fa-solid fa-eye"></i>
               </button>
             </div>
 
             <!-- Xác nhận mật khẩu -->
-            <div class="input-group">
+            <div class="input-group" onclick="this.querySelector('input').focus()">
               <div class="electric-glow"></div>
               <div class="electric-border"></div>
               <input type="password" id="confirmPassword" name="confirmPassword" placeholder=" " autocomplete="new-password" required minlength="6">
               <label for="confirmPassword">Xác nhận mật khẩu</label>
-              <button type="button" class="password-toggle" onclick="window.toggleAuthPassword('confirmPassword', this)">
+              <button type="button" class="password-toggle" onclick="event.stopPropagation(); window.toggleAuthPassword('confirmPassword', this)">
                 <i class="fa-solid fa-eye"></i>
               </button>
             </div>
@@ -157,6 +157,6 @@
     </div>
   </main>
   <div id="toast" class="toast" role="status"></div>
-  <script type="module" src="/js/app.js?v=2.5.6"></script>
+  <script type="module" src="/js/app.js?v=2.5.7"></script>
 </body>
 </html>
