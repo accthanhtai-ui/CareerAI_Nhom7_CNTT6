@@ -12,42 +12,6 @@
 </head>
 <body data-page="login">
   <main class="auth-layout">
-    <!-- Khu vực Giới thiệu thương hiệu CareerAI bên trái -->
-    <section class="auth-brand-section">
-      <a href="/" class="auth-brand-logo">
-        <img src="/assets/logo.png" alt="CareerAI">
-      </a>
-      <h2>Chào mừng bạn đến với <span class="highlight-text">CareerAI</span></h2>
-      <p class="auth-brand-desc">
-        Hệ sinh thái thông minh ứng dụng trí tuệ nhân tạo Gemini giúp bạn phân tích CV chuyên sâu, tối ưu hồ sơ năng lực và kết nối các cơ hội việc làm mơ ước.
-      </p>
-      
-      <div class="auth-features">
-        <div class="auth-feature-item">
-          <span class="auth-feature-icon">⚡</span>
-          <div>
-            <strong>Phân tích CV chuẩn ATS bằng Gemini AI</strong>
-            <p>Đánh giá điểm số, chỉ rõ điểm mạnh, điểm cần cải thiện và từ khóa kỹ năng cần bổ sung.</p>
-          </div>
-        </div>
-        <div class="auth-feature-item">
-          <span class="auth-feature-icon">🎯</span>
-          <div>
-            <strong>Gợi ý việc làm & So khớp kỹ năng</strong>
-            <p>Tự động đề xuất các vị trí tuyển dụng phù hợp nhất với hồ sơ và định hướng của bạn.</p>
-          </div>
-        </div>
-        <div class="auth-feature-item">
-          <span class="auth-feature-icon">🤖</span>
-          <div>
-            <strong>Trợ lý AI đồng hành 24/7</strong>
-            <p>Giải đáp thắc mắc lộ trình, tư vấn mẹo phỏng vấn và hoàn thiện kỹ năng chuyên môn.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Khối Form Đăng nhập đặt ở góc phải màn hình -->
     <section class="auth-card">
       <a href="/"><img class="auth-logo" src="/assets/logo.png" alt="CareerAI"></a>
       <h1>Đăng nhập</h1>
@@ -55,10 +19,10 @@
       <div id="pageMessage" class="message" hidden></div>
       <form id="authForm">
         <label>Email
-          <input name="email" type="email" required placeholder="name@example.com">
+          <input name="email" type="email" required>
         </label>
         <label>Mật khẩu
-          <input name="password" type="password" minlength="6" required placeholder="••••••••">
+          <input name="password" type="password" minlength="6" required>
         </label>
         <button class="button button-primary" type="submit">Đăng nhập</button>
       </form>
@@ -66,6 +30,6 @@
     </section>
   </main>
   <div id="toast" class="toast" role="status"></div>
-  <script type="module" src="/js/app.js?v=2.5.3"></script>
+  <script type="module" src="/js/app.js?v=2.5.4"></script>
 </body>
 </html>
