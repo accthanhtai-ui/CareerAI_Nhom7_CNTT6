@@ -13,13 +13,8 @@ try {
                     <input name="name" value="${p.name || ""}" required>
                 </label>
                 <label class="field">
-                    <span style="display:flex;align-items:center;justify-content:space-between">
-                        <span>Email</span>
-                        <span class="tag" style="font-size:11px;background:#f1f5f9;color:#64748b;padding:2px 8px;border-radius:12px;font-weight:normal;display:inline-flex;align-items:center;gap:4px">
-                            🔒 Đăng nhập (Cố định)
-                        </span>
-                    </span>
-                    <input value="${p.email || ""}" readonly style="background:#f8fafc;color:#64748b;cursor:not-allowed;border-color:#e2e8f0" title="Email là tài khoản đăng nhập duy nhất gắn với mã xác thực JWT, không thể thay đổi trực tiếp tại đây để bảo vệ tài khoản">
+                    <span>Email</span>
+                    <input value="${p.email || ""}" readonly style="background:#f8fafc;color:#64748b;cursor:not-allowed;border-color:#e2e8f0" title="Email là tài khoản đăng nhập duy nhất">
                 </label>
                 <label class="field">
                     <span>Số điện thoại</span>
