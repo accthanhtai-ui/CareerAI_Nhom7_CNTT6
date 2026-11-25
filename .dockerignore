@@ -1,0 +1,11 @@
+.git
+.gitignore
+.vscode
+**/venv
+**/.venv
+**/__pycache__
+**/*.pyc
+**/.env
+CareerAI_Clean_HTML_FastAPI/backend/uploads/*
+!CareerAI_Clean_HTML_FastAPI/backend/uploads/.gitkeep
+node_modules

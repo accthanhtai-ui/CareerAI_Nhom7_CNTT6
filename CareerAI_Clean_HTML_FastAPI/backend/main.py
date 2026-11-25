@@ -1,15 +1,29 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from .config import PROJECT_DIR, UPLOAD_DIR
-from .database import fetch_all, fetch_one
+from .config import PROJECT_DIR, UPLOAD_DIR, DB_CONFIG, AUTO_INIT_DB
+from .database import fetch_all, fetch_one, init_schema_from_sql
 from .routers import auth, profile, cvs, ai, jobs, admin, notifications
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    if AUTO_INIT_DB:
+        try:
+            init_schema_from_sql()
+        except Exception as exc:
+            print(f"[CareerAI] AUTO_INIT_DB skipped/deferred: {exc}")
+    yield
+
 
 app = FastAPI(
     title="CareerAI API",
     version="2.5.0",
     description="CareerAI - HTML CSS JavaScript thuần và Python FastAPI",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -62,11 +76,18 @@ def page(page_name: str):
 
 @app.get("/api/health")
 def health():
-    tables = fetch_all("SHOW TABLES")
-    return {
-        "status": "connected",
-        "database": "career_ai_db",
-        "tables_count": len(tables),
-        "users_count": fetch_one("SELECT COUNT(*) total FROM users")["total"],
-        "jobs_count": fetch_one("SELECT COUNT(*) total FROM jobs")["total"],
-    }
+    try:
+        tables = fetch_all("SHOW TABLES")
+        return {
+            "status": "connected",
+            "database": DB_CONFIG["database"],
+            "tables_count": len(tables),
+            "users_count": fetch_one("SELECT COUNT(*) total FROM users")["total"],
+            "jobs_count": fetch_one("SELECT COUNT(*) total FROM jobs")["total"],
+        }
+    except Exception as exc:
+        return {
+            "status": "degraded",
+            "database": DB_CONFIG["database"],
+            "detail": str(exc),
+        }
