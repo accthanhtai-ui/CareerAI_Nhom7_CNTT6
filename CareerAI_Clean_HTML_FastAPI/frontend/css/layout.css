@@ -17,7 +17,12 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease;
+  transition:
+    width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.2s ease;
   z-index: 100;
   box-sizing: border-box;
   user-select: none;
@@ -44,7 +49,9 @@
   font-weight: 700;
   font-size: 16px;
   overflow: hidden;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebar-brand-logo {
@@ -340,10 +347,39 @@ body.is-admin .sidebar-link.admin-link {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.main-area { min-width: 0; flex: 1; display: flex; flex-direction: column; }
-.topbar { height: 70px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
-.user-chip { background: #eef3ff; color: #244ca9; border-radius: 30px; padding: 8px 14px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-.page-content { padding: 30px; max-width: 1250px; width: 100%; margin: 0 auto; flex: 1; }
+.main-area {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  height: 70px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+.user-chip {
+  background: #eef3ff;
+  color: #244ca9;
+  border-radius: 30px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.page-content {
+  padding: 30px;
+  max-width: 1250px;
+  width: 100%;
+  margin: 0 auto;
+  flex: 1;
+}
 /* ========================================================
    GIAO DIỆN ĐĂNG NHẬP / ĐĂNG KÝ NEUMORPHIC 3D FLIP CARD
    ======================================================== */
@@ -365,7 +401,9 @@ body.is-admin .sidebar-link.admin-link {
   position: fixed;
   border-radius: 50%;
   background: #e7ebf0;
-  box-shadow: 15px 15px 30px rgba(163, 177, 198, 0.55), -15px -15px 30px rgba(255, 255, 255, 0.9);
+  box-shadow:
+    15px 15px 30px rgba(163, 177, 198, 0.55),
+    -15px -15px 30px rgba(255, 255, 255, 0.9);
   z-index: 1;
   animation: floating 6s ease-in-out infinite;
   pointer-events: none;
@@ -395,8 +433,13 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 @keyframes floating {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-16px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
 }
 
 /* Khu vực giới thiệu thương hiệu bên trái */
@@ -438,7 +481,9 @@ body.is-admin .sidebar-link.admin-link {
   padding: 12px 18px;
   border-radius: 16px;
   background: #e7ebf0;
-  box-shadow: 5px 5px 12px rgba(163, 177, 198, 0.5), -5px -5px 12px rgba(255, 255, 255, 0.9);
+  box-shadow:
+    5px 5px 12px rgba(163, 177, 198, 0.5),
+    -5px -5px 12px rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -484,13 +529,17 @@ body.is-admin .sidebar-link.admin-link {
   padding: 28px 26px;
   border-radius: 30px;
   background: #e7ebf0;
-  box-shadow: 18px 18px 36px rgba(163, 177, 198, 0.65), -18px -18px 36px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    18px 18px 36px rgba(163, 177, 198, 0.65),
+    -18px -18px 36px rgba(255, 255, 255, 0.95);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 /* SỬA LỖI CLICK VÀ ĐÚP CHUỘT: Ngăn chặn mặt sau chặn click */
@@ -532,7 +581,9 @@ body.is-admin .sidebar-link.admin-link {
   align-items: center;
   border-radius: 50%;
   background: #e7ebf0;
-  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.65), -8px -8px 16px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    8px 8px 16px rgba(163, 177, 198, 0.65),
+    -8px -8px 16px rgba(255, 255, 255, 0.95);
   transition: transform 0.35s ease;
   flex-shrink: 0;
 }
@@ -634,8 +685,12 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 @keyframes electricRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Input click & type mượt mà */
@@ -652,7 +707,9 @@ body.is-admin .sidebar-link.admin-link {
   font-size: 14px;
   padding: 0 40px 0 14px;
   z-index: 20;
-  box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.55), inset -4px -4px 8px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    inset 4px 4px 8px rgba(163, 177, 198, 0.55),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.95);
   transition: box-shadow 0.25s ease;
   box-sizing: border-box;
   pointer-events: auto !important;
@@ -660,7 +717,9 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 .input-group input:focus {
-  box-shadow: inset 2px 2px 5px rgba(163, 177, 198, 0.55), inset -2px -2px 5px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    inset 2px 2px 5px rgba(163, 177, 198, 0.55),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.95);
 }
 
 .input-group label {
@@ -758,7 +817,9 @@ body.is-admin .sidebar-link.admin-link {
   letter-spacing: 0.5px;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 7px 7px 14px rgba(163, 177, 198, 0.65), -7px -7px 14px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    7px 7px 14px rgba(163, 177, 198, 0.65),
+    -7px -7px 14px rgba(255, 255, 255, 0.95);
   transition: all 0.3s ease;
   margin-top: 2px;
 }
@@ -780,8 +841,12 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 @keyframes buttonMove {
-  from { background-position: 0 50%; }
-  to { background-position: 200% 50%; }
+  from {
+    background-position: 0 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
 }
 
 .main-btn:hover {
@@ -818,7 +883,9 @@ body.is-admin .sidebar-link.admin-link {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 5px 5px 10px rgba(163, 177, 198, 0.65), -5px -5px 10px rgba(255, 255, 255, 0.95);
+  box-shadow:
+    5px 5px 10px rgba(163, 177, 198, 0.65),
+    -5px -5px 10px rgba(255, 255, 255, 0.95);
   transition: all 0.35s ease;
 }
 
@@ -878,20 +945,61 @@ body.is-admin .sidebar-link.admin-link {
 }
 
 /* Spinner và Loading Animation */
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e2e8f0;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
 
 /* Toast nâng cao */
-.toast { position: fixed; right: 24px; bottom: 24px; background: #1e293b; color: #fff; padding: 13px 20px; border-radius: 10px; display: none; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-size: 14px; font-weight: 500; max-width: 380px; line-height: 1.5; transition: all 0.2s ease; }
-.toast.show { display: block; }
-.toast.toast-success { background: #059669; }
-.toast.toast-error { background: #dc2626; }
-.toast.toast-warning { background: #d97706; }
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: #1e293b;
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 10px;
+  display: none;
+  z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 380px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+}
+.toast.show {
+  display: block;
+}
+.toast.toast-success {
+  background: #059669;
+}
+.toast.toast-error {
+  background: #dc2626;
+}
+.toast.toast-warning {
+  background: #d97706;
+}
 
 /* Responsive Mobile & Tablet (< 850px) */
 @media (max-width: 850px) {
-  .app-shell { display: flex; flex-direction: column; }
-  .sidebar-mobile-toggle { display: inline-flex !important; }
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-mobile-toggle {
+    display: inline-flex !important;
+  }
   .sidebar {
     position: fixed !important;
     top: 0 !important;
@@ -907,13 +1015,27 @@ body.is-admin .sidebar-link.admin-link {
   .sidebar.mobile-open {
     transform: translateX(0) !important;
   }
-  .topbar { padding: 0 16px; height: 60px; }
-  .page-content { padding: 16px; }
-  .grid-3 { grid-template-columns: 1fr !important; }
-  .row.between { flex-direction: column; align-items: flex-start !important; gap: 10px; }
-  table th, table td { padding: 10px 8px; font-size: 13px; }
+  .topbar {
+    padding: 0 16px;
+    height: 60px;
+  }
+  .page-content {
+    padding: 16px;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+  .row.between {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+  table th,
+  table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
 }
-
 
 /* ========================================================
    BỘ NÚT CHUYỂN ĐỔI GIAO DIỆN SÁNG / TỐI (DAY / NIGHT TOGGLE)
@@ -1167,7 +1289,8 @@ body.is-admin .sidebar-link.admin-link {
 /* ========================================================
    CHẾ ĐỘ TỐI TOÀN HỆ THỐNG (DARK MODE THEME)
    ======================================================== */
-[data-theme="dark"], body.dark-theme {
+[data-theme="dark"],
+body.dark-theme {
   --primary: #3b82f6;
   --primary-dark: #2563eb;
   --muted: #94a3b8;
@@ -1219,15 +1342,14 @@ body.is-admin .sidebar-link.admin-link {
   color: #ffffff !important;
 }
 
-
 /* ========================================================
    NAVIGATION SIDEBAR - DARK MODE (KHI BẬT TỐI SANG MÀU ĐEN)
    ======================================================== */
 [data-theme="dark"] .sidebar,
 body.dark-theme .sidebar {
   background: #141416 !important;
-  border-right: 1px solid #27272A !important;
-  color: #F4F4F5 !important;
+  border-right: 1px solid #27272a !important;
+  color: #f4f4f5 !important;
 }
 
 [data-theme="dark"] .sidebar-header,
@@ -1237,46 +1359,46 @@ body.dark-theme .sidebar-header {
 
 [data-theme="dark"] .sidebar-brand,
 body.dark-theme .sidebar-brand {
-  color: #F4F4F5 !important;
+  color: #f4f4f5 !important;
 }
 
 [data-theme="dark"] .sidebar-brand-ai,
 body.dark-theme .sidebar-brand-ai {
-  color: #38BDF8 !important;
+  color: #38bdf8 !important;
 }
 
 [data-theme="dark"] .sidebar-toggle-btn,
 body.dark-theme .sidebar-toggle-btn {
-  border-color: #27272A !important;
-  color: #A1A1AA !important;
+  border-color: #27272a !important;
+  color: #a1a1aa !important;
 }
 
 [data-theme="dark"] .sidebar-toggle-btn:hover,
 body.dark-theme .sidebar-toggle-btn:hover {
-  background: #27272A !important;
-  color: #F4F4F5 !important;
-  border-color: #3F3F46 !important;
+  background: #27272a !important;
+  color: #f4f4f5 !important;
+  border-color: #3f3f46 !important;
 }
 
 [data-theme="dark"] .sidebar-nav-container,
 body.dark-theme .sidebar-nav-container {
-  scrollbar-color: #27272A transparent !important;
+  scrollbar-color: #27272a transparent !important;
 }
 
 [data-theme="dark"] .sidebar-link,
 body.dark-theme .sidebar-link {
-  color: #A1A1AA !important;
+  color: #a1a1aa !important;
 }
 
 [data-theme="dark"] .sidebar-link-icon,
 body.dark-theme .sidebar-link-icon {
-  color: #71717A !important;
+  color: #71717a !important;
 }
 
 [data-theme="dark"] .sidebar-link:hover,
 body.dark-theme .sidebar-link:hover {
   background: rgba(255, 255, 255, 0.04) !important;
-  color: #F4F4F5 !important;
+  color: #f4f4f5 !important;
   border-color: rgba(255, 255, 255, 0.06) !important;
 }
 
@@ -1284,13 +1406,13 @@ body.dark-theme .sidebar-link:hover {
 [data-theme="dark"] .sidebar-link.active .sidebar-link-icon,
 body.dark-theme .sidebar-link:hover .sidebar-link-icon,
 body.dark-theme .sidebar-link.active .sidebar-link-icon {
-  color: #38BDF8 !important;
+  color: #38bdf8 !important;
 }
 
 [data-theme="dark"] .sidebar-link.active,
 body.dark-theme .sidebar-link.active {
   background: rgba(255, 255, 255, 0.08) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
@@ -1298,15 +1420,15 @@ body.dark-theme .sidebar-link.active {
 [data-theme="dark"] .sidebar-pill-badge,
 body.dark-theme .sidebar-pill-badge {
   background: rgba(56, 189, 248, 0.12) !important;
-  color: #38BDF8 !important;
+  color: #38bdf8 !important;
   border-color: rgba(56, 189, 248, 0.3) !important;
 }
 
 [data-theme="dark"] .sidebar-role-badge,
 body.dark-theme .sidebar-role-badge {
-  background: #27272A !important;
-  color: #A1A1AA !important;
-  border-color: #3F3F46 !important;
+  background: #27272a !important;
+  color: #a1a1aa !important;
+  border-color: #3f3f46 !important;
 }
 
 [data-theme="dark"] .sidebar-footer,
@@ -1318,23 +1440,23 @@ body.dark-theme .sidebar-footer {
 body.dark-theme .sidebar-logout-btn {
   background: rgba(239, 68, 68, 0.06) !important;
   border-color: rgba(239, 68, 68, 0.18) !important;
-  color: #F87171 !important;
+  color: #f87171 !important;
 }
 
 [data-theme="dark"] .sidebar-logout-btn:hover,
 body.dark-theme .sidebar-logout-btn:hover {
   background: rgba(239, 68, 68, 0.14) !important;
   border-color: rgba(239, 68, 68, 0.35) !important;
-  color: #EF4444 !important;
+  color: #ef4444 !important;
 }
 
 [data-theme="dark"] .sidebar.collapsed .sidebar-link:hover::after,
 [data-theme="dark"] .sidebar.collapsed .sidebar-logout-btn:hover::after,
 body.dark-theme .sidebar.collapsed .sidebar-link:hover::after,
 body.dark-theme .sidebar.collapsed .sidebar-logout-btn:hover::after {
-  background: #18181B !important;
-  color: #F4F4F5 !important;
-  border-color: #27272A !important;
+  background: #18181b !important;
+  color: #f4f4f5 !important;
+  border-color: #27272a !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
 }
 
@@ -1342,47 +1464,64 @@ body.dark-theme .sidebar.collapsed .sidebar-logout-btn:hover::after {
    TINH CHỈNH GIAO DIỆN NỀN XANH DƯƠNG NHẠT / TRẮNG & SIDEBAR (LIGHT MODE)
    Cô lập phạm vi hoàn toàn - không ảnh hưởng trang Đăng nhập / Đăng ký & Dark Mode
    ========================================================================== */
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) {
-  --bg: #F4F8FF;
-  --line: #E2E8F0;
-  --primary: #2563EB;
-  --primary-dark: #1D4ED8;
-  background-color: #F4F8FF;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) {
+  --bg: #f4f8ff;
+  --line: #e2e8f0;
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  background-color: #f4f8ff;
 }
 
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .app-shell,
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .main-area {
-  background-color: #F4F8FF;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .app-shell,
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .main-area {
+  background-color: #f4f8ff;
 }
 
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .sidebar {
-  background: #FFFFFF;
-  border-right: 1px solid #E2E8F0;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
   box-shadow: 2px 0 12px rgba(15, 23, 42, 0.025);
 }
 
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .topbar {
-  background: #FFFFFF;
-  border-bottom: 1px solid #E2E8F0;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .card:not([style*="background"]),
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .list-item:not([style*="background"]) {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .card:not([style*="background"]),
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .list-item:not([style*="background"]) {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
 }
 
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .sidebar-link.active {
-  background: #EFF6FF !important;
-  color: #2563EB !important;
-  border-color: #BFDBFE !important;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .sidebar-link.active {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #bfdbfe !important;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
 }
 
-html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme) .sidebar-link:hover:not(.active) {
-  background: #F8FAFC !important;
-  border-color: #E2E8F0 !important;
+html:not([data-theme="dark"])
+  body:not([data-page="login"]):not([data-page="register"]):not(.dark-theme)
+  .sidebar-link:hover:not(.active) {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 
 /* ==========================================================================
@@ -1391,7 +1530,7 @@ html:not([data-theme="dark"]) body:not([data-page="login"]):not([data-page="regi
    Tổng thời gian: ~1.45s - 1.55s | Cô lập phạm vi tuyệt đối
    ========================================================================== */
 html.cv-splash-pending {
-  background: linear-gradient(135deg, #F0F7FF 0%, #FFFFFF 100%) !important;
+  background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%) !important;
   overflow: hidden;
 }
 
@@ -1399,7 +1538,9 @@ html.cv-splash-pending[data-theme="dark"] {
   background: linear-gradient(135deg, #090e1a 0%, #131c31 100%) !important;
 }
 
-html.cv-splash-pending body:not([data-page="login"]):not([data-page="register"]) .app-shell {
+html.cv-splash-pending
+  body:not([data-page="login"]):not([data-page="register"])
+  .app-shell {
   opacity: 0;
 }
 
@@ -1444,7 +1585,7 @@ html.cv-splash-pending body:not([data-page="login"]):not([data-page="register"])
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #F0F7FF 0%, #FFFFFF 100%);
+  background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
   border-right: 1px solid transparent;
   transition:
     width 0.62s cubic-bezier(0.22, 1, 0.36, 1),
@@ -1460,14 +1601,14 @@ html.cv-splash-pending body:not([data-page="login"]):not([data-page="register"])
 }
 
 .cv-splash-root.cv-splash-stage2 .cv-splash-backdrop {
-  background: #FFFFFF;
-  border-right-color: #E2E8F0;
+  background: #ffffff;
+  border-right-color: #e2e8f0;
   box-shadow: 4px 0 24px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="dark"] .cv-splash-root.cv-splash-stage2 .cv-splash-backdrop {
   background: #141416;
-  border-right-color: #27272A;
+  border-right-color: #27272a;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
 }
 
@@ -1535,16 +1676,18 @@ html.cv-splash-pending body:not([data-page="login"]):not([data-page="register"])
   transform: translate(-50%, 0);
   font-size: 13.5px;
   font-weight: 500;
-  color: #64748B;
+  color: #64748b;
   letter-spacing: 0.01em;
   white-space: nowrap;
   animation: cvSplashTextIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
-  transition: opacity 0.24s ease, transform 0.24s ease;
+  transition:
+    opacity 0.24s ease,
+    transform 0.24s ease;
   z-index: 2;
 }
 
 [data-theme="dark"] .cv-splash-subtitle {
-  color: #94A3B8;
+  color: #94a3b8;
 }
 
 .cv-splash-root.cv-splash-stage2 .cv-splash-subtitle {
@@ -1587,7 +1730,9 @@ body.cv-splash-reveal .sidebar-brand-text,
 body.cv-splash-reveal .sidebar-toggle-btn {
   opacity: 1 !important;
   transform: translateX(0);
-  transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.06s, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
+  transition:
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.06s,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
 }
 
 body.cv-splash-reveal .sidebar-nav .sidebar-link,
@@ -1595,8 +1740,10 @@ body.cv-splash-reveal .sidebar-footer {
   opacity: 1 !important;
   transform: translateY(0);
   transition:
-    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--cv-nav-i, 0) * 32ms + 40ms),
-    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--cv-nav-i, 0) * 32ms + 40ms),
+    opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1)
+      calc(var(--cv-nav-i, 0) * 32ms + 40ms),
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1)
+      calc(var(--cv-nav-i, 0) * 32ms + 40ms),
     background 0.18s ease,
     color 0.18s ease,
     border-color 0.18s ease;
@@ -1732,7 +1879,8 @@ body:not([data-page="login"]):not([data-page="register"]) .hero h1 {
   position: relative;
   display: inline-block;
   transform-origin: left bottom;
-  animation: cvHeadingSceneTransition 0.58s cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+  animation: cvHeadingSceneTransition 0.58s cubic-bezier(0.22, 1, 0.36, 1) 0ms
+    both;
   will-change: opacity, transform, filter;
   padding-bottom: 8px;
 }
@@ -1740,7 +1888,8 @@ body:not([data-page="login"]):not([data-page="register"]) .hero h1 {
 /* Tiêu đề lớn trong Hero banner & Card chi tiết (theo nhịp thẻ cha) */
 body:not([data-page="login"]):not([data-page="register"]) .hero h2 {
   transform-origin: left bottom;
-  animation: cvHeadingSceneTransition 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+  animation: cvHeadingSceneTransition 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s
+    both;
   will-change: opacity, transform, filter;
 }
 
@@ -1748,7 +1897,8 @@ body:not([data-page="login"]):not([data-page="register"]) .card h1 {
   position: relative;
   display: inline-block;
   transform-origin: left bottom;
-  animation: cvHeadingSceneTransition 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+  animation: cvHeadingSceneTransition 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.14s
+    both;
   will-change: opacity, transform, filter;
   padding-bottom: 8px;
 }
@@ -1764,7 +1914,12 @@ body:not([data-page="login"]):not([data-page="register"]) .card h1::after {
   height: 3px;
   width: 100%;
   border-radius: 4px;
-  background: linear-gradient(90deg, #2563EB 0%, #38BDF8 65%, rgba(56, 189, 248, 0.4) 100%);
+  background: linear-gradient(
+    90deg,
+    #2563eb 0%,
+    #38bdf8 65%,
+    rgba(56, 189, 248, 0.4) 100%
+  );
   box-shadow: 0 2px 10px rgba(56, 189, 248, 0.5);
   animation: cvHeadingAccentLine 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
   will-change: opacity, transform;
@@ -1782,11 +1937,17 @@ body:not([data-page="login"]):not([data-page="register"]) .page-title p {
 /* ÁP DỤNG NHỊP 2: Các khối nội dung / Card (0.55s, cách nhau 80ms) */
 body:not([data-page="login"]):not([data-page="register"]) .page-content > .hero,
 body:not([data-page="login"]):not([data-page="register"]) .page-content > .card,
-body:not([data-page="login"]):not([data-page="register"]) .page-content > article,
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > section:not(.grid),
+body:not([data-page="login"]):not([data-page="register"])
+  .page-content
+  > article,
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > section:not(.grid),
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > .hero,
 body:not([data-page="login"]):not([data-page="register"]) #pageContent > .card,
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > article,
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > article,
 body:not([data-page="login"]):not([data-page="register"]) .grid > .card,
 body:not([data-page="login"]):not([data-page="register"]) .grid > article,
 body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-card {
@@ -1795,49 +1956,85 @@ body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-card {
 }
 
 /* Phân bổ độ trễ (delay) cho các khối trong Nhịp 2: cách đều 80ms */
-body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(2),
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(2) {
+body:not([data-page="login"]):not([data-page="register"])
+  .page-content
+  > *:nth-child(2),
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > *:nth-child(2) {
   animation-delay: 0.08s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(3),
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(3) {
+body:not([data-page="login"]):not([data-page="register"])
+  .page-content
+  > *:nth-child(3),
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > *:nth-child(3) {
   animation-delay: 0.16s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(4),
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(4) {
+body:not([data-page="login"]):not([data-page="register"])
+  .page-content
+  > *:nth-child(4),
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > *:nth-child(4) {
   animation-delay: 0.34s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(5),
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(5) {
+body:not([data-page="login"]):not([data-page="register"])
+  .page-content
+  > *:nth-child(5),
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > *:nth-child(5) {
   animation-delay: 0.42s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .page-content > *:nth-child(n+6),
-body:not([data-page="login"]):not([data-page="register"]) #pageContent > *:nth-child(n+6) {
+body:not([data-page="login"]):not([data-page="register"])
+  .page-content
+  > *:nth-child(n + 6),
+body:not([data-page="login"]):not([data-page="register"])
+  #pageContent
+  > *:nth-child(n + 6) {
   animation-delay: 0.48s;
 }
 
 /* Delay cho từng thẻ trong Bento Grid (cách nhau 80ms) */
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(1) { animation-delay: 0.16s; }
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(2) { animation-delay: 0.24s; }
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(3) { animation-delay: 0.32s; }
-body:not([data-page="login"]):not([data-page="register"]) .grid > *:nth-child(n+4) { animation-delay: 0.40s; }
+body:not([data-page="login"]):not([data-page="register"])
+  .grid
+  > *:nth-child(1) {
+  animation-delay: 0.16s;
+}
+body:not([data-page="login"]):not([data-page="register"])
+  .grid
+  > *:nth-child(2) {
+  animation-delay: 0.24s;
+}
+body:not([data-page="login"]):not([data-page="register"])
+  .grid
+  > *:nth-child(3) {
+  animation-delay: 0.32s;
+}
+body:not([data-page="login"]):not([data-page="register"])
+  .grid
+  > *:nth-child(n + 4) {
+  animation-delay: 0.4s;
+}
 
 /* Tiêu đề & đoạn văn bên trong thẻ: đồng bộ nhịp cha trong phạm vi <= 1.0s */
 body:not([data-page="login"]):not([data-page="register"]) .card h2,
 body:not([data-page="login"]):not([data-page="register"]) .card h3,
 body:not([data-page="login"]):not([data-page="register"]) .card h4 {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
   will-change: opacity, transform, filter;
 }
 
 body:not([data-page="login"]):not([data-page="register"]) .hero p,
 body:not([data-page="login"]):not([data-page="register"]) .card p,
 body:not([data-page="login"]):not([data-page="register"]) .card > strong {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.20s both;
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
   will-change: opacity, transform, filter;
 }
 
@@ -1848,28 +2045,40 @@ body:not([data-page="login"]):not([data-page="register"]) .card .stat-value {
 }
 
 /* Các trường nhập form (lướt vào nối tiếp gọn trong < 0.9s) */
-body:not([data-page="login"]):not([data-page="register"]) .card .field:nth-child(1) {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .field:nth-child(1) {
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .field:nth-child(2) {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.19s both;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .field:nth-child(2) {
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.19s both;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .field:nth-child(3) {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .field:nth-child(3) {
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .field:nth-child(4) {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.29s both;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .field:nth-child(4) {
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.29s both;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .field:nth-child(5) {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .field:nth-child(5) {
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .field:nth-child(n+6) {
-  animation: cvRevealText 0.50s cubic-bezier(0.22, 1, 0.36, 1) 0.39s both;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .field:nth-child(n + 6) {
+  animation: cvRevealText 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.39s both;
 }
 
 /* ÁP DỤNG NHỊP 3: Chi tiết nhỏ bên trong từng khối (cách nhau 50ms, xong trong ~1.0s) */
@@ -1882,39 +2091,79 @@ body:not([data-page="login"]):not([data-page="register"]) .card .score,
 body:not([data-page="login"]):not([data-page="register"]) .card ul > li,
 body:not([data-page="login"]):not([data-page="register"]) .card .actions > *,
 body:not([data-page="login"]):not([data-page="register"]) .cv-reveal-item {
-  animation: cvRevealBeat3 0.50s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cvRevealBeat3 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: opacity, transform;
 }
 
 /* Phân tầng độ trễ cho chi tiết con: 50ms mỗi phần tử (0.30s -> 0.50s, kết thúc ở 1.00s) */
-body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(1),
-body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(1),
-body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(1) {
-  animation-delay: 0.30s;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .tag:nth-child(1),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  ul
+  > li:nth-child(1),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .actions
+  > *:nth-child(1) {
+  animation-delay: 0.3s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(2),
-body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(2),
-body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(2) {
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .tag:nth-child(2),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  ul
+  > li:nth-child(2),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .actions
+  > *:nth-child(2) {
   animation-delay: 0.35s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(3),
-body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(3),
-body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(3) {
-  animation-delay: 0.40s;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .tag:nth-child(3),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  ul
+  > li:nth-child(3),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .actions
+  > *:nth-child(3) {
+  animation-delay: 0.4s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(4),
-body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(4),
-body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(4) {
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .tag:nth-child(4),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  ul
+  > li:nth-child(4),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .actions
+  > *:nth-child(4) {
   animation-delay: 0.45s;
 }
 
-body:not([data-page="login"]):not([data-page="register"]) .card .tag:nth-child(n+5),
-body:not([data-page="login"]):not([data-page="register"]) .card ul > li:nth-child(n+5),
-body:not([data-page="login"]):not([data-page="register"]) .card .actions > *:nth-child(n+5) {
-  animation-delay: 0.50s;
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .tag:nth-child(n + 5),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  ul
+  > li:nth-child(n + 5),
+body:not([data-page="login"]):not([data-page="register"])
+  .card
+  .actions
+  > *:nth-child(n + 5) {
+  animation-delay: 0.5s;
 }
 
 /* Hoạt ảnh thanh tiến trình điểm số (Progress Bar Reveal) */
@@ -2119,8 +2368,19 @@ div[role="progressbar"] > div {
 }
 
 /* Chuyển đổi mượt mà */
-body, .main-area, .topbar, .card, .sidebar, input, select, textarea, table {
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease;
+body,
+.main-area,
+.topbar,
+.card,
+.sidebar,
+input,
+select,
+textarea,
+table {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.2s ease;
 }
 
 /* Responsive Mobile cho Theme Toggle */

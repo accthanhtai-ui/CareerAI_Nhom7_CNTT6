@@ -1,162 +1,274 @@
 <!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="CareerAI - Phân tích CV bằng AI và kết nối việc làm">
-  <title>Đăng ký & Đăng nhập | CareerAI</title>
-  <link rel="icon" href="/assets/favicon.ico">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="/css/base.css">
-  <link rel="stylesheet" href="/css/layout.css">
-  <link rel="stylesheet" href="/css/components.css">
-</head>
-<body data-page="register">
-  <main class="auth-layout">
-    <!-- Các quả cầu Neumorphic trôi nổi mềm mại trên nền -->
-    <div class="bg-circle bg1"></div>
-    <div class="bg-circle bg2"></div>
-    <div class="bg-circle bg3"></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="CareerAI - Phân tích CV bằng AI và kết nối việc làm"
+    />
+    <title>Đăng ký & Đăng nhập | CareerAI</title>
+    <link rel="icon" href="/assets/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/layout.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+  </head>
+  <body data-page="register">
+    <main class="auth-layout">
+      <!-- Các quả cầu Neumorphic trôi nổi mềm mại trên nền -->
+      <div class="bg-circle bg1"></div>
+      <div class="bg-circle bg2"></div>
+      <div class="bg-circle bg3"></div>
 
-    <!-- Khu vực giới thiệu ngắn bên trái (Brand Showcase) -->
-    <div class="auth-left-brand">
-      <h1>Career<span class="brand-blue">AI</span></h1>
-      <p class="brand-tagline">
-        Nền tảng ứng dụng AI hàng đầu hỗ trợ sinh viên & lập trình viên tối ưu CV chuẩn ATS, đánh giá năng lực nghề nghiệp và kết nối việc làm tự động.
-      </p>
-      <div class="brand-stats-row">
-        <div class="brand-stat-item">
-          <span class="stat-number">100%</span>
-          <span class="stat-label">Gemini AI</span>
-        </div>
-        <div class="brand-stat-item">
-          <span class="stat-number">ATS</span>
-          <span class="stat-label">Tiêu chuẩn CV</span>
-        </div>
-        <div class="brand-stat-item">
-          <span class="stat-number">24/7</span>
-          <span class="stat-label">Tư vấn trực tuyến</span>
+      <!-- Khu vực giới thiệu ngắn bên trái (Brand Showcase) -->
+      <div class="auth-left-brand">
+        <h1>Career<span class="brand-blue">AI</span></h1>
+        <p class="brand-tagline">
+          Nền tảng ứng dụng AI hàng đầu hỗ trợ sinh viên & lập trình viên tối ưu
+          CV chuẩn ATS, đánh giá năng lực nghề nghiệp và kết nối việc làm tự
+          động.
+        </p>
+        <div class="brand-stats-row">
+          <div class="brand-stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Gemini AI</span>
+          </div>
+          <div class="brand-stat-item">
+            <span class="stat-number">ATS</span>
+            <span class="stat-label">Tiêu chuẩn CV</span>
+          </div>
+          <div class="brand-stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Tư vấn trực tuyến</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Khối Neumorphic 3D Flip Card đặt ở góc phải màn hình (Mặc định lật sang mặt Đăng ký) -->
-    <div class="auth-wrapper">
-      <div class="auth-card-3d flipped" id="authCard">
-
-        <!-- Mặt 1: Form Đăng nhập (Login Panel) -->
-        <div class="form-panel login-panel">
-          <div class="auth-panel-logo">
-            <img src="/assets/logo.png" alt="CareerAI">
-          </div>
-          <h1>Chào mừng</h1>
-          <p class="subtitle">Đăng nhập để tiếp tục hành trình</p>
-
-          <div id="loginMessage" class="auth-msg-box"></div>
-
-          <form id="loginForm">
-            <!-- Email -->
-            <div class="input-group" onclick="this.querySelector('input').focus()">
-              <div class="electric-glow"></div>
-              <div class="electric-border"></div>
-              <input type="email" id="loginEmail" name="email" placeholder=" " autocomplete="email" required>
-              <label for="loginEmail">Địa chỉ Email</label>
+      <!-- Khối Neumorphic 3D Flip Card đặt ở góc phải màn hình (Mặc định lật sang mặt Đăng ký) -->
+      <div class="auth-wrapper">
+        <div class="auth-card-3d flipped" id="authCard">
+          <!-- Mặt 1: Form Đăng nhập (Login Panel) -->
+          <div class="form-panel login-panel">
+            <div class="auth-panel-logo">
+              <img src="/assets/logo.png" alt="CareerAI" />
             </div>
+            <h1>Chào mừng</h1>
+            <p class="subtitle">Đăng nhập để tiếp tục hành trình</p>
 
-            <!-- Mật khẩu -->
-            <div class="input-group" onclick="this.querySelector('input').focus()">
-              <div class="electric-glow"></div>
-              <div class="electric-border"></div>
-              <input type="password" id="loginPassword" name="password" placeholder=" " autocomplete="current-password" required>
-              <label for="loginPassword">Mật khẩu</label>
-              <button type="button" class="password-toggle" onclick="event.stopPropagation(); window.toggleAuthPassword('loginPassword', this)">
-                <i class="fa-solid fa-eye"></i>
+            <div id="loginMessage" class="auth-msg-box"></div>
+
+            <form id="loginForm">
+              <!-- Email -->
+              <div
+                class="input-group"
+                onclick="this.querySelector('input').focus()"
+              >
+                <div class="electric-glow"></div>
+                <div class="electric-border"></div>
+                <input
+                  type="email"
+                  id="loginEmail"
+                  name="email"
+                  placeholder=" "
+                  autocomplete="email"
+                  required
+                />
+                <label for="loginEmail">Địa chỉ Email</label>
+              </div>
+
+              <!-- Mật khẩu -->
+              <div
+                class="input-group"
+                onclick="this.querySelector('input').focus()"
+              >
+                <div class="electric-glow"></div>
+                <div class="electric-border"></div>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  name="password"
+                  placeholder=" "
+                  autocomplete="current-password"
+                  required
+                />
+                <label for="loginPassword">Mật khẩu</label>
+                <button
+                  type="button"
+                  class="password-toggle"
+                  onclick="
+                    event.stopPropagation();
+                    window.toggleAuthPassword('loginPassword', this);
+                  "
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+
+              <div class="options">
+                <label class="checkbox">
+                  <input type="checkbox" name="remember" checked />
+                  Ghi nhớ đăng nhập
+                </label>
+                <a
+                  href="javascript:void(0)"
+                  onclick="
+                    alert(
+                      'Vui lòng liên hệ quản trị viên để được hỗ trợ cấp lại mật khẩu.',
+                    )
+                  "
+                  >Quên mật khẩu?</a
+                >
+              </div>
+
+              <button type="submit" class="main-btn" id="loginSubmitBtn">
+                ĐĂNG NHẬP
+              </button>
+            </form>
+
+            <div class="switch-area">
+              <span>Chưa có tài khoản?</span>
+              <button
+                type="button"
+                class="switch-circle"
+                onclick="window.flipAuthCard()"
+                title="Chuyển sang Đăng ký"
+              >
+                <i class="fa-solid fa-plus"></i>
               </button>
             </div>
+          </div>
 
-            <div class="options">
-              <label class="checkbox">
-                <input type="checkbox" name="remember" checked>
-                Ghi nhớ đăng nhập
-              </label>
-              <a href="javascript:void(0)" onclick="alert('Vui lòng liên hệ quản trị viên để được hỗ trợ cấp lại mật khẩu.')">Quên mật khẩu?</a>
+          <!-- Mặt 2: Form Đăng ký (Sign Up Panel) -->
+          <div class="form-panel signup-panel">
+            <div class="auth-panel-logo">
+              <img src="/assets/logo.png" alt="CareerAI" />
             </div>
+            <h1>Tạo tài khoản</h1>
+            <p class="subtitle">Bắt đầu hành trình cùng CareerAI</p>
 
-            <button type="submit" class="main-btn" id="loginSubmitBtn">ĐĂNG NHẬP</button>
-          </form>
+            <div id="signupMessage" class="auth-msg-box"></div>
 
-          <div class="switch-area">
-            <span>Chưa có tài khoản?</span>
-            <button type="button" class="switch-circle" onclick="window.flipAuthCard()" title="Chuyển sang Đăng ký">
-              <i class="fa-solid fa-plus"></i>
-            </button>
+            <form id="signupForm">
+              <!-- Họ và tên -->
+              <div
+                class="input-group"
+                onclick="this.querySelector('input').focus()"
+              >
+                <div class="electric-glow"></div>
+                <div class="electric-border"></div>
+                <input
+                  type="text"
+                  id="signupName"
+                  name="name"
+                  placeholder=" "
+                  autocomplete="name"
+                  required
+                  minlength="2"
+                />
+                <label for="signupName">Họ và tên</label>
+              </div>
+
+              <!-- Email -->
+              <div
+                class="input-group"
+                onclick="this.querySelector('input').focus()"
+              >
+                <div class="electric-glow"></div>
+                <div class="electric-border"></div>
+                <input
+                  type="email"
+                  id="signupEmail"
+                  name="email"
+                  placeholder=" "
+                  autocomplete="email"
+                  required
+                />
+                <label for="signupEmail">Địa chỉ Email</label>
+              </div>
+
+              <!-- Mật khẩu -->
+              <div
+                class="input-group"
+                onclick="this.querySelector('input').focus()"
+              >
+                <div class="electric-glow"></div>
+                <div class="electric-border"></div>
+                <input
+                  type="password"
+                  id="signupPassword"
+                  name="password"
+                  placeholder=" "
+                  autocomplete="new-password"
+                  required
+                  minlength="6"
+                />
+                <label for="signupPassword">Mật khẩu (tối thiểu 6 ký tự)</label>
+                <button
+                  type="button"
+                  class="password-toggle"
+                  onclick="
+                    event.stopPropagation();
+                    window.toggleAuthPassword('signupPassword', this);
+                  "
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+
+              <!-- Xác nhận mật khẩu -->
+              <div
+                class="input-group"
+                onclick="this.querySelector('input').focus()"
+              >
+                <div class="electric-glow"></div>
+                <div class="electric-border"></div>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder=" "
+                  autocomplete="new-password"
+                  required
+                  minlength="6"
+                />
+                <label for="confirmPassword">Xác nhận mật khẩu</label>
+                <button
+                  type="button"
+                  class="password-toggle"
+                  onclick="
+                    event.stopPropagation();
+                    window.toggleAuthPassword('confirmPassword', this);
+                  "
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+
+              <button type="submit" class="main-btn" id="signupSubmitBtn">
+                TẠO TÀI KHOẢN
+              </button>
+            </form>
+
+            <div class="switch-area">
+              <span>Đã có tài khoản?</span>
+              <button
+                type="button"
+                class="switch-circle"
+                onclick="window.flipAuthCard()"
+                title="Chuyển sang Đăng nhập"
+              >
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+            </div>
           </div>
         </div>
-
-        <!-- Mặt 2: Form Đăng ký (Sign Up Panel) -->
-        <div class="form-panel signup-panel">
-          <div class="auth-panel-logo">
-            <img src="/assets/logo.png" alt="CareerAI">
-          </div>
-          <h1>Tạo tài khoản</h1>
-          <p class="subtitle">Bắt đầu hành trình cùng CareerAI</p>
-
-          <div id="signupMessage" class="auth-msg-box"></div>
-
-          <form id="signupForm">
-            <!-- Họ và tên -->
-            <div class="input-group" onclick="this.querySelector('input').focus()">
-              <div class="electric-glow"></div>
-              <div class="electric-border"></div>
-              <input type="text" id="signupName" name="name" placeholder=" " autocomplete="name" required minlength="2">
-              <label for="signupName">Họ và tên</label>
-            </div>
-
-            <!-- Email -->
-            <div class="input-group" onclick="this.querySelector('input').focus()">
-              <div class="electric-glow"></div>
-              <div class="electric-border"></div>
-              <input type="email" id="signupEmail" name="email" placeholder=" " autocomplete="email" required>
-              <label for="signupEmail">Địa chỉ Email</label>
-            </div>
-
-            <!-- Mật khẩu -->
-            <div class="input-group" onclick="this.querySelector('input').focus()">
-              <div class="electric-glow"></div>
-              <div class="electric-border"></div>
-              <input type="password" id="signupPassword" name="password" placeholder=" " autocomplete="new-password" required minlength="6">
-              <label for="signupPassword">Mật khẩu (tối thiểu 6 ký tự)</label>
-              <button type="button" class="password-toggle" onclick="event.stopPropagation(); window.toggleAuthPassword('signupPassword', this)">
-                <i class="fa-solid fa-eye"></i>
-              </button>
-            </div>
-
-            <!-- Xác nhận mật khẩu -->
-            <div class="input-group" onclick="this.querySelector('input').focus()">
-              <div class="electric-glow"></div>
-              <div class="electric-border"></div>
-              <input type="password" id="confirmPassword" name="confirmPassword" placeholder=" " autocomplete="new-password" required minlength="6">
-              <label for="confirmPassword">Xác nhận mật khẩu</label>
-              <button type="button" class="password-toggle" onclick="event.stopPropagation(); window.toggleAuthPassword('confirmPassword', this)">
-                <i class="fa-solid fa-eye"></i>
-              </button>
-            </div>
-
-            <button type="submit" class="main-btn" id="signupSubmitBtn">TẠO TÀI KHOẢN</button>
-          </form>
-
-          <div class="switch-area">
-            <span>Đã có tài khoản?</span>
-            <button type="button" class="switch-circle" onclick="window.flipAuthCard()" title="Chuyển sang Đăng nhập">
-              <i class="fa-solid fa-arrow-left"></i>
-            </button>
-          </div>
-        </div>
-
       </div>
-    </div>
-  </main>
-  <div id="toast" class="toast" role="status"></div>
-  <script type="module" src="/js/app.js?v=2.5.7"></script>
-</body>
+    </main>
+    <div id="toast" class="toast" role="status"></div>
+    <script type="module" src="/js/app.js?v=2.5.7"></script>
+  </body>
 </html>
